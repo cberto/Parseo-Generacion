@@ -44,8 +44,6 @@ Un programa comienza con **INICIO** y termina con **FIN.**. Todas las sentencias
 
   - Acceso: ```<lista>[<indice>]```
 
-  - Asignación por índice: ```anotar <lista>[<indice>] = <valor>```
-
 ### Impresión
 
 **mostrar** acepta una expresión de texto que puede concatenar varias partes con + (variables, números, booleanos, accesos a lista, llamadas a función).
@@ -122,7 +120,7 @@ Se admiten paréntesis para agrupar: ( … ).
 
   -  Modificación: ```anotar <id> = <valor>```
 
-  -  Listas: ```anotar lista<tipo_base> L = vacia```; acceso ```L[i]```; escritura ```anotar L[i] = v```
+  -  Listas: ```anotar lista<tipo_base> L = vacia```; acceso ```L[i]```
 
 - Impresión: mostrar <expresion_texto> (concatenación con +).
 
@@ -358,7 +356,6 @@ Limpiando listas...
 <asignacion> ::= anotar <tipo> <identificador> = <valor>
                | anotar <identificador> = <valor>
                | anotar lista<tipo_base> <identificador> = vacia
-               | anotar <identificador> [ <valor> ] = <valor>
 
 <tipo> ::= numero | url | payload | vulnerabilidad | bool | lista<tipo_base>
 
