@@ -13,15 +13,17 @@ Ser un lenguaje de programación en español que permita expresar y automatizar 
 
 - **numero** → valor numérico entero.
 
-- **url** → texto (URLs válidas para testing de seguridad).
+- **url** → texto (URLs válidas para testing de seguridad). Debe seguir el formato: `http://` o `https://` seguido de dominio válido.
 
 - **payload** → texto (cadenas de ataque predefinidas).
+
+- **regex** → expresión regular para validación de patrones de seguridad.
 
 - **vulnerabilidad** → sqli | xss | rce | lfi (tipos de vulnerabilidades).
 
 - **bool** → vulnerable | seguro.
 
-- **lista<tipo_base>** → lista tipada cuyos elementos son **numero**, **url**, **payload**, **vulnerabilidad** o **bool**.
+- **lista<tipo_base>** → lista tipada cuyos elementos son **numero**, **url**, **payload**, **vulnerabilidad**, **bool** o **regex**.
 
   - No existen literales de lista; se crean vacías con **vacia** y se completan con operaciones.
 
@@ -109,7 +111,7 @@ Se admiten paréntesis para agrupar: ( … ).
 
 - Operadores y signos: ```+ - * / == != < > <= >= ( ) [ ] , ``` y lógicos ```y```, ```o```, ```no```.
 
-- Palabras clave principales: ```INICIO```, ```FIN.```, ```anotar```, ```mostrar```, ```evaluar```, ```si pasa:```, ```si no pasa:```, ```mientras```, ```hacer```, ```funcion```, ```retornar```, ```finFuncion```, ```procedimiento```, ```finProcedimiento```, ```agregar```, ```quitar```, ```en```, ```limpiar```, ```entre```, ```vacia```, ```vulnerable```, ```seguro```, ```probar```, ```inyectar```, ```reportar```.
+- Palabras clave principales: ```INICIO```, ```FIN.```, ```anotar```, ```mostrar```, ```evaluar```, ```si pasa:```, ```si no pasa:```, ```mientras```, ```hacer```, ```funcion```, ```retornar```, ```finFuncion```, ```procedimiento```, ```finProcedimiento```, ```agregar```, ```quitar```, ```en```, ```limpiar```, ```entre```, ```vacia```, ```vulnerable```, ```seguro```, ```probar```, ```inyectar```, ```reportar```, ```pasa```, ```salir```, ```validar_url```, ```coincidir_regex```.
  
 ## Especificaciones sintácticas
 -  Programa: INICIO <sentencias> FIN.
@@ -148,6 +150,14 @@ evaluar <condicion>
 -  **mostrar:** acepta una expresión de texto que puede concatenar varias partes con + (variables, números, booleanos, accesos a lista, llamadas a función).
 
 -  **Ámbitos:** variables de funciones/procedimientos son locales.
+
+## Funciones predefinidas
+
+- **pasa**: Evalúa si una condición es verdadera. Retorna `vulnerable` si es verdadero, `seguro` si es falso.
+- **reportar**: Genera un reporte de vulnerabilidad encontrada con el mensaje especificado.
+- **salir**: Termina la ejecución del programa o sale de un bucle.
+- **validar_url**: Verifica si una cadena es una URL válida. Retorna `vulnerable` si es válida, `seguro` si no.
+- **coincidir_regex**: Evalúa si un texto coincide con una expresión regular. Retorna `vulnerable` si coincide, `seguro` si no.
 
 ## Reglas semánticas
 
@@ -341,6 +351,37 @@ Quitando último test...
 Limpiando listas...
 ```
 
+### Ejemplo 4: Validación de URLs y Expresiones Regulares
+```
+INICIO
+    anotar url sitio_test = "https://ejemplo.com/login"
+    anotar regex patron_sql = ".*' OR 1=1.*"
+    anotar regex patron_xss = ".*<script>.*"
+    
+    mostrar "Validando URL: " + sitio_test
+    
+    evaluar validar_url(sitio_test)
+        si pasa:
+            mostrar "URL válida - procediendo con tests"
+            
+            evaluar coincidir_regex("admin' OR 1=1--", patron_sql)
+                si pasa:
+                    mostrar "Patrón SQL detectado en payload"
+                    reportar "SQL Injection pattern encontrado"
+                si no pasa:
+                    mostrar "Payload no coincide con patrón SQL"
+            
+            evaluar coincidir_regex("<script>alert(1)</script>", patron_xss)
+                si pasa:
+                    mostrar "Patrón XSS detectado en payload"
+                    reportar "XSS pattern encontrado"
+                si no pasa:
+                    mostrar "Payload no coincide con patrón XSS"
+        si no pasa:
+            mostrar "URL inválida - abortando tests"
+FIN.
+```
+
 ## BNF
 ```
 <programa> ::= INICIO <sentencias> FIN.
@@ -359,7 +400,7 @@ Limpiando listas...
 
 <tipo> ::= numero | url | payload | vulnerabilidad | bool | lista<tipo_base>
 
-<tipo_base> ::= numero | url | payload | vulnerabilidad | bool
+<tipo_base> ::= numero | url | payload | vulnerabilidad | bool | regex
 
 <impresion> ::= mostrar <expresion_texto>
 
