@@ -13,7 +13,7 @@ Ser un lenguaje de programación en español que permita expresar y automatizar 
 
 - **numero** → valor numérico entero.
 
-- **url** → texto (URLs válidas para testing de seguridad). Debe seguir el formato: `http://` o `https://` seguido de dominio válido.
+- **texto** → cadena de caracteres (strings).
 
 - **payload** → texto (cadenas de ataque predefinidas).
 
@@ -23,7 +23,7 @@ Ser un lenguaje de programación en español que permita expresar y automatizar 
 
 - **bool** → vulnerable | seguro.
 
-- **lista<tipo_base>** → lista tipada cuyos elementos son **numero**, **url**, **payload**, **vulnerabilidad**, **bool** o **regex**.
+- **lista<tipo_base>** → lista tipada cuyos elementos son **numero**, **texto**, **payload**, **vulnerabilidad**, **bool** o **regex**.
 
   - No existen literales de lista; se crean vacías con **vacia** y se completan con operaciones.
 
@@ -156,7 +156,7 @@ evaluar <condicion>
 - **pasa**: Evalúa si una condición es verdadera. Retorna `vulnerable` si es verdadero, `seguro` si es falso.
 - **reportar**: Genera un reporte de vulnerabilidad encontrada con el mensaje especificado.
 - **salir**: Termina la ejecución del programa o sale de un bucle.
-- **validar_url**: Verifica si una cadena es una URL válida. Retorna `vulnerable` si es válida, `seguro` si no.
+- **validar_url**: Verifica si una cadena de texto es una URL válida usando expresiones regulares. Retorna `vulnerable` si es válida, `seguro` si no.
 - **coincidir_regex**: Evalúa si un texto coincide con una expresión regular. Retorna `vulnerable` si coincide, `seguro` si no.
 
 ## Reglas semánticas
@@ -174,7 +174,7 @@ evaluar <condicion>
 ### Ejemplo 1: Scanner de SQL Injection con iteración
 ```
 INICIO
-    anotar url objetivo = "https://ejemplo.com/login"
+    anotar texto objetivo = "https://ejemplo.com/login"
     anotar numero contador = 1
     anotar lista<texto> payloads = vacia
     
@@ -202,7 +202,7 @@ FIN.
 ### Ejemplo 2: Detector de XSS con condicionales
 ```
 INICIO
-    anotar url sitio = "https://ejemplo.com/comentarios"
+    anotar texto sitio = "https://ejemplo.com/comentarios"
     anotar vulnerabilidad tipo = xss
     anotar payload xss_payload = "<script>alert(1)</script>"
     
@@ -228,10 +228,10 @@ FIN.
 ### Ejemplo 3: Test de autenticación con funciones
 ```
 INICIO
-    anotar url admin = "https://ejemplo.com/admin"
+    anotar texto admin = "https://ejemplo.com/admin"
     anotar numero intentos = 0
     
-    funcion testear_auth: bool(url: texto)
+    funcion testear_auth: bool(texto: texto)
         mostrar "Probando bypass de autenticación en " + url
         retornar vulnerable
     finFuncion
@@ -257,7 +257,7 @@ FIN.
 INICIO
 
 // Listas: URLs y tipos de vulnerabilidades. Se inicializan vacías
-anotar lista<url> sitios = vacia
+anotar lista<texto> sitios = vacia
 anotar lista<vulnerabilidad> tipos = vacia
 anotar lista<bool> resultados = vacia
 
@@ -278,12 +278,12 @@ agregar rce a tipos
 anotar numero cantidad_tests = 3
 
 // Procedimiento: imprime un reporte de vulnerabilidad
-procedimiento mostrarReporte(url sitio, vulnerabilidad tipo, bool estado)
+procedimiento mostrarReporte(texto sitio, vulnerabilidad tipo, bool estado)
     mostrar "Sitio: " + sitio + " | Tipo: " + tipo + " | Estado: " + estado
 finProcedimiento
 
 // Función: estado según tipo de vulnerabilidad (bool)
-funcion bool testearVulnerabilidad(url sitio, vulnerabilidad tipo)
+funcion bool testearVulnerabilidad(texto sitio, vulnerabilidad tipo)
     evaluar tipo == sqli
         si pasa:
             retornar probar_sql(sitio, "admin' OR 1=1--")
@@ -315,7 +315,7 @@ finFuncion
 mostrar "Iniciando escaneo de vulnerabilidades:"
 anotar numero i = 1
 mientras i <= cantidad_tests hacer
-    anotar url sitio_actual = sitios[i]
+    anotar texto sitio_actual = sitios[i]
     anotar vulnerabilidad tipo_actual = tipos[i]
     anotar bool resultado = testearVulnerabilidad(sitio_actual, tipo_actual)
     agregar resultado a resultados
@@ -354,13 +354,15 @@ Limpiando listas...
 ### Ejemplo 4: Validación de URLs y Expresiones Regulares
 ```
 INICIO
-    anotar url sitio_test = "https://ejemplo.com/login"
+    anotar texto sitio_test = "https://ejemplo.com/login"
+    anotar regex patron_url = "https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?"
     anotar regex patron_sql = ".*' OR 1=1.*"
     anotar regex patron_xss = ".*<script>.*"
     
     mostrar "Validando URL: " + sitio_test
     
-    evaluar validar_url(sitio_test)
+    // Validación manual con regex
+    evaluar coincidir_regex(sitio_test, patron_url)
         si pasa:
             mostrar "URL válida - procediendo con tests"
             
@@ -379,6 +381,13 @@ INICIO
                     mostrar "Payload no coincide con patrón XSS"
         si no pasa:
             mostrar "URL inválida - abortando tests"
+    
+    // Alternativa usando función predefinida
+    evaluar validar_url(sitio_test)
+        si pasa:
+            mostrar "URL válida (validación automática)"
+        si no pasa:
+            mostrar "URL inválida (validación automática)"
 FIN.
 ```
 
@@ -398,9 +407,9 @@ FIN.
                | anotar <identificador> = <valor>
                | anotar lista<tipo_base> <identificador> = vacia
 
-<tipo> ::= numero | url | payload | vulnerabilidad | bool | lista<tipo_base>
+<tipo> ::= numero | texto | payload | vulnerabilidad | bool | lista<tipo_base>
 
-<tipo_base> ::= numero | url | payload | vulnerabilidad | bool | regex
+<tipo_base> ::= numero | texto | payload | vulnerabilidad | bool | regex
 
 <impresion> ::= mostrar <expresion_texto>
 
