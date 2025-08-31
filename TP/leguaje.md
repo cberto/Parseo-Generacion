@@ -1,11 +1,11 @@
-# Lenguaje a crear
+# Lenguaje de Seguridad Educativo
 ## Objetivo
-Ser un lenguaje de programación en español que permita expresar y automatizar tareas de seguridad (detectar vulnerabilidades, generar payloads, crear reportes) de forma clara y accesible, con reglas simples y cercanas al ámbito de seguridad informática
+Ser un lenguaje de programación en español que permita expresar y automatizar tareas básicas de seguridad (detectar vulnerabilidades simples, validar entradas) de forma clara y accesible, con reglas simples y cercanas al ámbito de seguridad informática
 
 ## Alcance
 ### Incluye:
 
--  Tipos: numero, url (texto), payload (texto), vulnerabilidad (sqli|xss|rce|lfi), bool (vulnerable|seguro), lista<tipo_base>.
+-  Tipos: numero, texto, vulnerabilidad (sqli|xss|rce), bool (vulnerable|seguro), lista<tipo_base>.
 
 -  Sentencias: asignación, impresión, condicional (evaluar), iteración (mientras), funciones, procedimientos, operaciones de lista (agregar, quitar en, limpiar).
 
@@ -15,15 +15,11 @@ Ser un lenguaje de programación en español que permita expresar y automatizar 
 
 - **texto** → cadena de caracteres (strings).
 
-- **payload** → texto (cadenas de ataque predefinidas).
-
-- **regex** → expresión regular para validación de patrones de seguridad.
-
-- **vulnerabilidad** → sqli | xss | rce | lfi (tipos de vulnerabilidades).
+- **vulnerabilidad** → sqli | xss | rce (tipos básicos de vulnerabilidades).
 
 - **bool** → vulnerable | seguro.
 
-- **lista<tipo_base>** → lista tipada cuyos elementos son **numero**, **texto**, **payload**, **vulnerabilidad**, **bool** o **regex**.
+- **lista<tipo_base>** → lista tipada cuyos elementos son **numero**, **texto**, **vulnerabilidad** o **bool**.
 
   - No existen literales de lista; se crean vacías con **vacia** y se completan con operaciones.
 
@@ -49,15 +45,13 @@ Un programa comienza con **INICIO** y termina con **FIN.**. Todas las sentencias
 ### Impresión
 
 **mostrar** acepta una expresión de texto que puede concatenar varias partes con + (variables, números, booleanos, accesos a lista, llamadas a función).
-Ej.: ```mostrar "Sitio: " + url + " | Vulnerabilidad: " + tipo```
+Ej.: ```mostrar "Sitio: " + sitio + " | Vulnerabilidad: " + tipo```
 
 ### Condicional
 
 ```evaluar <condicion>``` ejecuta un bloque ```si pasa:``` y, opcionalmente, un bloque ```si no pasa:```.
 
 Negación: ```no <condicion>```
-
-
 
 ### Iteración (únicamente mientras)
 
@@ -111,7 +105,7 @@ Se admiten paréntesis para agrupar: ( … ).
 
 - Operadores y signos: ```+ - * / == != < > <= >= ( ) [ ] , ``` y lógicos ```y```, ```o```, ```no```.
 
-- Palabras clave principales: ```INICIO```, ```FIN.```, ```anotar```, ```mostrar```, ```evaluar```, ```si pasa:```, ```si no pasa:```, ```mientras```, ```hacer```, ```funcion```, ```retornar```, ```finFuncion```, ```procedimiento```, ```finProcedimiento```, ```agregar```, ```quitar```, ```en```, ```limpiar```, ```entre```, ```vacia```, ```vulnerable```, ```seguro```, ```probar```, ```inyectar```, ```reportar```, ```pasa```, ```salir```, ```validar_url```, ```coincidir_regex```.
+- Palabras clave principales: ```INICIO```, ```FIN.```, ```anotar```, ```mostrar```, ```evaluar```, ```si pasa:```, ```si no pasa:```, ```mientras```, ```hacer```, ```funcion```, ```retornar```, ```finFuncion```, ```procedimiento```, ```finProcedimiento```, ```agregar```, ```quitar```, ```en```, ```limpiar```, ```vacia```, ```vulnerable```, ```seguro```, ```probar```, ```reportar```.
  
 ## Especificaciones sintácticas
 -  Programa: INICIO <sentencias> FIN.
@@ -143,7 +137,7 @@ evaluar <condicion>
 ## Especificaciones semánticas
 -  **Tipos:** verificación estática; se declara al momento de crear la variable
 
--  **vulnerabilidad:** texto en [sqli|xss|rce|lfi]; asignar fuera de rango es error.
+-  **vulnerabilidad:** texto en [sqli|xss|rce]; asignar fuera de rango es error.
 
 -  **Listas:** tipo base estricto; se declara al momento de crear la lista, se puede inicializar vacia
   
@@ -153,15 +147,12 @@ evaluar <condicion>
 
 ## Funciones predefinidas
 
-- **pasa**: Evalúa si una condición es verdadera. Retorna `vulnerable` si es verdadero, `seguro` si es falso.
+- **probar**: Evalúa si una entrada es vulnerable. Retorna `vulnerable` si es vulnerable, `seguro` si no.
 - **reportar**: Genera un reporte de vulnerabilidad encontrada con el mensaje especificado.
-- **salir**: Termina la ejecución del programa o sale de un bucle.
-- **validar_url**: Verifica si una cadena de texto es una URL válida usando expresiones regulares. Retorna `vulnerable` si es válida, `seguro` si no.
-- **coincidir_regex**: Evalúa si un texto coincide con una expresión regular. Retorna `vulnerable` si coincide, `seguro` si no.
 
 ## Reglas semánticas
 
-- vulnerabilidad debe estar en [sqli|xss|rce|lfi].
+- vulnerabilidad debe estar en [sqli|xss|rce].
 
 - Tipos de listas estrictos (solo tipo_base permitido).
 
@@ -169,94 +160,13 @@ evaluar <condicion>
 
 - Todo valor se convierte a texto al imprimir/concatenar en mostrar.
 
-## Ejemplos de uso
+## Ejemplo de uso
 
-### Ejemplo 1: Scanner de SQL Injection con iteración
-```
-INICIO
-    anotar texto objetivo = "https://ejemplo.com/login"
-    anotar numero contador = 1
-    anotar lista<texto> payloads = vacia
-    
-    agregar payloads en "admin' OR 1=1--"
-    agregar payloads en "admin' UNION SELECT 1,2,3--"
-    agregar payloads en "'; DROP TABLE users; --"
-    
-    mientras contador <= 3 hacer
-        anotar payload = payloads[contador]
-        mostrar "Probando payload " + contador + ": " + payload
-        
-        evaluar probar_sql(objetivo, payload)
-            si pasa:
-                mostrar "¡Vulnerabilidad SQL detectada!"
-                reportar "SQL Injection en " + objetivo
-            si no pasa:
-                mostrar "Payload " + contador + " no vulnerable"
-        
-        anotar contador = contador + 1
-    
-    mostrar "Escaneo SQL completado"
-FIN.
-```
-
-### Ejemplo 2: Detector de XSS con condicionales
-```
-INICIO
-    anotar texto sitio = "https://ejemplo.com/comentarios"
-    anotar vulnerabilidad tipo = xss
-    anotar payload xss_payload = "<script>alert(1)</script>"
-    
-    mostrar "Iniciando test de " + tipo + " en " + sitio
-    
-    evaluar inyectar_xss(sitio, xss_payload)
-        si pasa:
-            mostrar "¡XSS detectado!"
-            anotar bool resultado = vulnerable
-        si no pasa:
-            mostrar "No se detectó XSS"
-            anotar bool resultado = seguro
-    
-    evaluar resultado == vulnerable
-        si pasa:
-            mostrar "Sitio vulnerable a Cross-Site Scripting"
-            reportar "XSS en " + sitio
-        si no pasa:
-            mostrar "Sitio seguro contra XSS"
-FIN.
-```
-
-### Ejemplo 3: Test de autenticación con funciones
-```
-INICIO
-    anotar texto admin = "https://ejemplo.com/admin"
-    anotar numero intentos = 0
-    
-    funcion testear_auth: bool(texto: texto)
-        mostrar "Probando bypass de autenticación en " + url
-        retornar vulnerable
-    finFuncion
-    
-    mientras intentos < 5 hacer
-        anotar intentos = intentos + 1
-        mostrar "Intento " + intentos + " de 5"
-        
-        evaluar testear_auth(admin)
-            si pasa:
-                mostrar "¡Bypass de autenticación exitoso!"
-                reportar "Auth Bypass en " + admin
-                salir
-            si no pasa:
-                mostrar "Autenticación segura en intento " + intentos
-    
-    mostrar "Test de autenticación completado"
-FIN.
-```
-
-## Ejemplo Completo: Scanner de Vulnerabilidades
+### Ejemplo: Scanner básico de vulnerabilidades
 ```
 INICIO
 
-// Listas: URLs y tipos de vulnerabilidades. Se inicializan vacías
+// Listas: sitios y tipos de vulnerabilidades. Se inicializan vacías
 anotar lista<texto> sitios = vacia
 anotar lista<vulnerabilidad> tipos = vacia
 anotar lista<bool> resultados = vacia
@@ -271,9 +181,6 @@ agregar sqli a tipos
 agregar xss a tipos
 agregar rce a tipos
 
-// [https://ejemplo.com/login, https://ejemplo.com/comentarios, https://ejemplo.com/admin]
-// [sqli, xss, rce]
-
 // Cantidad de tests a realizar
 anotar numero cantidad_tests = 3
 
@@ -286,15 +193,15 @@ finProcedimiento
 funcion bool testearVulnerabilidad(texto sitio, vulnerabilidad tipo)
     evaluar tipo == sqli
         si pasa:
-            retornar probar_sql(sitio, "admin' OR 1=1--")
+            retornar probar(sitio, "admin' OR 1=1--")
         si no pasa:
             evaluar tipo == xss
                 si pasa:
-                    retornar inyectar_xss(sitio, "<script>alert(1)</script>")
+                    retornar probar(sitio, "<script>alert(1)</script>")
                 si no pasa:
                     evaluar tipo == rce
                         si pasa:
-                            retornar probar_rce(sitio, "ping -c 1 127.0.0.1")
+                            retornar probar(sitio, "ping -c 1 127.0.0.1")
                         si no pasa:
                             retornar seguro
 finFuncion
@@ -351,46 +258,6 @@ Quitando último test...
 Limpiando listas...
 ```
 
-### Ejemplo 4: Validación de URLs y Expresiones Regulares
-```
-INICIO
-    anotar texto sitio_test = "https://ejemplo.com/login"
-    anotar regex patron_url = "https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?"
-    anotar regex patron_sql = ".*' OR 1=1.*"
-    anotar regex patron_xss = ".*<script>.*"
-    
-    mostrar "Validando URL: " + sitio_test
-    
-    // Validación manual con regex
-    evaluar coincidir_regex(sitio_test, patron_url)
-        si pasa:
-            mostrar "URL válida - procediendo con tests"
-            
-            evaluar coincidir_regex("admin' OR 1=1--", patron_sql)
-                si pasa:
-                    mostrar "Patrón SQL detectado en payload"
-                    reportar "SQL Injection pattern encontrado"
-                si no pasa:
-                    mostrar "Payload no coincide con patrón SQL"
-            
-            evaluar coincidir_regex("<script>alert(1)</script>", patron_xss)
-                si pasa:
-                    mostrar "Patrón XSS detectado en payload"
-                    reportar "XSS pattern encontrado"
-                si no pasa:
-                    mostrar "Payload no coincide con patrón XSS"
-        si no pasa:
-            mostrar "URL inválida - abortando tests"
-    
-    // Alternativa usando función predefinida
-    evaluar validar_url(sitio_test)
-        si pasa:
-            mostrar "URL válida (validación automática)"
-        si no pasa:
-            mostrar "URL inválida (validación automática)"
-FIN.
-```
-
 ## BNF
 ```
 <programa> ::= INICIO <sentencias> FIN.
@@ -407,9 +274,9 @@ FIN.
                | anotar <identificador> = <valor>
                | anotar lista<tipo_base> <identificador> = vacia
 
-<tipo> ::= numero | texto | payload | vulnerabilidad | bool | lista<tipo_base>
+<tipo> ::= numero | texto | vulnerabilidad | bool | lista<tipo_base>
 
-<tipo_base> ::= numero | texto | payload | vulnerabilidad | bool | regex
+<tipo_base> ::= numero | texto | vulnerabilidad | bool
 
 <impresion> ::= mostrar <expresion_texto>
 
@@ -424,7 +291,6 @@ FIN.
                        | si pasa: <sentencias> si no pasa: <sentencias>
 
 <condicion> ::= no <condicion>
-              | <identificador> entre <valor> y <valor>
               | <valor> <operador_relacional> <valor>
               | <condicion> <operador_logico> <condicion>
               | <booleano> | <identificador>
