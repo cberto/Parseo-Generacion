@@ -1,0 +1,107 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    AGREGAR
+    DIF
+    EVALUAR
+    FINFUNCION
+    FINPROCEDIMIENTO
+    FUNCION
+    HACER
+    IGUAL
+    LBRACKET
+    LIMPIAR
+    MAYOR
+    MAYORIG
+    MENOR
+    MENORIG
+    MIENTRAS
+    NO
+    PASA
+    PROCEDIMIENTO
+    QUITAR
+    RBRACKET
+    RETORNAR
+    SEGURO
+    SI
+    VACIA
+    VULNERABLE
+
+Grammar
+
+Rule 0     S' -> programa
+Rule 1     programa -> INICIO sentencias FIN
+Rule 2     sentencias -> sentencia sentencias
+Rule 3     sentencias -> sentencia
+Rule 4     sentencia -> ANOTAR ID ASIGNAR expresion
+Rule 5     sentencia -> MOSTRAR expresion
+Rule 6     expresion -> expresion MAS expresion
+Rule 7     expresion -> expresion MENOS expresion
+Rule 8     expresion -> expresion POR expresion
+Rule 9     expresion -> expresion DIV expresion
+Rule 10    expresion -> NUMERO
+Rule 11    expresion -> TEXTO
+Rule 12    expresion -> ID
+Rule 13    expresion -> SQLI
+Rule 14    expresion -> XSS
+Rule 15    expresion -> RCE
+Rule 16    expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+Rule 17    expresion -> REPORTAR LPAREN expresion RPAREN
+
+Terminals, with rules where they appear
+
+AGREGAR              : 
+ANOTAR               : 4
+ASIGNAR              : 4
+COMA                 : 16 16
+DIF                  : 
+DIV                  : 9
+EVALUAR              : 
+FINFUNCION           : 
+FINPROCEDIMIENTO     : 
+FUNCION              : 
+HACER                : 
+ID                   : 4 12
+IGUAL                : 
+INICIO               : 1
+LBRACKET             : 
+LIMPIAR              : 
+LPAREN               : 16 17
+MAS                  : 6
+MAYOR                : 
+MAYORIG              : 
+MENOR                : 
+MENORIG              : 
+MENOS                : 7
+MIENTRAS             : 
+MOSTRAR              : 5
+NO                   : 
+NUMERO               : 10
+PASA                 : 
+POR                  : 8
+PROBAR               : 16
+PROCEDIMIENTO        : 
+QUITAR               : 
+RBRACKET             : 
+RCE                  : 15
+REPORTAR             : 17
+RETORNAR             : 
+RPAREN               : 16 17
+SEGURO               : 
+SI                   : 
+SQLI                 : 13
+TEXTO                : 11
+VACIA                : 
+VULNERABLE           : 
+XSS                  : 14
+error                : 
+
+Nonterminals, with rules where they appear
+
+FIN                  : 1
+expresion            : 4 5 6 6 7 7 8 8 9 9 16 16 16 17
+programa             : 0
+sentencia            : 2 3
+sentencias           : 1 2
+
