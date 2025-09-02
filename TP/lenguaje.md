@@ -65,7 +65,7 @@ repite mientras la condición sea verdadera.
 
 - `agregar <valor> a <lista>` (Se agrega al final de lista)
 
-- `quitar <lista>[<indice>]` (Elimina por índice) - si no tiene indice da error
+- `quitar en <lista>[<indice>]` (Elimina por índice) - si no tiene índice válido da error
 
 - `limpiar <lista>` (Deja la lista vacía)
 
@@ -104,7 +104,7 @@ finProcedimiento
 
 - **Relacionales:** ==, !=, <, >, <=, >= (se permiten en ambos lados valores/expresiones).
 
-- **Lógicos:** y, o, nop.
+- **Lógicos:** y, o, no.
 
 ## Especificaciones léxicas
 
@@ -208,7 +208,7 @@ Emite un reporte (consola/archivo según implementación del runtime).
 INICIO
 
 anotar bool r1 = probar("https://ejemplo.com/login", sqli, "admin' OR 1=1--")
-anotar bool r2 = probar("https://ejemplo.com/comentarios", xss, "<script>alert(1)</script>")
+anotar bool r2 = probar("https://ejemplo.com/comentarios", xss, "Hola mundo")
 anotar bool r3 = probar("https://ejemplo.com/admin", rce, "ping -c 1 127.0.0.1")
 
 mostrar "Login vulnerable? " + r1
@@ -222,11 +222,11 @@ FIN.
 
 ```
 [probar] URL=https://ejemplo.com/login | Tipo=sqli | Payload="admin' OR 1=1--"
-[probar] URL=https://ejemplo.com/comentarios | Tipo=xss | Payload="<script>alert(1)</script>"
+[probar] URL=https://ejemplo.com/comentarios | Tipo=xss | Payload="Hola mundo"
 [probar] URL=https://ejemplo.com/admin | Tipo=rce | Payload="ping -c 1 127.0.0.1"
 
 Login vulnerable? vulnerable
-Comentarios vulnerables? vulnerable
+Comentarios vulnerables? seguro
 Admin vulnerable? vulnerable
 ```
 
@@ -281,24 +281,24 @@ finProcedimiento
 funcion bool testearVulnerabilidad(texto sitio, vulnerabilidad tipo)
 evaluar tipo == sqli
 si pasa:
-retornar probar(sitio, "admin' OR 1=1--")
+retornar probar(sitio, sqli, "admin' OR 1=1--")
 si no pasa:
 evaluar tipo == xss
 si pasa:
-retornar probar(sitio, "<script>alert(1)</script>")
+retornar probar(sitio, xss, "Hola mundo")
 si no pasa:
 evaluar tipo == rce
 si pasa:
-retornar probar(sitio, "ping -c 1 127.0.0.1")
+retornar probar(sitio, rce, "ping -c 1 127.0.0.1")
 si no pasa:
 retornar seguro
 finFuncion
 
 // Función: contar vulnerabilidades encontradas
 funcion numero contarVulnerabilidades(lista<bool> resultados, numero n)
-anotar numero i = 1
+anotar numero i = 0
 anotar numero contador = 0
-mientras i <= n hacer
+mientras i < n hacer
 evaluar resultados[i] == vulnerable
 si pasa:
 anotar contador = contador + 1
@@ -308,8 +308,8 @@ finFuncion
 
 // Recorrido con 'mientras' para testear todos los sitios
 mostrar "Iniciando escaneo de vulnerabilidades:"
-anotar numero i = 1
-mientras i <= cantidad_tests hacer
+anotar numero i = 0
+mientras i < cantidad_tests hacer
 anotar texto sitio_actual = sitios[i]
 anotar vulnerabilidad tipo_actual = tipos[i]
 anotar bool resultado = testearVulnerabilidad(sitio_actual, tipo_actual)
@@ -323,9 +323,9 @@ mostrar "Total de vulnerabilidades encontradas: " + total_vulnerabilidades
 
 // Operaciones de lista: quitar y limpiar
 mostrar "Quitando último test..."
-quitar en sitios[3]
-quitar en tipos[3]
-quitar en resultados[3]
+quitar en sitios[2]
+quitar en tipos[2]
+quitar en resultados[2]
 anotar cantidad_tests = 2
 
 mostrar "Limpiando listas..."
@@ -423,6 +423,8 @@ finProcedimiento
 
 <booleano> ::= vulnerable | seguro
 
+<vulnerabilidad> ::= sqli | xss | rce
+
 <operador_relacional> ::= == | != | < | > | <= | >=
 <operador_logico> ::= y | o
 
@@ -433,7 +435,7 @@ finProcedimiento
 <letra> ::= a | b | ... | z | A | B | ... | Z
 <digito> ::= 0 | 1 | ... | 9
 
-<comentario*linea> ::= "//" {cualquier_caracter_excepto_salto}
-<comentario_bloque> ::= "/*" {cualquier*caracter} "*/"
+<comentario_linea> ::= "//" {cualquier_caracter_excepto_salto}
+<comentario_bloque> ::= "/*" {cualquier_caracter} "*/"
 
-```
+<vacia> ::= vacia
