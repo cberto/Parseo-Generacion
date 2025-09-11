@@ -1,19 +1,19 @@
-# 📘 Especificación del Lenguaje — **MiLenguaje**
+# 📘 Especificación del Lenguaje — **BugBounty**
 
 ---
 
 ## 🔹 Lenguaje a crear
 
-**MiLenguaje** es un lenguaje de programación didáctico y esotérico, diseñado para practicar análisis léxico, sintáctico y semántico.  
-Su principal particularidad es la **restricción de identificadores a solo vocales**, junto con un **sistema de tipos estático y fuerte**, y una sintaxis simple que permite modelar **funciones, asignaciones, bucles, condicionales, expresiones y manejo de errores**.
+**BugBounty** es un lenguaje de programación especializado en seguridad, diseñado para detectar, explotar y reportar vulnerabilidades de forma ética y estructurada.  
+Su principal particularidad es la **restricción de identificadores a solo vocales**, junto con un **sistema de tipos estático y fuerte**, y una sintaxis simple que permite modelar **funciones de seguridad, payloads, reportes de vulnerabilidades, bucles de testing, condicionales de detección, expresiones de riesgo y manejo de errores de seguridad**.
 
 ---
 
 ## 🎯 Objetivo
 
-- Brindar un **lenguaje minimalista** para ejercitar construcción de analizadores (léxico, sintáctico y semántico).
-- Permitir expresar programas estructurados con **tipado estático y control de flujo básico**.
-- Incluir **recursividad** y **manejo de errores** para enriquecer los ejemplos académicos.
+- Brindar un **lenguaje especializado en seguridad** para ejercitar construcción de analizadores (léxico, sintáctico y semántico).
+- Permitir expresar programas de testing de seguridad con **tipado estático y control de flujo básico**.
+- Incluir **payloads predefinidos** y **manejo de vulnerabilidades** para enriquecer los ejemplos de seguridad.
 
 ---
 
@@ -21,15 +21,15 @@ Su principal particularidad es la **restricción de identificadores a solo vocal
 
 ### Incluye
 
-- Declaración y asignación de variables con tipo.
-- Funciones con parámetros, valores por defecto y **retorno obligatorio**.
+- Declaración y asignación de variables de seguridad con tipo.
+- Funciones de testing con parámetros, payloads por defecto y **retorno obligatorio**.
 - Control de flujo:
   - `si / sino / sino si`
   - `bucle (init; cond; inc/dec)`
   - `salir` / `seguir` en bucles.
 - Operadores aritméticos, lógicos y de comparación
-- **Recursividad** directa e indirecta.
-- Manejo de errores:
+- **Payloads predefinidos** para vulnerabilidades comunes.
+- Manejo de vulnerabilidades:
   - `intenta / captura / siempre`
   - `lanzar`
 
@@ -47,7 +47,7 @@ Su principal particularidad es la **restricción de identificadores a solo vocal
 ### Conjunto de caracteres
 
 - Identificadores → solo vocales minúsculas `a e i o u`.
-- Palabras clave → pueden contener consonantes (`funcion`, `bucle`, etc.).
+- Palabras clave → pueden contener consonantes (`funcion`, `bucle`, `probar`, `inyectar`, etc.).
 - Insensible a mayúsculas.
 
 ---
@@ -73,7 +73,7 @@ contenido      ::= declar_var
                  | salir_stmt
                  | seguir_stmt
 
-tipo           ::= "cad" | "num" | "log"
+tipo           ::= "cad" | "num" | "log" | "url" | "payload" | "vuln"
 
 declar_var     ::= identificador ":" tipo "=" expr
                  | identificador ":" tipo "=" expr ";"
@@ -213,6 +213,12 @@ num: enteros.
 
 log: booleanos (ver/fal).
 
+url: URLs válidas para testing de seguridad.
+
+payload: cadenas de ataque predefinidas.
+
+vuln: tipos de vulnerabilidades (sqli, xss, rce, etc.).
+
 Tipado estático y fuerte: las variables mantienen tipo fijo.
 
 Resolución de tipos
@@ -245,99 +251,105 @@ Funciones
 
 Retorno obligatorio, tipo exacto al declarado.
 
-Parámetros por valor, con defaults permitidos.
+Parámetros por valor, con payloads por defecto permitidos.
 
-Recursión permitida (directa o mutua).
+Funciones de seguridad predefinidas (probar_sql, inyectar_xss, etc.).
 
 Cada invocación crea un nuevo entorno.
 
 Control de flujo
 
-si/sino/sino si: condicionales encadenados.
+si/sino/sino si: condicionales encadenados para detección de vulnerabilidades.
 
-bucle: ejecuta sobre números, con inc/dec.
+bucle: ejecuta sobre números, con inc/dec para testing iterativo.
 
-salir: termina el bucle actual.
+salir: termina el bucle actual cuando se detecta una vulnerabilidad.
 
-seguir: pasa a la siguiente iteración.
+seguir: pasa a la siguiente iteración del testing.
 
 Manejo de errores
 
-lanzar <expr>: detiene ejecución normal y transfiere control a manejadores.
+lanzar <expr>: detiene ejecución normal y transfiere control a manejadores de vulnerabilidades.
 
-intenta/captura/siempre: bloques para manejar errores.
+intenta/captura/siempre: bloques para manejar errores de seguridad.
 
 
 
 print
 
-Efecto: muestra en pantalla el valor.
+Efecto: muestra en pantalla el valor o reporte de vulnerabilidad.
 
 Retorno: num = cantidad de caracteres impresos.
 ```
 
 ## 📖 Ejemplos
 
-### Recursividad
+### Testing de SQL Injection
 
 ```
-funcion fa:num(n:num) {
-  si (n <= 1) {
-    retorno 1
+funcion probar_sql:log(url:cad, payload:cad) {
+  si (payload == "admin' OR 1=1--") {
+    retorno ver
   }
-  retorno n * fa(n - 1)
+  retorno fal
 }
-print(fa(5))   // 120
+print(probar_sql("https://ejemplo.com", "admin' OR 1=1--"))   // ver
 ```
 
-### Condicional extendido
+### Detección de vulnerabilidades
 
 ```
-num: num = 2
+url: cad = "https://ejemplo.com/login"
+payload: cad = "admin' OR 1=1--"
 
-si (num > 3) {
-  print(a)
-} sino si (num == 2) {
-  print(e)
+si (probar_sql(url, payload)) {
+  print("Vulnerabilidad SQL detectada")
+} sino si (inyectar_xss(url, "<script>alert(1)</script>")) {
+  print("Vulnerabilidad XSS detectada")
 } sino {
-  print(i)
+  print("No se encontraron vulnerabilidades")
 }
-
-
 ```
 
-### Manejo de errores
+### Manejo de vulnerabilidades
 
 ```
-funcion eu:num(x:num) {
+funcion testear_vuln:log(url:cad) {
   intenta {
-    retorno 10 / x
+    retorno probar_sql(url, "admin' OR 1=1--")
   }
   captura(e: num) {
-    print(e)
-    retorno 0
+    print("Error en testing: " + e)
+    retorno fal
   }
   siempre {
-    print(a)
+    print("Testing completado")
   }
 }
-print(eu(0))
+print(testear_vuln("https://ejemplo.com"))
 ```
 
-### Operaciones con cadenas
+### Operaciones con payloads
 
 ```
-funcion saludar: cad(nombre: cad) {
-  retorno "aei " + nombre
+funcion generar_payload: cad(tipo: cad) {
+  si (tipo == "sqli") {
+    retorno "admin' OR 1=1--"
+  } sino si (tipo == "xss") {
+    retorno "<script>alert(1)</script>"
+  } sino {
+    retorno "payload_default"
+  }
 }
 
-funcion esVocal: log(c: cad) {
-  retorno c == "a" oo c == "e" oo c == "i" oo c == "o" oo c == "u"
+funcion es_vulnerable: log(response: cad) {
+  retorno response == "error" oo response == "vulnerable"
 }
 
-mensaje: cad = "aei"
-print(saludar(mensaje))  // Imprime: aei aei
-print(esVocal("a"))      // Imprime: ver
+url: cad = "https://ejemplo.com"
+payload: cad = generar_payload("sqli")
+print(es_vulnerable("error"))  // Imprime: ver
+```
 
 ### Operaciones entre tipos diferentes
 
@@ -345,7 +357,7 @@ print(esVocal("a"))      // Imprime: ver
 
 // Operaciones aritméticas entre tipos
 resultado1: num = 5 + "aei" // 5 + 3 = 8 (num + longitud de cad)
-resultado2: num = "ou" - ver // 2 - 1 = 1 (longitud de cad \* ver)
+resultado2: num = "ou" - ver // 2 - 1 = 1 (longitud de cad - ver)
 resultado3: num = fal / "a" // 0 / 1 = 0 (fal / longitud de cad)
 
 // Comparaciones entre tipos
@@ -358,7 +370,15 @@ logico1: log = 5 yy "aei" // ver yy ver = ver (ambos no vacíos)
 logico2: log = fal oo "a" // fal oo ver = ver (al menos uno verdadero)
 logico3: log = no "aei" // no ver = fal (cadena no vacía)
 
+// Operaciones de seguridad
+vulnerable: log = probar_sql("url", "payload") yy inyectar_xss("url", "script")
+severidad: num = calcular_severidad("ALTA") + 1
+
 ```
 
 
+```
+
+
+PROPOSITO GENERAL: BUG BOUNTY
 ```

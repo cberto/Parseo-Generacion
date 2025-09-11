@@ -82,8 +82,8 @@ def t_ID(t):
     t.type = reserved.get(t.value, 'ID')
     return t
 
-# Ignorar espacios y tabs
-t_ignore = ' \t\r'
+# Ignorar espacios, tabs y saltos de línea
+t_ignore = ' \t\r\n'
 
 
 # Ignorar comentarios
