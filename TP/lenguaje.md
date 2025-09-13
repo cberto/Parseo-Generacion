@@ -352,90 +352,182 @@ Limpiando listas...
 
 ```
 <programa> ::= INICIO <sentencias> FIN.
-
 <sentencias> ::= <sentencia> <sentencias> | λ
-
 <sentencia> ::= <asignacion> | <impresion> | <condicional> | <iteracion>
 | <definicion_funcion>
 | <definicion_procedimiento>
 | <llamada_procedimiento>
 | <operacion_lista>
-
 <asignacion> ::= anotar <tipo> <identificador> = <valor>
 | anotar <identificador> = <valor>
 | anotar lista<tipo_base> <identificador> = vacia
-
 <tipo> ::= numero | texto | vulnerabilidad | bool | lista<tipo_base>
-
 <tipo_base> ::= numero | texto | vulnerabilidad | bool
-
 <impresion> ::= mostrar <expresion_texto>
-
-<expresion_texto> ::= <valor_texto> | <valor_texto> + <expresion_texto>
-
+<expresion_texto> ::= <valor_texto> | <valor_texto> , <expresion_texto>;
 <valor_texto> ::= <texto> | <identificador> | <booleano> | <numero>
-| <acceso_lista> | <llamada_funcion>
-
+| <acceso_lista> | <llamada_funcion
 <condicional> ::= evaluar <condicion> <bloque_condicional>
-
 <bloque_condicional> ::= si pasa: <sentencias>
 | si pasa: <sentencias> si no pasa: <sentencias>
-
 <condicion> ::= no <condicion>
 | <valor> <operador_relacional> <valor>
 | <condicion> <operador_logico> <condicion>
 | <booleano> | <identificador>
-
 <iteracion> ::= mientras <condicion> hacer <sentencias>
-
 <valor> ::= <valor> <op_suma> <termino> | <termino>
 <termino> ::= <termino> <op_mul> <factor> | <factor>
 <factor> ::= <numero> | <texto> | <identificador> | <booleano>
 | <acceso_lista> | <llamada_funcion> | "(" <valor> ")"
-
 <op_suma> ::= + | -
 <op_mul> ::= \* | /
-
 <acceso_lista> ::= <identificador> [ <valor> ]
-
 <operacion_lista> ::= agregar <valor> a <identificador>
 | quitar en <identificador> [ <valor> ]
 | limpiar <identificador>
-
 <definicion_funcion> ::= funcion <tipo> <identificador> ( <parametros_opt> )
 <sentencias>
 retornar <valor>
 finFuncion
-
 <definicion_procedimiento> ::= procedimiento <identificador> ( <parametros_opt> )
 <sentencias>
 finProcedimiento
-
 <llamada_funcion> ::= <identificador> ( <argumentos_opt> )
 <llamada_procedimiento> ::= <identificador> ( <argumentos_opt> )
-
 <parametros_opt> ::= λ | <lista_parametros>
 <lista_parametros> ::= <parametro> | <parametro> , <lista_parametros>
 <parametro> ::= <tipo> <identificador>
-
 <argumentos_opt> ::= λ | <lista_argumentos>
 <lista_argumentos> ::= <valor> | <valor> , <lista_argumentos>
-
 <booleano> ::= vulnerable | seguro
-
 <vulnerabilidad> ::= sqli | xss | rce
-
 <operador_relacional> ::= == | != | < | > | <= | >=
 <operador_logico> ::= y | o
-
-<numero> ::= <digito> { <digito> }
-<texto> ::= '"' { <letra> | <digito> } '"'
-<identificador> ::= <letra> { <letra> | <digito> | \_ }
-
-<letra> ::= a | b | ... | z | A | B | ... | Z
-<digito> ::= 0 | 1 | ... | 9
-
-<comentario_linea> ::= "//" {cualquier_caracter_excepto_salto}
+<numero> ::= <digito> <numero> | <digito>
+<texto> ::= "<contenido_texto>"
+<contenido_texto ::= <identificador>   
+<identificador> ::= <letra> | <letra> <identificador> <letra> ::= a | b | ... | z | A | B | ... | Z
+<digito> ::= 0 | 1 | ... | 9<comentario_linea> ::= "//" {cualquier_caracter_excepto_salto}
 <comentario_bloque> ::= "/*" {cualquier_caracter} "*/"
-
 <vacia> ::= vacia
+
+```
+
+## Árbol de derivación
+
+Ej: 
+```
+INICIO
+
+procedimiento p(texto a)
+mostrar a
+finProcedimiento
+
+
+FIN
+```
+
+
+
+## Árbol de Derivación - Grafico
+
+```mermaid
+
+
+flowchart TD
+  A[Programa] --> A1[INICIO]
+  A --> A2[Sentencias]
+  A --> A3[FIN]
+  
+  A2 --> B1[Sentencia]
+  B1 --> C1[DefinicionProcedimiento]
+  
+  C1 --> C2[procedimiento]
+  C1 --> C3[Identificador]
+  C1 --> C4["("]
+  C1 --> C5[ParametrosOpt]
+  C1 --> C6[")"]
+  C1 --> C7[Sentencias]
+  C1 --> C8[finProcedimiento]
+  
+  C3 --> C3a["p"]
+  C5 --> C5a[ListaParametros]
+  C5a --> C5b[Parametro]
+  C5b --> C5c[texto]
+  C5b --> C5d[Identificador]
+  C5d --> C5e["a"]
+  
+  C7 --> C9[Sentencia]
+  C9 --> C10[Impresion]
+  C10 --> C11[mostrar]
+  C10 --> C12[ExpresionTexto]
+  C12 --> C13[ValorTexto]
+  C13 --> C14[Identificador]
+  C14 --> C15["a"]
+```
+
+
+### ASD — Derivación a izquierda Descentende 
+| Cadena de derivación obtenida                                | Próxima producción a aplicar |
+|--------------------------------------------------------------|------------------------------|
+| Programa                                                     | Programa → INICIO Sentencias FIN . |
+| INICIO Sentencias FIN .                                      | Sentencias → Sentencia |
+| INICIO Sentencia FIN .                                       | Sentencia → DefinicionProcedimiento |
+| INICIO DefinicionProcedimiento FIN .                         | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
+| INICIO procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento FIN . | Identificador → p |
+| INICIO procedimiento p ( ParametrosOpt ) Sentencias finProcedimiento FIN . | ParametrosOpt → ListaParametros |
+| INICIO procedimiento p ( ListaParametros ) Sentencias finProcedimiento FIN . | ListaParametros → Parametro |
+| INICIO procedimiento p ( Parametro ) Sentencias finProcedimiento FIN . | Parametro → Tipo Identificador |
+| INICIO procedimiento p ( texto Identificador ) Sentencias finProcedimiento FIN . | Identificador → a |
+| INICIO procedimiento p ( texto a ) Sentencias finProcedimiento FIN . | Sentencias → Sentencia |
+| INICIO procedimiento p ( texto a ) Sentencia finProcedimiento FIN . | Sentencia → Impresion |
+| INICIO procedimiento p ( texto a ) Impresion finProcedimiento FIN . | Impresion → mostrar ExpresionTexto |
+| INICIO procedimiento p ( texto a ) mostrar ExpresionTexto finProcedimiento FIN . | ExpresionTexto → ValorTexto |
+| INICIO procedimiento p ( texto a ) mostrar ValorTexto finProcedimiento FIN . | ValorTexto → Identificador |
+| INICIO procedimiento p ( texto a ) mostrar Identificador finProcedimiento FIN . | Identificador → a |
+| INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN . | accept |
+
+
+### ASA — Orden inverso de la derivación a la derecha (reducción ascendente)
+
+| Cadena de derivación obtenida                                | Próxima producción a aplicar |
+|--------------------------------------------------------------|------------------------------|
+| INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN . | Identificador → a |
+| INICIO procedimiento p ( texto a ) mostrar Identificador finProcedimiento FIN . | ValorTexto → Identificador |
+| INICIO procedimiento p ( texto a ) mostrar ValorTexto finProcedimiento FIN . | ExpresionTexto → ValorTexto |
+| INICIO procedimiento p ( texto a ) mostrar ExpresionTexto finProcedimiento FIN . | Impresion → mostrar ExpresionTexto |
+| INICIO procedimiento p ( texto a ) Impresion finProcedimiento FIN . | Sentencia → Impresion |
+| INICIO procedimiento p ( texto a ) Sentencia finProcedimiento FIN . | Sentencias → Sentencia |
+| INICIO procedimiento p ( texto Identificador ) Sentencias finProcedimiento FIN . | Identificador → a |
+| INICIO procedimiento p ( texto a ) Sentencias finProcedimiento FIN . | Parametro → Tipo Identificador |
+| INICIO procedimiento p ( Parametro ) Sentencias finProcedimiento FIN . | ListaParametros → Parametro |
+| INICIO procedimiento p ( ListaParametros ) Sentencias finProcedimiento FIN . | ParametrosOpt → ListaParametros |
+| INICIO procedimiento p ( ParametrosOpt ) Sentencias finProcedimiento FIN . | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
+| INICIO DefinicionProcedimiento FIN .                         | Sentencia → DefinicionProcedimiento |
+| INICIO Sentencia FIN .                                       | Sentencias → Sentencia |
+| INICIO Sentencias FIN .                                      | Programa → INICIO Sentencias FIN . |
+| Programa                                                     | accept |
+
+
+
+
+### ASA — Derivación a la derecha (sin invertir)
+
+| Cadena de derivación obtenida                                | Producción aplicada |
+|--------------------------------------------------------------|----------------------|
+| Programa                                                     | Programa → INICIO Sentencias FIN . |
+| INICIO Sentencias FIN .                                      | Sentencias → Sentencia |
+| INICIO Sentencia FIN .                                       | Sentencia → DefinicionProcedimiento |
+| INICIO DefinicionProcedimiento FIN .                         | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
+| INICIO procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento FIN . | Identificador → p |
+| INICIO procedimiento p ( ParametrosOpt ) Sentencias finProcedimiento FIN . | ParametrosOpt → ListaParametros |
+| INICIO procedimiento p ( ListaParametros ) Sentencias finProcedimiento FIN . | ListaParametros → Parametro |
+| INICIO procedimiento p ( Parametro ) Sentencias finProcedimiento FIN . | Parametro → Tipo Identificador |
+| INICIO procedimiento p ( texto Identificador ) Sentencias finProcedimiento FIN . | Identificador → a |
+| INICIO procedimiento p ( texto a ) Sentencias finProcedimiento FIN . | Sentencias → Sentencia |
+| INICIO procedimiento p ( texto a ) Sentencia finProcedimiento FIN . | Sentencia → Impresion |
+| INICIO procedimiento p ( texto a ) Impresion finProcedimiento FIN . | Impresion → mostrar ExpresionTexto |
+| INICIO procedimiento p ( texto a ) mostrar ExpresionTexto finProcedimiento FIN . | ExpresionTexto → ValorTexto |
+| INICIO procedimiento p ( texto a ) mostrar ValorTexto finProcedimiento FIN . | ValorTexto → Identificador |
+| INICIO procedimiento p ( texto a ) mostrar Identificador finProcedimiento FIN . | Identificador → a |
+| INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN . | accept |
