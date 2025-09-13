@@ -1,7 +1,13 @@
+"""
+Analizador Léxico (Scanner) para el Lenguaje de Seguridad Educativo
+Implementación corregida siguiendo las mejores prácticas de PLY
+"""
+
 import ply.lex as lex
 
-
-# Palabras reservadas
+# =============================================================================
+# PALABRAS RESERVADAS DEL LENGUAJE
+# =============================================================================
 reserved = {
     'INICIO': 'INICIO',
     'anotar': 'ANOTAR',
@@ -12,13 +18,17 @@ reserved = {
     'no': 'NO',
     'mientras': 'MIENTRAS',
     'hacer': 'HACER',
+    'y': 'Y',
+    'o': 'O',
     'funcion': 'FUNCION',
     'retornar': 'RETORNAR',
     'finFuncion': 'FINFUNCION',
     'procedimiento': 'PROCEDIMIENTO',
     'finProcedimiento': 'FINPROCEDIMIENTO',
     'agregar': 'AGREGAR',
+    'a': 'A',
     'quitar': 'QUITAR',
+    'en': 'EN',
     'limpiar': 'LIMPIAR',
     'vacia': 'VACIA',
     'vulnerable': 'VULNERABLE',
@@ -27,42 +37,78 @@ reserved = {
     'xss': 'XSS',
     'rce': 'RCE',
     'probar': 'PROBAR',
-    'reportar': 'REPORTAR'
+    'reportar': 'REPORTAR',
+    'numero': 'NUMERO_TIPO',
+    'texto': 'TEXTO_TIPO',
+    'vulnerabilidad': 'VULNERABILIDAD_TIPO',
+    'bool': 'BOOL_TIPO',
+    'lista': 'LISTA'
 }
 
-# Lista de tokens
+# =============================================================================
+# DEFINICIÓN DE TOKENS
+# =============================================================================
 tokens = [
-    'FIN',
-    'ID',
-    'NUMERO',
-    'TEXTO',
-    'MAS', 'MENOS', 'POR', 'DIV',
-    'IGUAL', 'DIF', 'MENOR', 'MAYOR', 'MENORIG', 'MAYORIG',
-    'ASIGNAR',
-    'LPAREN', 'RPAREN',
-    'LBRACKET', 'RBRACKET',
-    'COMA'
+    # Tokens especiales
+    'FIN',              # Fin del programa (FIN.)
+    'ID',               # Identificadores de variables/funciones
+    'NUMERO',           # Números enteros
+    'TEXTO',            # Cadenas de texto entre comillas
+    
+    # Operadores aritméticos
+    'MAS',              # Suma (+)
+    'MENOS',            # Resta (-)
+    'POR',              # Multiplicación (*)
+    'DIV',              # División (/)
+    
+    # Operadores de comparación
+    'IGUAL',            # Igualdad (==)
+    'DIF',              # Desigualdad (!=)
+    'MENOR',            # Menor que (<)
+    'MAYOR',            # Mayor que (>)
+    'MENORIG',          # Menor o igual (<=)
+    'MAYORIG',          # Mayor o igual (>=)
+    
+    # Operadores de asignación y agrupación
+    'ASIGNAR',          # Asignación (=)
+    'LPAREN',           # Paréntesis izquierdo (()
+    'RPAREN',           # Paréntesis derecho ())
+    'LBRACKET',         # Corchete izquierdo ([)
+    'RBRACKET',         # Corchete derecho (])
+    'COMA',             # Separador de argumentos (,)
 ] + list(reserved.values())
 
-# Expresiones regulares simples
-t_MAS       = r'\+'
-t_MENOS     = r'-'
-t_POR       = r'\*'
-t_DIV       = r'/'
-t_IGUAL     = r'=='
-t_DIF       = r'!='
-t_MENORIG   = r'<='
-t_MAYORIG   = r'>='
-t_MENOR     = r'<'
-t_MAYOR     = r'>'
-t_ASIGNAR   = r'='
-t_LPAREN    = r'\('
-t_RPAREN    = r'\)'
-t_LBRACKET  = r'\['
-t_RBRACKET  = r'\]'
-t_COMA      = r','
+# =============================================================================
+# EXPRESIONES REGULARES PARA SÍMBOLOS SIMPLES
+# =============================================================================
+# Según la documentación de PLY, los tokens simples se definen como variables
+t_MAS = r'\+'
+t_MENOS = r'-'
+t_POR = r'\*'
+t_DIV = r'/'
+t_IGUAL = r'=='
+t_DIF = r'!='
+t_MENORIG = r'<='
+t_MAYORIG = r'>='
+t_MENOR = r'<'
+t_MAYOR = r'>'
+t_ASIGNAR = r'='
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
+t_COMA = r','
 
-# Tokens más complejos
+# =============================================================================
+# CARACTERES IGNORADOS
+# =============================================================================
+# Espacios, tabs y saltos de línea
+t_ignore = ' \t\r\n'
+
+# =============================================================================
+# FUNCIONES DE RECONOCIMIENTO DE TOKENS COMPLEJOS
+# =============================================================================
+
 def t_FIN(t):
     r'FIN\.'
     return t
@@ -73,8 +119,8 @@ def t_NUMERO(t):
     return t
 
 def t_TEXTO(t):
-    r'\"([^\\\n]|(\\.))*?\"'
-    t.value = t.value[1:-1]
+    r'\"([^"\\\n]|(\\.))*\"'
+    t.value = t.value[1:-1]  # Quitar las comillas
     return t
 
 def t_ID(t):
@@ -82,24 +128,19 @@ def t_ID(t):
     t.type = reserved.get(t.value, 'ID')
     return t
 
-# Ignorar espacios y tabs
-t_ignore = ' \t\r'
-
-
-# Ignorar comentarios
 def t_COMMENTLINE(t):
     r'//.*'
-    pass
+    pass  # No retorna nada, se ignora
 
-def t_COMMENTBLOCK(t):
-    r'/\*[^*]*\*+(?:[^/*][^*]*\*+)*/'
-    pass
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
 
-# Manejo de errores
 def t_error(t):
-    print(f"Caracter ilegal: {t.value[0]}")
+    print(f"Error léxico: Carácter ilegal '{t.value[0]}' en línea {t.lineno}")
     t.lexer.skip(1)
 
-# Construcción del lexer
+# =============================================================================
+# CONSTRUCCIÓN DEL LEXER
+# =============================================================================
 lexer = lex.lex()
-

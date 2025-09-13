@@ -1,0 +1,23 @@
+INICIO
+anotar sitio = "https://ejemplo.com/login"
+mostrar "=== Test de Vulnerabilidades ==="
+mostrar "Probando: " + sitio
+
+// Test SQL Injection
+mostrar "Test SQL Injection:"
+mostrar probar("https://ejemplo.com/login", sqli, "admin' OR 1=1--")
+
+// Test XSS
+mostrar "Test XSS:"
+mostrar probar("https://ejemplo.com/comentarios", xss, "<script>alert('XSS')</script>")
+
+// Test RCE
+mostrar "Test RCE:"
+mostrar probar("https://ejemplo.com/admin", rce, "ping -c 1 127.0.0.1")
+
+// Test seguro
+mostrar "Test seguro:"
+mostrar probar("https://ejemplo.com/login", sqli, "admin123")
+
+mostrar "=== Fin de Tests ==="
+FIN.

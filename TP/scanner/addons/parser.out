@@ -1,33 +1,5 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    AGREGAR
-    DIF
-    EVALUAR
-    FINFUNCION
-    FINPROCEDIMIENTO
-    FUNCION
-    HACER
-    IGUAL
-    LBRACKET
-    LIMPIAR
-    MAYOR
-    MAYORIG
-    MENOR
-    MENORIG
-    MIENTRAS
-    NO
-    PASA
-    PROCEDIMIENTO
-    QUITAR
-    RBRACKET
-    RETORNAR
-    SEGURO
-    SI
-    VACIA
-    VULNERABLE
-
 Grammar
 
 Rule 0     S' -> programa
@@ -35,73 +7,3472 @@ Rule 1     programa -> INICIO sentencias FIN
 Rule 2     sentencias -> sentencia sentencias
 Rule 3     sentencias -> sentencia
 Rule 4     sentencia -> ANOTAR ID ASIGNAR expresion
-Rule 5     sentencia -> MOSTRAR expresion
-Rule 6     expresion -> expresion MAS expresion
-Rule 7     expresion -> expresion MENOS expresion
-Rule 8     expresion -> expresion POR expresion
-Rule 9     expresion -> expresion DIV expresion
-Rule 10    expresion -> NUMERO
-Rule 11    expresion -> TEXTO
-Rule 12    expresion -> ID
-Rule 13    expresion -> SQLI
-Rule 14    expresion -> XSS
-Rule 15    expresion -> RCE
-Rule 16    expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
-Rule 17    expresion -> REPORTAR LPAREN expresion RPAREN
+Rule 5     sentencia -> ANOTAR tipo ID ASIGNAR expresion
+Rule 6     sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA
+Rule 7     sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+Rule 8     sentencia -> MOSTRAR expresion
+Rule 9     sentencia -> EVALUAR condicion PASA sentencias
+Rule 10    sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias
+Rule 11    sentencia -> MIENTRAS condicion HACER sentencias
+Rule 12    sentencia -> AGREGAR expresion A ID
+Rule 13    sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET
+Rule 14    sentencia -> LIMPIAR ID
+Rule 15    sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+Rule 16    sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+Rule 17    sentencia -> ID LPAREN argumentos_opt RPAREN
+Rule 18    tipo -> NUMERO_TIPO
+Rule 19    tipo -> TEXTO_TIPO
+Rule 20    tipo -> VULNERABILIDAD_TIPO
+Rule 21    tipo -> BOOL_TIPO
+Rule 22    tipo -> LISTA MENOR tipo_base MAYOR
+Rule 23    tipo_base -> NUMERO_TIPO
+Rule 24    tipo_base -> TEXTO_TIPO
+Rule 25    tipo_base -> VULNERABILIDAD_TIPO
+Rule 26    tipo_base -> BOOL_TIPO
+Rule 27    expresion -> expresion MAS expresion
+Rule 28    expresion -> expresion MENOS expresion
+Rule 29    expresion -> expresion POR expresion
+Rule 30    expresion -> expresion DIV expresion
+Rule 31    expresion -> NUMERO
+Rule 32    expresion -> TEXTO
+Rule 33    expresion -> ID
+Rule 34    expresion -> ID LBRACKET expresion RBRACKET
+Rule 35    expresion -> SQLI
+Rule 36    expresion -> XSS
+Rule 37    expresion -> RCE
+Rule 38    expresion -> VULNERABLE
+Rule 39    expresion -> SEGURO
+Rule 40    expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+Rule 41    expresion -> REPORTAR LPAREN expresion RPAREN
+Rule 42    expresion -> ID LPAREN argumentos_opt RPAREN
+Rule 43    expresion -> LPAREN expresion RPAREN
+Rule 44    condicion -> expresion IGUAL expresion
+Rule 45    condicion -> expresion DIF expresion
+Rule 46    condicion -> expresion MENOR expresion
+Rule 47    condicion -> expresion MAYOR expresion
+Rule 48    condicion -> expresion MENORIG expresion
+Rule 49    condicion -> expresion MAYORIG expresion
+Rule 50    condicion -> condicion Y condicion
+Rule 51    condicion -> condicion O condicion
+Rule 52    condicion -> NO condicion
+Rule 53    condicion -> expresion
+Rule 54    parametros_opt -> parametros
+Rule 55    parametros_opt -> empty
+Rule 56    parametros -> parametro
+Rule 57    parametros -> parametro COMA parametros
+Rule 58    parametro -> tipo ID
+Rule 59    argumentos_opt -> argumentos
+Rule 60    argumentos_opt -> empty
+Rule 61    argumentos -> expresion
+Rule 62    argumentos -> expresion COMA argumentos
+Rule 63    empty -> <empty>
 
 Terminals, with rules where they appear
 
-AGREGAR              : 
-ANOTAR               : 4
-ASIGNAR              : 4
-COMA                 : 16 16
-DIF                  : 
-DIV                  : 9
-EVALUAR              : 
-FINFUNCION           : 
-FINPROCEDIMIENTO     : 
-FUNCION              : 
-HACER                : 
-ID                   : 4 12
-IGUAL                : 
+A                    : 12
+AGREGAR              : 12
+ANOTAR               : 4 5 6 7
+ASIGNAR              : 4 5 6 7
+BOOL_TIPO            : 21 26
+COMA                 : 40 40 57 62
+DIF                  : 45
+DIV                  : 30
+EN                   : 13
+EVALUAR              : 9 10
+FIN                  : 1
+FINFUNCION           : 15
+FINPROCEDIMIENTO     : 16
+FUNCION              : 15
+HACER                : 11
+ID                   : 4 5 6 7 12 13 14 15 16 17 33 34 42 58
+IGUAL                : 44
 INICIO               : 1
-LBRACKET             : 
-LIMPIAR              : 
-LPAREN               : 16 17
-MAS                  : 6
-MAYOR                : 
-MAYORIG              : 
-MENOR                : 
-MENORIG              : 
-MENOS                : 7
-MIENTRAS             : 
-MOSTRAR              : 5
-NO                   : 
-NUMERO               : 10
-PASA                 : 
-POR                  : 8
-PROBAR               : 16
-PROCEDIMIENTO        : 
-QUITAR               : 
-RBRACKET             : 
-RCE                  : 15
-REPORTAR             : 17
-RETORNAR             : 
-RPAREN               : 16 17
-SEGURO               : 
-SI                   : 
-SQLI                 : 13
-TEXTO                : 11
-VACIA                : 
-VULNERABLE           : 
-XSS                  : 14
+LBRACKET             : 7 13 34
+LIMPIAR              : 14
+LISTA                : 6 7 22
+LPAREN               : 15 16 17 40 41 42 43
+MAS                  : 27
+MAYOR                : 6 7 22 47
+MAYORIG              : 49
+MENOR                : 6 7 22 46
+MENORIG              : 48
+MENOS                : 28
+MIENTRAS             : 11
+MOSTRAR              : 8
+NO                   : 10 52
+NUMERO               : 31
+NUMERO_TIPO          : 18 23
+O                    : 51
+PASA                 : 9 10 10
+POR                  : 29
+PROBAR               : 40
+PROCEDIMIENTO        : 16
+QUITAR               : 13
+RBRACKET             : 7 13 34
+RCE                  : 37
+REPORTAR             : 41
+RETORNAR             : 15
+RPAREN               : 15 16 17 40 41 42 43
+SEGURO               : 39
+SI                   : 10
+SQLI                 : 35
+TEXTO                : 32
+TEXTO_TIPO           : 19 24
+VACIA                : 6
+VULNERABILIDAD_TIPO  : 20 25
+VULNERABLE           : 38
+XSS                  : 36
+Y                    : 50
 error                : 
 
 Nonterminals, with rules where they appear
 
-FIN                  : 1
-expresion            : 4 5 6 6 7 7 8 8 9 9 16 16 16 17
+argumentos           : 59 62
+argumentos_opt       : 17 42
+condicion            : 9 10 11 50 50 51 51 52
+empty                : 55 60
+expresion            : 4 5 8 12 13 15 27 27 28 28 29 29 30 30 34 40 40 40 41 43 44 44 45 45 46 46 47 47 48 48 49 49 53 61 62
+parametro            : 56 57
+parametros           : 54 57
+parametros_opt       : 15 16
 programa             : 0
 sentencia            : 2 3
-sentencias           : 1 2
+sentencias           : 1 2 9 10 10 11 15 16
+tipo                 : 5 15 58
+tipo_base            : 6 7 22
 
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programa
+    (1) programa -> . INICIO sentencias FIN
+
+    INICIO          shift and go to state 2
+
+    programa                       shift and go to state 1
+
+state 1
+
+    (0) S' -> programa .
+
+
+
+state 2
+
+    (1) programa -> INICIO . sentencias FIN
+    (2) sentencias -> . sentencia sentencias
+    (3) sentencias -> . sentencia
+    (4) sentencia -> . ANOTAR ID ASIGNAR expresion
+    (5) sentencia -> . ANOTAR tipo ID ASIGNAR expresion
+    (6) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (8) sentencia -> . MOSTRAR expresion
+    (9) sentencia -> . EVALUAR condicion PASA sentencias
+    (10) sentencia -> . EVALUAR condicion PASA sentencias SI NO PASA sentencias
+    (11) sentencia -> . MIENTRAS condicion HACER sentencias
+    (12) sentencia -> . AGREGAR expresion A ID
+    (13) sentencia -> . QUITAR EN ID LBRACKET expresion RBRACKET
+    (14) sentencia -> . LIMPIAR ID
+    (15) sentencia -> . FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+    (16) sentencia -> . PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+    (17) sentencia -> . ID LPAREN argumentos_opt RPAREN
+
+    ANOTAR          shift and go to state 5
+    MOSTRAR         shift and go to state 7
+    EVALUAR         shift and go to state 8
+    MIENTRAS        shift and go to state 9
+    AGREGAR         shift and go to state 10
+    QUITAR          shift and go to state 11
+    LIMPIAR         shift and go to state 12
+    FUNCION         shift and go to state 13
+    PROCEDIMIENTO   shift and go to state 14
+    ID              shift and go to state 6
+
+    sentencias                     shift and go to state 3
+    sentencia                      shift and go to state 4
+
+state 3
+
+    (1) programa -> INICIO sentencias . FIN
+
+    FIN             shift and go to state 15
+
+
+state 4
+
+    (2) sentencias -> sentencia . sentencias
+    (3) sentencias -> sentencia .
+    (2) sentencias -> . sentencia sentencias
+    (3) sentencias -> . sentencia
+    (4) sentencia -> . ANOTAR ID ASIGNAR expresion
+    (5) sentencia -> . ANOTAR tipo ID ASIGNAR expresion
+    (6) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (8) sentencia -> . MOSTRAR expresion
+    (9) sentencia -> . EVALUAR condicion PASA sentencias
+    (10) sentencia -> . EVALUAR condicion PASA sentencias SI NO PASA sentencias
+    (11) sentencia -> . MIENTRAS condicion HACER sentencias
+    (12) sentencia -> . AGREGAR expresion A ID
+    (13) sentencia -> . QUITAR EN ID LBRACKET expresion RBRACKET
+    (14) sentencia -> . LIMPIAR ID
+    (15) sentencia -> . FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+    (16) sentencia -> . PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+    (17) sentencia -> . ID LPAREN argumentos_opt RPAREN
+
+  ! shift/reduce conflict for ANOTAR resolved as shift
+  ! shift/reduce conflict for MOSTRAR resolved as shift
+  ! shift/reduce conflict for EVALUAR resolved as shift
+  ! shift/reduce conflict for MIENTRAS resolved as shift
+  ! shift/reduce conflict for AGREGAR resolved as shift
+  ! shift/reduce conflict for QUITAR resolved as shift
+  ! shift/reduce conflict for LIMPIAR resolved as shift
+  ! shift/reduce conflict for FUNCION resolved as shift
+  ! shift/reduce conflict for PROCEDIMIENTO resolved as shift
+  ! shift/reduce conflict for ID resolved as shift
+    FIN             reduce using rule 3 (sentencias -> sentencia .)
+    SI              reduce using rule 3 (sentencias -> sentencia .)
+    FINPROCEDIMIENTO reduce using rule 3 (sentencias -> sentencia .)
+    RETORNAR        reduce using rule 3 (sentencias -> sentencia .)
+    ANOTAR          shift and go to state 5
+    MOSTRAR         shift and go to state 7
+    EVALUAR         shift and go to state 8
+    MIENTRAS        shift and go to state 9
+    AGREGAR         shift and go to state 10
+    QUITAR          shift and go to state 11
+    LIMPIAR         shift and go to state 12
+    FUNCION         shift and go to state 13
+    PROCEDIMIENTO   shift and go to state 14
+    ID              shift and go to state 6
+
+  ! ANOTAR          [ reduce using rule 3 (sentencias -> sentencia .) ]
+  ! MOSTRAR         [ reduce using rule 3 (sentencias -> sentencia .) ]
+  ! EVALUAR         [ reduce using rule 3 (sentencias -> sentencia .) ]
+  ! MIENTRAS        [ reduce using rule 3 (sentencias -> sentencia .) ]
+  ! AGREGAR         [ reduce using rule 3 (sentencias -> sentencia .) ]
+  ! QUITAR          [ reduce using rule 3 (sentencias -> sentencia .) ]
+  ! LIMPIAR         [ reduce using rule 3 (sentencias -> sentencia .) ]
+  ! FUNCION         [ reduce using rule 3 (sentencias -> sentencia .) ]
+  ! PROCEDIMIENTO   [ reduce using rule 3 (sentencias -> sentencia .) ]
+  ! ID              [ reduce using rule 3 (sentencias -> sentencia .) ]
+
+    sentencia                      shift and go to state 4
+    sentencias                     shift and go to state 16
+
+state 5
+
+    (4) sentencia -> ANOTAR . ID ASIGNAR expresion
+    (5) sentencia -> ANOTAR . tipo ID ASIGNAR expresion
+    (6) sentencia -> ANOTAR . LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> ANOTAR . LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (18) tipo -> . NUMERO_TIPO
+    (19) tipo -> . TEXTO_TIPO
+    (20) tipo -> . VULNERABILIDAD_TIPO
+    (21) tipo -> . BOOL_TIPO
+    (22) tipo -> . LISTA MENOR tipo_base MAYOR
+
+    ID              shift and go to state 17
+    LISTA           shift and go to state 19
+    NUMERO_TIPO     shift and go to state 20
+    TEXTO_TIPO      shift and go to state 21
+    VULNERABILIDAD_TIPO shift and go to state 22
+    BOOL_TIPO       shift and go to state 23
+
+    tipo                           shift and go to state 18
+
+state 6
+
+    (17) sentencia -> ID . LPAREN argumentos_opt RPAREN
+
+    LPAREN          shift and go to state 24
+
+
+state 7
+
+    (8) sentencia -> MOSTRAR . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 25
+
+state 8
+
+    (9) sentencia -> EVALUAR . condicion PASA sentencias
+    (10) sentencia -> EVALUAR . condicion PASA sentencias SI NO PASA sentencias
+    (44) condicion -> . expresion IGUAL expresion
+    (45) condicion -> . expresion DIF expresion
+    (46) condicion -> . expresion MENOR expresion
+    (47) condicion -> . expresion MAYOR expresion
+    (48) condicion -> . expresion MENORIG expresion
+    (49) condicion -> . expresion MAYORIG expresion
+    (50) condicion -> . condicion Y condicion
+    (51) condicion -> . condicion O condicion
+    (52) condicion -> . NO condicion
+    (53) condicion -> . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NO              shift and go to state 38
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    condicion                      shift and go to state 37
+    expresion                      shift and go to state 39
+
+state 9
+
+    (11) sentencia -> MIENTRAS . condicion HACER sentencias
+    (44) condicion -> . expresion IGUAL expresion
+    (45) condicion -> . expresion DIF expresion
+    (46) condicion -> . expresion MENOR expresion
+    (47) condicion -> . expresion MAYOR expresion
+    (48) condicion -> . expresion MENORIG expresion
+    (49) condicion -> . expresion MAYORIG expresion
+    (50) condicion -> . condicion Y condicion
+    (51) condicion -> . condicion O condicion
+    (52) condicion -> . NO condicion
+    (53) condicion -> . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NO              shift and go to state 38
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    condicion                      shift and go to state 40
+    expresion                      shift and go to state 39
+
+state 10
+
+    (12) sentencia -> AGREGAR . expresion A ID
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 41
+
+state 11
+
+    (13) sentencia -> QUITAR . EN ID LBRACKET expresion RBRACKET
+
+    EN              shift and go to state 42
+
+
+state 12
+
+    (14) sentencia -> LIMPIAR . ID
+
+    ID              shift and go to state 43
+
+
+state 13
+
+    (15) sentencia -> FUNCION . tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+    (18) tipo -> . NUMERO_TIPO
+    (19) tipo -> . TEXTO_TIPO
+    (20) tipo -> . VULNERABILIDAD_TIPO
+    (21) tipo -> . BOOL_TIPO
+    (22) tipo -> . LISTA MENOR tipo_base MAYOR
+
+    NUMERO_TIPO     shift and go to state 20
+    TEXTO_TIPO      shift and go to state 21
+    VULNERABILIDAD_TIPO shift and go to state 22
+    BOOL_TIPO       shift and go to state 23
+    LISTA           shift and go to state 45
+
+    tipo                           shift and go to state 44
+
+state 14
+
+    (16) sentencia -> PROCEDIMIENTO . ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+
+    ID              shift and go to state 46
+
+
+state 15
+
+    (1) programa -> INICIO sentencias FIN .
+
+    $end            reduce using rule 1 (programa -> INICIO sentencias FIN .)
+
+
+state 16
+
+    (2) sentencias -> sentencia sentencias .
+
+    FIN             reduce using rule 2 (sentencias -> sentencia sentencias .)
+    SI              reduce using rule 2 (sentencias -> sentencia sentencias .)
+    ANOTAR          reduce using rule 2 (sentencias -> sentencia sentencias .)
+    MOSTRAR         reduce using rule 2 (sentencias -> sentencia sentencias .)
+    EVALUAR         reduce using rule 2 (sentencias -> sentencia sentencias .)
+    MIENTRAS        reduce using rule 2 (sentencias -> sentencia sentencias .)
+    AGREGAR         reduce using rule 2 (sentencias -> sentencia sentencias .)
+    QUITAR          reduce using rule 2 (sentencias -> sentencia sentencias .)
+    LIMPIAR         reduce using rule 2 (sentencias -> sentencia sentencias .)
+    FUNCION         reduce using rule 2 (sentencias -> sentencia sentencias .)
+    PROCEDIMIENTO   reduce using rule 2 (sentencias -> sentencia sentencias .)
+    ID              reduce using rule 2 (sentencias -> sentencia sentencias .)
+    FINPROCEDIMIENTO reduce using rule 2 (sentencias -> sentencia sentencias .)
+    RETORNAR        reduce using rule 2 (sentencias -> sentencia sentencias .)
+
+
+state 17
+
+    (4) sentencia -> ANOTAR ID . ASIGNAR expresion
+
+    ASIGNAR         shift and go to state 47
+
+
+state 18
+
+    (5) sentencia -> ANOTAR tipo . ID ASIGNAR expresion
+
+    ID              shift and go to state 48
+
+
+state 19
+
+    (6) sentencia -> ANOTAR LISTA . MENOR tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> ANOTAR LISTA . MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (22) tipo -> LISTA . MENOR tipo_base MAYOR
+
+    MENOR           shift and go to state 49
+
+
+state 20
+
+    (18) tipo -> NUMERO_TIPO .
+
+    ID              reduce using rule 18 (tipo -> NUMERO_TIPO .)
+
+
+state 21
+
+    (19) tipo -> TEXTO_TIPO .
+
+    ID              reduce using rule 19 (tipo -> TEXTO_TIPO .)
+
+
+state 22
+
+    (20) tipo -> VULNERABILIDAD_TIPO .
+
+    ID              reduce using rule 20 (tipo -> VULNERABILIDAD_TIPO .)
+
+
+state 23
+
+    (21) tipo -> BOOL_TIPO .
+
+    ID              reduce using rule 21 (tipo -> BOOL_TIPO .)
+
+
+state 24
+
+    (17) sentencia -> ID LPAREN . argumentos_opt RPAREN
+    (59) argumentos_opt -> . argumentos
+    (60) argumentos_opt -> . empty
+    (61) argumentos -> . expresion
+    (62) argumentos -> . expresion COMA argumentos
+    (63) empty -> .
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    RPAREN          reduce using rule 63 (empty -> .)
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    argumentos_opt                 shift and go to state 50
+    argumentos                     shift and go to state 51
+    empty                          shift and go to state 52
+    expresion                      shift and go to state 53
+
+state 25
+
+    (8) sentencia -> MOSTRAR expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    ANOTAR          reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    MOSTRAR         reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    EVALUAR         reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    MIENTRAS        reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    AGREGAR         reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    QUITAR          reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    LIMPIAR         reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    FUNCION         reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    PROCEDIMIENTO   reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    ID              reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    FIN             reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    SI              reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    FINPROCEDIMIENTO reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    RETORNAR        reduce using rule 8 (sentencia -> MOSTRAR expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 26
+
+    (31) expresion -> NUMERO .
+
+    MAS             reduce using rule 31 (expresion -> NUMERO .)
+    MENOS           reduce using rule 31 (expresion -> NUMERO .)
+    POR             reduce using rule 31 (expresion -> NUMERO .)
+    DIV             reduce using rule 31 (expresion -> NUMERO .)
+    ANOTAR          reduce using rule 31 (expresion -> NUMERO .)
+    MOSTRAR         reduce using rule 31 (expresion -> NUMERO .)
+    EVALUAR         reduce using rule 31 (expresion -> NUMERO .)
+    MIENTRAS        reduce using rule 31 (expresion -> NUMERO .)
+    AGREGAR         reduce using rule 31 (expresion -> NUMERO .)
+    QUITAR          reduce using rule 31 (expresion -> NUMERO .)
+    LIMPIAR         reduce using rule 31 (expresion -> NUMERO .)
+    FUNCION         reduce using rule 31 (expresion -> NUMERO .)
+    PROCEDIMIENTO   reduce using rule 31 (expresion -> NUMERO .)
+    ID              reduce using rule 31 (expresion -> NUMERO .)
+    FIN             reduce using rule 31 (expresion -> NUMERO .)
+    SI              reduce using rule 31 (expresion -> NUMERO .)
+    FINPROCEDIMIENTO reduce using rule 31 (expresion -> NUMERO .)
+    RETORNAR        reduce using rule 31 (expresion -> NUMERO .)
+    IGUAL           reduce using rule 31 (expresion -> NUMERO .)
+    DIF             reduce using rule 31 (expresion -> NUMERO .)
+    MENOR           reduce using rule 31 (expresion -> NUMERO .)
+    MAYOR           reduce using rule 31 (expresion -> NUMERO .)
+    MENORIG         reduce using rule 31 (expresion -> NUMERO .)
+    MAYORIG         reduce using rule 31 (expresion -> NUMERO .)
+    PASA            reduce using rule 31 (expresion -> NUMERO .)
+    Y               reduce using rule 31 (expresion -> NUMERO .)
+    O               reduce using rule 31 (expresion -> NUMERO .)
+    HACER           reduce using rule 31 (expresion -> NUMERO .)
+    A               reduce using rule 31 (expresion -> NUMERO .)
+    COMA            reduce using rule 31 (expresion -> NUMERO .)
+    RPAREN          reduce using rule 31 (expresion -> NUMERO .)
+    RBRACKET        reduce using rule 31 (expresion -> NUMERO .)
+    FINFUNCION      reduce using rule 31 (expresion -> NUMERO .)
+
+
+state 27
+
+    (32) expresion -> TEXTO .
+
+    MAS             reduce using rule 32 (expresion -> TEXTO .)
+    MENOS           reduce using rule 32 (expresion -> TEXTO .)
+    POR             reduce using rule 32 (expresion -> TEXTO .)
+    DIV             reduce using rule 32 (expresion -> TEXTO .)
+    ANOTAR          reduce using rule 32 (expresion -> TEXTO .)
+    MOSTRAR         reduce using rule 32 (expresion -> TEXTO .)
+    EVALUAR         reduce using rule 32 (expresion -> TEXTO .)
+    MIENTRAS        reduce using rule 32 (expresion -> TEXTO .)
+    AGREGAR         reduce using rule 32 (expresion -> TEXTO .)
+    QUITAR          reduce using rule 32 (expresion -> TEXTO .)
+    LIMPIAR         reduce using rule 32 (expresion -> TEXTO .)
+    FUNCION         reduce using rule 32 (expresion -> TEXTO .)
+    PROCEDIMIENTO   reduce using rule 32 (expresion -> TEXTO .)
+    ID              reduce using rule 32 (expresion -> TEXTO .)
+    FIN             reduce using rule 32 (expresion -> TEXTO .)
+    SI              reduce using rule 32 (expresion -> TEXTO .)
+    FINPROCEDIMIENTO reduce using rule 32 (expresion -> TEXTO .)
+    RETORNAR        reduce using rule 32 (expresion -> TEXTO .)
+    IGUAL           reduce using rule 32 (expresion -> TEXTO .)
+    DIF             reduce using rule 32 (expresion -> TEXTO .)
+    MENOR           reduce using rule 32 (expresion -> TEXTO .)
+    MAYOR           reduce using rule 32 (expresion -> TEXTO .)
+    MENORIG         reduce using rule 32 (expresion -> TEXTO .)
+    MAYORIG         reduce using rule 32 (expresion -> TEXTO .)
+    PASA            reduce using rule 32 (expresion -> TEXTO .)
+    Y               reduce using rule 32 (expresion -> TEXTO .)
+    O               reduce using rule 32 (expresion -> TEXTO .)
+    HACER           reduce using rule 32 (expresion -> TEXTO .)
+    A               reduce using rule 32 (expresion -> TEXTO .)
+    COMA            reduce using rule 32 (expresion -> TEXTO .)
+    RPAREN          reduce using rule 32 (expresion -> TEXTO .)
+    RBRACKET        reduce using rule 32 (expresion -> TEXTO .)
+    FINFUNCION      reduce using rule 32 (expresion -> TEXTO .)
+
+
+state 28
+
+    (33) expresion -> ID .
+    (34) expresion -> ID . LBRACKET expresion RBRACKET
+    (42) expresion -> ID . LPAREN argumentos_opt RPAREN
+
+    MAS             reduce using rule 33 (expresion -> ID .)
+    MENOS           reduce using rule 33 (expresion -> ID .)
+    POR             reduce using rule 33 (expresion -> ID .)
+    DIV             reduce using rule 33 (expresion -> ID .)
+    ANOTAR          reduce using rule 33 (expresion -> ID .)
+    MOSTRAR         reduce using rule 33 (expresion -> ID .)
+    EVALUAR         reduce using rule 33 (expresion -> ID .)
+    MIENTRAS        reduce using rule 33 (expresion -> ID .)
+    AGREGAR         reduce using rule 33 (expresion -> ID .)
+    QUITAR          reduce using rule 33 (expresion -> ID .)
+    LIMPIAR         reduce using rule 33 (expresion -> ID .)
+    FUNCION         reduce using rule 33 (expresion -> ID .)
+    PROCEDIMIENTO   reduce using rule 33 (expresion -> ID .)
+    ID              reduce using rule 33 (expresion -> ID .)
+    FIN             reduce using rule 33 (expresion -> ID .)
+    SI              reduce using rule 33 (expresion -> ID .)
+    FINPROCEDIMIENTO reduce using rule 33 (expresion -> ID .)
+    RETORNAR        reduce using rule 33 (expresion -> ID .)
+    IGUAL           reduce using rule 33 (expresion -> ID .)
+    DIF             reduce using rule 33 (expresion -> ID .)
+    MENOR           reduce using rule 33 (expresion -> ID .)
+    MAYOR           reduce using rule 33 (expresion -> ID .)
+    MENORIG         reduce using rule 33 (expresion -> ID .)
+    MAYORIG         reduce using rule 33 (expresion -> ID .)
+    PASA            reduce using rule 33 (expresion -> ID .)
+    Y               reduce using rule 33 (expresion -> ID .)
+    O               reduce using rule 33 (expresion -> ID .)
+    HACER           reduce using rule 33 (expresion -> ID .)
+    A               reduce using rule 33 (expresion -> ID .)
+    COMA            reduce using rule 33 (expresion -> ID .)
+    RPAREN          reduce using rule 33 (expresion -> ID .)
+    RBRACKET        reduce using rule 33 (expresion -> ID .)
+    FINFUNCION      reduce using rule 33 (expresion -> ID .)
+    LBRACKET        shift and go to state 58
+    LPAREN          shift and go to state 59
+
+
+state 29
+
+    (35) expresion -> SQLI .
+
+    MAS             reduce using rule 35 (expresion -> SQLI .)
+    MENOS           reduce using rule 35 (expresion -> SQLI .)
+    POR             reduce using rule 35 (expresion -> SQLI .)
+    DIV             reduce using rule 35 (expresion -> SQLI .)
+    ANOTAR          reduce using rule 35 (expresion -> SQLI .)
+    MOSTRAR         reduce using rule 35 (expresion -> SQLI .)
+    EVALUAR         reduce using rule 35 (expresion -> SQLI .)
+    MIENTRAS        reduce using rule 35 (expresion -> SQLI .)
+    AGREGAR         reduce using rule 35 (expresion -> SQLI .)
+    QUITAR          reduce using rule 35 (expresion -> SQLI .)
+    LIMPIAR         reduce using rule 35 (expresion -> SQLI .)
+    FUNCION         reduce using rule 35 (expresion -> SQLI .)
+    PROCEDIMIENTO   reduce using rule 35 (expresion -> SQLI .)
+    ID              reduce using rule 35 (expresion -> SQLI .)
+    FIN             reduce using rule 35 (expresion -> SQLI .)
+    SI              reduce using rule 35 (expresion -> SQLI .)
+    FINPROCEDIMIENTO reduce using rule 35 (expresion -> SQLI .)
+    RETORNAR        reduce using rule 35 (expresion -> SQLI .)
+    IGUAL           reduce using rule 35 (expresion -> SQLI .)
+    DIF             reduce using rule 35 (expresion -> SQLI .)
+    MENOR           reduce using rule 35 (expresion -> SQLI .)
+    MAYOR           reduce using rule 35 (expresion -> SQLI .)
+    MENORIG         reduce using rule 35 (expresion -> SQLI .)
+    MAYORIG         reduce using rule 35 (expresion -> SQLI .)
+    PASA            reduce using rule 35 (expresion -> SQLI .)
+    Y               reduce using rule 35 (expresion -> SQLI .)
+    O               reduce using rule 35 (expresion -> SQLI .)
+    HACER           reduce using rule 35 (expresion -> SQLI .)
+    A               reduce using rule 35 (expresion -> SQLI .)
+    COMA            reduce using rule 35 (expresion -> SQLI .)
+    RPAREN          reduce using rule 35 (expresion -> SQLI .)
+    RBRACKET        reduce using rule 35 (expresion -> SQLI .)
+    FINFUNCION      reduce using rule 35 (expresion -> SQLI .)
+
+
+state 30
+
+    (36) expresion -> XSS .
+
+    MAS             reduce using rule 36 (expresion -> XSS .)
+    MENOS           reduce using rule 36 (expresion -> XSS .)
+    POR             reduce using rule 36 (expresion -> XSS .)
+    DIV             reduce using rule 36 (expresion -> XSS .)
+    ANOTAR          reduce using rule 36 (expresion -> XSS .)
+    MOSTRAR         reduce using rule 36 (expresion -> XSS .)
+    EVALUAR         reduce using rule 36 (expresion -> XSS .)
+    MIENTRAS        reduce using rule 36 (expresion -> XSS .)
+    AGREGAR         reduce using rule 36 (expresion -> XSS .)
+    QUITAR          reduce using rule 36 (expresion -> XSS .)
+    LIMPIAR         reduce using rule 36 (expresion -> XSS .)
+    FUNCION         reduce using rule 36 (expresion -> XSS .)
+    PROCEDIMIENTO   reduce using rule 36 (expresion -> XSS .)
+    ID              reduce using rule 36 (expresion -> XSS .)
+    FIN             reduce using rule 36 (expresion -> XSS .)
+    SI              reduce using rule 36 (expresion -> XSS .)
+    FINPROCEDIMIENTO reduce using rule 36 (expresion -> XSS .)
+    RETORNAR        reduce using rule 36 (expresion -> XSS .)
+    IGUAL           reduce using rule 36 (expresion -> XSS .)
+    DIF             reduce using rule 36 (expresion -> XSS .)
+    MENOR           reduce using rule 36 (expresion -> XSS .)
+    MAYOR           reduce using rule 36 (expresion -> XSS .)
+    MENORIG         reduce using rule 36 (expresion -> XSS .)
+    MAYORIG         reduce using rule 36 (expresion -> XSS .)
+    PASA            reduce using rule 36 (expresion -> XSS .)
+    Y               reduce using rule 36 (expresion -> XSS .)
+    O               reduce using rule 36 (expresion -> XSS .)
+    HACER           reduce using rule 36 (expresion -> XSS .)
+    A               reduce using rule 36 (expresion -> XSS .)
+    COMA            reduce using rule 36 (expresion -> XSS .)
+    RPAREN          reduce using rule 36 (expresion -> XSS .)
+    RBRACKET        reduce using rule 36 (expresion -> XSS .)
+    FINFUNCION      reduce using rule 36 (expresion -> XSS .)
+
+
+state 31
+
+    (37) expresion -> RCE .
+
+    MAS             reduce using rule 37 (expresion -> RCE .)
+    MENOS           reduce using rule 37 (expresion -> RCE .)
+    POR             reduce using rule 37 (expresion -> RCE .)
+    DIV             reduce using rule 37 (expresion -> RCE .)
+    ANOTAR          reduce using rule 37 (expresion -> RCE .)
+    MOSTRAR         reduce using rule 37 (expresion -> RCE .)
+    EVALUAR         reduce using rule 37 (expresion -> RCE .)
+    MIENTRAS        reduce using rule 37 (expresion -> RCE .)
+    AGREGAR         reduce using rule 37 (expresion -> RCE .)
+    QUITAR          reduce using rule 37 (expresion -> RCE .)
+    LIMPIAR         reduce using rule 37 (expresion -> RCE .)
+    FUNCION         reduce using rule 37 (expresion -> RCE .)
+    PROCEDIMIENTO   reduce using rule 37 (expresion -> RCE .)
+    ID              reduce using rule 37 (expresion -> RCE .)
+    FIN             reduce using rule 37 (expresion -> RCE .)
+    SI              reduce using rule 37 (expresion -> RCE .)
+    FINPROCEDIMIENTO reduce using rule 37 (expresion -> RCE .)
+    RETORNAR        reduce using rule 37 (expresion -> RCE .)
+    IGUAL           reduce using rule 37 (expresion -> RCE .)
+    DIF             reduce using rule 37 (expresion -> RCE .)
+    MENOR           reduce using rule 37 (expresion -> RCE .)
+    MAYOR           reduce using rule 37 (expresion -> RCE .)
+    MENORIG         reduce using rule 37 (expresion -> RCE .)
+    MAYORIG         reduce using rule 37 (expresion -> RCE .)
+    PASA            reduce using rule 37 (expresion -> RCE .)
+    Y               reduce using rule 37 (expresion -> RCE .)
+    O               reduce using rule 37 (expresion -> RCE .)
+    HACER           reduce using rule 37 (expresion -> RCE .)
+    A               reduce using rule 37 (expresion -> RCE .)
+    COMA            reduce using rule 37 (expresion -> RCE .)
+    RPAREN          reduce using rule 37 (expresion -> RCE .)
+    RBRACKET        reduce using rule 37 (expresion -> RCE .)
+    FINFUNCION      reduce using rule 37 (expresion -> RCE .)
+
+
+state 32
+
+    (38) expresion -> VULNERABLE .
+
+    MAS             reduce using rule 38 (expresion -> VULNERABLE .)
+    MENOS           reduce using rule 38 (expresion -> VULNERABLE .)
+    POR             reduce using rule 38 (expresion -> VULNERABLE .)
+    DIV             reduce using rule 38 (expresion -> VULNERABLE .)
+    ANOTAR          reduce using rule 38 (expresion -> VULNERABLE .)
+    MOSTRAR         reduce using rule 38 (expresion -> VULNERABLE .)
+    EVALUAR         reduce using rule 38 (expresion -> VULNERABLE .)
+    MIENTRAS        reduce using rule 38 (expresion -> VULNERABLE .)
+    AGREGAR         reduce using rule 38 (expresion -> VULNERABLE .)
+    QUITAR          reduce using rule 38 (expresion -> VULNERABLE .)
+    LIMPIAR         reduce using rule 38 (expresion -> VULNERABLE .)
+    FUNCION         reduce using rule 38 (expresion -> VULNERABLE .)
+    PROCEDIMIENTO   reduce using rule 38 (expresion -> VULNERABLE .)
+    ID              reduce using rule 38 (expresion -> VULNERABLE .)
+    FIN             reduce using rule 38 (expresion -> VULNERABLE .)
+    SI              reduce using rule 38 (expresion -> VULNERABLE .)
+    FINPROCEDIMIENTO reduce using rule 38 (expresion -> VULNERABLE .)
+    RETORNAR        reduce using rule 38 (expresion -> VULNERABLE .)
+    IGUAL           reduce using rule 38 (expresion -> VULNERABLE .)
+    DIF             reduce using rule 38 (expresion -> VULNERABLE .)
+    MENOR           reduce using rule 38 (expresion -> VULNERABLE .)
+    MAYOR           reduce using rule 38 (expresion -> VULNERABLE .)
+    MENORIG         reduce using rule 38 (expresion -> VULNERABLE .)
+    MAYORIG         reduce using rule 38 (expresion -> VULNERABLE .)
+    PASA            reduce using rule 38 (expresion -> VULNERABLE .)
+    Y               reduce using rule 38 (expresion -> VULNERABLE .)
+    O               reduce using rule 38 (expresion -> VULNERABLE .)
+    HACER           reduce using rule 38 (expresion -> VULNERABLE .)
+    A               reduce using rule 38 (expresion -> VULNERABLE .)
+    COMA            reduce using rule 38 (expresion -> VULNERABLE .)
+    RPAREN          reduce using rule 38 (expresion -> VULNERABLE .)
+    RBRACKET        reduce using rule 38 (expresion -> VULNERABLE .)
+    FINFUNCION      reduce using rule 38 (expresion -> VULNERABLE .)
+
+
+state 33
+
+    (39) expresion -> SEGURO .
+
+    MAS             reduce using rule 39 (expresion -> SEGURO .)
+    MENOS           reduce using rule 39 (expresion -> SEGURO .)
+    POR             reduce using rule 39 (expresion -> SEGURO .)
+    DIV             reduce using rule 39 (expresion -> SEGURO .)
+    ANOTAR          reduce using rule 39 (expresion -> SEGURO .)
+    MOSTRAR         reduce using rule 39 (expresion -> SEGURO .)
+    EVALUAR         reduce using rule 39 (expresion -> SEGURO .)
+    MIENTRAS        reduce using rule 39 (expresion -> SEGURO .)
+    AGREGAR         reduce using rule 39 (expresion -> SEGURO .)
+    QUITAR          reduce using rule 39 (expresion -> SEGURO .)
+    LIMPIAR         reduce using rule 39 (expresion -> SEGURO .)
+    FUNCION         reduce using rule 39 (expresion -> SEGURO .)
+    PROCEDIMIENTO   reduce using rule 39 (expresion -> SEGURO .)
+    ID              reduce using rule 39 (expresion -> SEGURO .)
+    FIN             reduce using rule 39 (expresion -> SEGURO .)
+    SI              reduce using rule 39 (expresion -> SEGURO .)
+    FINPROCEDIMIENTO reduce using rule 39 (expresion -> SEGURO .)
+    RETORNAR        reduce using rule 39 (expresion -> SEGURO .)
+    IGUAL           reduce using rule 39 (expresion -> SEGURO .)
+    DIF             reduce using rule 39 (expresion -> SEGURO .)
+    MENOR           reduce using rule 39 (expresion -> SEGURO .)
+    MAYOR           reduce using rule 39 (expresion -> SEGURO .)
+    MENORIG         reduce using rule 39 (expresion -> SEGURO .)
+    MAYORIG         reduce using rule 39 (expresion -> SEGURO .)
+    PASA            reduce using rule 39 (expresion -> SEGURO .)
+    Y               reduce using rule 39 (expresion -> SEGURO .)
+    O               reduce using rule 39 (expresion -> SEGURO .)
+    HACER           reduce using rule 39 (expresion -> SEGURO .)
+    A               reduce using rule 39 (expresion -> SEGURO .)
+    COMA            reduce using rule 39 (expresion -> SEGURO .)
+    RPAREN          reduce using rule 39 (expresion -> SEGURO .)
+    RBRACKET        reduce using rule 39 (expresion -> SEGURO .)
+    FINFUNCION      reduce using rule 39 (expresion -> SEGURO .)
+
+
+state 34
+
+    (40) expresion -> PROBAR . LPAREN expresion COMA expresion COMA expresion RPAREN
+
+    LPAREN          shift and go to state 60
+
+
+state 35
+
+    (43) expresion -> LPAREN . expresion RPAREN
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 61
+
+state 36
+
+    (41) expresion -> REPORTAR . LPAREN expresion RPAREN
+
+    LPAREN          shift and go to state 62
+
+
+state 37
+
+    (9) sentencia -> EVALUAR condicion . PASA sentencias
+    (10) sentencia -> EVALUAR condicion . PASA sentencias SI NO PASA sentencias
+    (50) condicion -> condicion . Y condicion
+    (51) condicion -> condicion . O condicion
+
+    PASA            shift and go to state 63
+    Y               shift and go to state 64
+    O               shift and go to state 65
+
+
+state 38
+
+    (52) condicion -> NO . condicion
+    (44) condicion -> . expresion IGUAL expresion
+    (45) condicion -> . expresion DIF expresion
+    (46) condicion -> . expresion MENOR expresion
+    (47) condicion -> . expresion MAYOR expresion
+    (48) condicion -> . expresion MENORIG expresion
+    (49) condicion -> . expresion MAYORIG expresion
+    (50) condicion -> . condicion Y condicion
+    (51) condicion -> . condicion O condicion
+    (52) condicion -> . NO condicion
+    (53) condicion -> . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NO              shift and go to state 38
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    condicion                      shift and go to state 66
+    expresion                      shift and go to state 39
+
+state 39
+
+    (44) condicion -> expresion . IGUAL expresion
+    (45) condicion -> expresion . DIF expresion
+    (46) condicion -> expresion . MENOR expresion
+    (47) condicion -> expresion . MAYOR expresion
+    (48) condicion -> expresion . MENORIG expresion
+    (49) condicion -> expresion . MAYORIG expresion
+    (53) condicion -> expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    IGUAL           shift and go to state 67
+    DIF             shift and go to state 68
+    MENOR           shift and go to state 69
+    MAYOR           shift and go to state 70
+    MENORIG         shift and go to state 71
+    MAYORIG         shift and go to state 72
+    PASA            reduce using rule 53 (condicion -> expresion .)
+    Y               reduce using rule 53 (condicion -> expresion .)
+    O               reduce using rule 53 (condicion -> expresion .)
+    HACER           reduce using rule 53 (condicion -> expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 40
+
+    (11) sentencia -> MIENTRAS condicion . HACER sentencias
+    (50) condicion -> condicion . Y condicion
+    (51) condicion -> condicion . O condicion
+
+    HACER           shift and go to state 73
+    Y               shift and go to state 64
+    O               shift and go to state 65
+
+
+state 41
+
+    (12) sentencia -> AGREGAR expresion . A ID
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    A               shift and go to state 74
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 42
+
+    (13) sentencia -> QUITAR EN . ID LBRACKET expresion RBRACKET
+
+    ID              shift and go to state 75
+
+
+state 43
+
+    (14) sentencia -> LIMPIAR ID .
+
+    ANOTAR          reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    MOSTRAR         reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    EVALUAR         reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    MIENTRAS        reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    AGREGAR         reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    QUITAR          reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    LIMPIAR         reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    FUNCION         reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    PROCEDIMIENTO   reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    ID              reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    FIN             reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    SI              reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    FINPROCEDIMIENTO reduce using rule 14 (sentencia -> LIMPIAR ID .)
+    RETORNAR        reduce using rule 14 (sentencia -> LIMPIAR ID .)
+
+
+state 44
+
+    (15) sentencia -> FUNCION tipo . ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+
+    ID              shift and go to state 76
+
+
+state 45
+
+    (22) tipo -> LISTA . MENOR tipo_base MAYOR
+
+    MENOR           shift and go to state 77
+
+
+state 46
+
+    (16) sentencia -> PROCEDIMIENTO ID . LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+
+    LPAREN          shift and go to state 78
+
+
+state 47
+
+    (4) sentencia -> ANOTAR ID ASIGNAR . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 79
+
+state 48
+
+    (5) sentencia -> ANOTAR tipo ID . ASIGNAR expresion
+
+    ASIGNAR         shift and go to state 80
+
+
+state 49
+
+    (6) sentencia -> ANOTAR LISTA MENOR . tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> ANOTAR LISTA MENOR . tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (22) tipo -> LISTA MENOR . tipo_base MAYOR
+    (23) tipo_base -> . NUMERO_TIPO
+    (24) tipo_base -> . TEXTO_TIPO
+    (25) tipo_base -> . VULNERABILIDAD_TIPO
+    (26) tipo_base -> . BOOL_TIPO
+
+    NUMERO_TIPO     shift and go to state 82
+    TEXTO_TIPO      shift and go to state 83
+    VULNERABILIDAD_TIPO shift and go to state 84
+    BOOL_TIPO       shift and go to state 85
+
+    tipo_base                      shift and go to state 81
+
+state 50
+
+    (17) sentencia -> ID LPAREN argumentos_opt . RPAREN
+
+    RPAREN          shift and go to state 86
+
+
+state 51
+
+    (59) argumentos_opt -> argumentos .
+
+    RPAREN          reduce using rule 59 (argumentos_opt -> argumentos .)
+
+
+state 52
+
+    (60) argumentos_opt -> empty .
+
+    RPAREN          reduce using rule 60 (argumentos_opt -> empty .)
+
+
+state 53
+
+    (61) argumentos -> expresion .
+    (62) argumentos -> expresion . COMA argumentos
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    RPAREN          reduce using rule 61 (argumentos -> expresion .)
+    COMA            shift and go to state 87
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 54
+
+    (27) expresion -> expresion MAS . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 88
+
+state 55
+
+    (28) expresion -> expresion MENOS . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 89
+
+state 56
+
+    (29) expresion -> expresion POR . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 90
+
+state 57
+
+    (30) expresion -> expresion DIV . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 91
+
+state 58
+
+    (34) expresion -> ID LBRACKET . expresion RBRACKET
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 92
+
+state 59
+
+    (42) expresion -> ID LPAREN . argumentos_opt RPAREN
+    (59) argumentos_opt -> . argumentos
+    (60) argumentos_opt -> . empty
+    (61) argumentos -> . expresion
+    (62) argumentos -> . expresion COMA argumentos
+    (63) empty -> .
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    RPAREN          reduce using rule 63 (empty -> .)
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    argumentos_opt                 shift and go to state 93
+    argumentos                     shift and go to state 51
+    empty                          shift and go to state 52
+    expresion                      shift and go to state 53
+
+state 60
+
+    (40) expresion -> PROBAR LPAREN . expresion COMA expresion COMA expresion RPAREN
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 94
+
+state 61
+
+    (43) expresion -> LPAREN expresion . RPAREN
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    RPAREN          shift and go to state 95
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 62
+
+    (41) expresion -> REPORTAR LPAREN . expresion RPAREN
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 96
+
+state 63
+
+    (9) sentencia -> EVALUAR condicion PASA . sentencias
+    (10) sentencia -> EVALUAR condicion PASA . sentencias SI NO PASA sentencias
+    (2) sentencias -> . sentencia sentencias
+    (3) sentencias -> . sentencia
+    (4) sentencia -> . ANOTAR ID ASIGNAR expresion
+    (5) sentencia -> . ANOTAR tipo ID ASIGNAR expresion
+    (6) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (8) sentencia -> . MOSTRAR expresion
+    (9) sentencia -> . EVALUAR condicion PASA sentencias
+    (10) sentencia -> . EVALUAR condicion PASA sentencias SI NO PASA sentencias
+    (11) sentencia -> . MIENTRAS condicion HACER sentencias
+    (12) sentencia -> . AGREGAR expresion A ID
+    (13) sentencia -> . QUITAR EN ID LBRACKET expresion RBRACKET
+    (14) sentencia -> . LIMPIAR ID
+    (15) sentencia -> . FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+    (16) sentencia -> . PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+    (17) sentencia -> . ID LPAREN argumentos_opt RPAREN
+
+    ANOTAR          shift and go to state 5
+    MOSTRAR         shift and go to state 7
+    EVALUAR         shift and go to state 8
+    MIENTRAS        shift and go to state 9
+    AGREGAR         shift and go to state 10
+    QUITAR          shift and go to state 11
+    LIMPIAR         shift and go to state 12
+    FUNCION         shift and go to state 13
+    PROCEDIMIENTO   shift and go to state 14
+    ID              shift and go to state 6
+
+    sentencias                     shift and go to state 97
+    sentencia                      shift and go to state 4
+
+state 64
+
+    (50) condicion -> condicion Y . condicion
+    (44) condicion -> . expresion IGUAL expresion
+    (45) condicion -> . expresion DIF expresion
+    (46) condicion -> . expresion MENOR expresion
+    (47) condicion -> . expresion MAYOR expresion
+    (48) condicion -> . expresion MENORIG expresion
+    (49) condicion -> . expresion MAYORIG expresion
+    (50) condicion -> . condicion Y condicion
+    (51) condicion -> . condicion O condicion
+    (52) condicion -> . NO condicion
+    (53) condicion -> . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NO              shift and go to state 38
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    condicion                      shift and go to state 98
+    expresion                      shift and go to state 39
+
+state 65
+
+    (51) condicion -> condicion O . condicion
+    (44) condicion -> . expresion IGUAL expresion
+    (45) condicion -> . expresion DIF expresion
+    (46) condicion -> . expresion MENOR expresion
+    (47) condicion -> . expresion MAYOR expresion
+    (48) condicion -> . expresion MENORIG expresion
+    (49) condicion -> . expresion MAYORIG expresion
+    (50) condicion -> . condicion Y condicion
+    (51) condicion -> . condicion O condicion
+    (52) condicion -> . NO condicion
+    (53) condicion -> . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NO              shift and go to state 38
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    condicion                      shift and go to state 99
+    expresion                      shift and go to state 39
+
+state 66
+
+    (52) condicion -> NO condicion .
+    (50) condicion -> condicion . Y condicion
+    (51) condicion -> condicion . O condicion
+
+    PASA            reduce using rule 52 (condicion -> NO condicion .)
+    Y               reduce using rule 52 (condicion -> NO condicion .)
+    O               reduce using rule 52 (condicion -> NO condicion .)
+    HACER           reduce using rule 52 (condicion -> NO condicion .)
+
+  ! Y               [ shift and go to state 64 ]
+  ! O               [ shift and go to state 65 ]
+
+
+state 67
+
+    (44) condicion -> expresion IGUAL . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 100
+
+state 68
+
+    (45) condicion -> expresion DIF . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 101
+
+state 69
+
+    (46) condicion -> expresion MENOR . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 102
+
+state 70
+
+    (47) condicion -> expresion MAYOR . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 103
+
+state 71
+
+    (48) condicion -> expresion MENORIG . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 104
+
+state 72
+
+    (49) condicion -> expresion MAYORIG . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 105
+
+state 73
+
+    (11) sentencia -> MIENTRAS condicion HACER . sentencias
+    (2) sentencias -> . sentencia sentencias
+    (3) sentencias -> . sentencia
+    (4) sentencia -> . ANOTAR ID ASIGNAR expresion
+    (5) sentencia -> . ANOTAR tipo ID ASIGNAR expresion
+    (6) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (8) sentencia -> . MOSTRAR expresion
+    (9) sentencia -> . EVALUAR condicion PASA sentencias
+    (10) sentencia -> . EVALUAR condicion PASA sentencias SI NO PASA sentencias
+    (11) sentencia -> . MIENTRAS condicion HACER sentencias
+    (12) sentencia -> . AGREGAR expresion A ID
+    (13) sentencia -> . QUITAR EN ID LBRACKET expresion RBRACKET
+    (14) sentencia -> . LIMPIAR ID
+    (15) sentencia -> . FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+    (16) sentencia -> . PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+    (17) sentencia -> . ID LPAREN argumentos_opt RPAREN
+
+    ANOTAR          shift and go to state 5
+    MOSTRAR         shift and go to state 7
+    EVALUAR         shift and go to state 8
+    MIENTRAS        shift and go to state 9
+    AGREGAR         shift and go to state 10
+    QUITAR          shift and go to state 11
+    LIMPIAR         shift and go to state 12
+    FUNCION         shift and go to state 13
+    PROCEDIMIENTO   shift and go to state 14
+    ID              shift and go to state 6
+
+    sentencias                     shift and go to state 106
+    sentencia                      shift and go to state 4
+
+state 74
+
+    (12) sentencia -> AGREGAR expresion A . ID
+
+    ID              shift and go to state 107
+
+
+state 75
+
+    (13) sentencia -> QUITAR EN ID . LBRACKET expresion RBRACKET
+
+    LBRACKET        shift and go to state 108
+
+
+state 76
+
+    (15) sentencia -> FUNCION tipo ID . LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+
+    LPAREN          shift and go to state 109
+
+
+state 77
+
+    (22) tipo -> LISTA MENOR . tipo_base MAYOR
+    (23) tipo_base -> . NUMERO_TIPO
+    (24) tipo_base -> . TEXTO_TIPO
+    (25) tipo_base -> . VULNERABILIDAD_TIPO
+    (26) tipo_base -> . BOOL_TIPO
+
+    NUMERO_TIPO     shift and go to state 82
+    TEXTO_TIPO      shift and go to state 83
+    VULNERABILIDAD_TIPO shift and go to state 84
+    BOOL_TIPO       shift and go to state 85
+
+    tipo_base                      shift and go to state 110
+
+state 78
+
+    (16) sentencia -> PROCEDIMIENTO ID LPAREN . parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+    (54) parametros_opt -> . parametros
+    (55) parametros_opt -> . empty
+    (56) parametros -> . parametro
+    (57) parametros -> . parametro COMA parametros
+    (63) empty -> .
+    (58) parametro -> . tipo ID
+    (18) tipo -> . NUMERO_TIPO
+    (19) tipo -> . TEXTO_TIPO
+    (20) tipo -> . VULNERABILIDAD_TIPO
+    (21) tipo -> . BOOL_TIPO
+    (22) tipo -> . LISTA MENOR tipo_base MAYOR
+
+    RPAREN          reduce using rule 63 (empty -> .)
+    NUMERO_TIPO     shift and go to state 20
+    TEXTO_TIPO      shift and go to state 21
+    VULNERABILIDAD_TIPO shift and go to state 22
+    BOOL_TIPO       shift and go to state 23
+    LISTA           shift and go to state 45
+
+    parametros_opt                 shift and go to state 111
+    parametros                     shift and go to state 112
+    empty                          shift and go to state 113
+    parametro                      shift and go to state 114
+    tipo                           shift and go to state 115
+
+state 79
+
+    (4) sentencia -> ANOTAR ID ASIGNAR expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    ANOTAR          reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    MOSTRAR         reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    EVALUAR         reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    MIENTRAS        reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    AGREGAR         reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    QUITAR          reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    LIMPIAR         reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    FUNCION         reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    PROCEDIMIENTO   reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    ID              reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    FIN             reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    SI              reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    FINPROCEDIMIENTO reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    RETORNAR        reduce using rule 4 (sentencia -> ANOTAR ID ASIGNAR expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 80
+
+    (5) sentencia -> ANOTAR tipo ID ASIGNAR . expresion
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 116
+
+state 81
+
+    (6) sentencia -> ANOTAR LISTA MENOR tipo_base . MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> ANOTAR LISTA MENOR tipo_base . MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (22) tipo -> LISTA MENOR tipo_base . MAYOR
+
+    MAYOR           shift and go to state 117
+
+
+state 82
+
+    (23) tipo_base -> NUMERO_TIPO .
+
+    MAYOR           reduce using rule 23 (tipo_base -> NUMERO_TIPO .)
+
+
+state 83
+
+    (24) tipo_base -> TEXTO_TIPO .
+
+    MAYOR           reduce using rule 24 (tipo_base -> TEXTO_TIPO .)
+
+
+state 84
+
+    (25) tipo_base -> VULNERABILIDAD_TIPO .
+
+    MAYOR           reduce using rule 25 (tipo_base -> VULNERABILIDAD_TIPO .)
+
+
+state 85
+
+    (26) tipo_base -> BOOL_TIPO .
+
+    MAYOR           reduce using rule 26 (tipo_base -> BOOL_TIPO .)
+
+
+state 86
+
+    (17) sentencia -> ID LPAREN argumentos_opt RPAREN .
+
+    ANOTAR          reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    MOSTRAR         reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    EVALUAR         reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    MIENTRAS        reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    AGREGAR         reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    QUITAR          reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    LIMPIAR         reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    FUNCION         reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    PROCEDIMIENTO   reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    ID              reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    FIN             reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    SI              reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    FINPROCEDIMIENTO reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+    RETORNAR        reduce using rule 17 (sentencia -> ID LPAREN argumentos_opt RPAREN .)
+
+
+state 87
+
+    (62) argumentos -> expresion COMA . argumentos
+    (61) argumentos -> . expresion
+    (62) argumentos -> . expresion COMA argumentos
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 53
+    argumentos                     shift and go to state 118
+
+state 88
+
+    (27) expresion -> expresion MAS expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    MAS             reduce using rule 27 (expresion -> expresion MAS expresion .)
+    MENOS           reduce using rule 27 (expresion -> expresion MAS expresion .)
+    ANOTAR          reduce using rule 27 (expresion -> expresion MAS expresion .)
+    MOSTRAR         reduce using rule 27 (expresion -> expresion MAS expresion .)
+    EVALUAR         reduce using rule 27 (expresion -> expresion MAS expresion .)
+    MIENTRAS        reduce using rule 27 (expresion -> expresion MAS expresion .)
+    AGREGAR         reduce using rule 27 (expresion -> expresion MAS expresion .)
+    QUITAR          reduce using rule 27 (expresion -> expresion MAS expresion .)
+    LIMPIAR         reduce using rule 27 (expresion -> expresion MAS expresion .)
+    FUNCION         reduce using rule 27 (expresion -> expresion MAS expresion .)
+    PROCEDIMIENTO   reduce using rule 27 (expresion -> expresion MAS expresion .)
+    ID              reduce using rule 27 (expresion -> expresion MAS expresion .)
+    FIN             reduce using rule 27 (expresion -> expresion MAS expresion .)
+    SI              reduce using rule 27 (expresion -> expresion MAS expresion .)
+    FINPROCEDIMIENTO reduce using rule 27 (expresion -> expresion MAS expresion .)
+    RETORNAR        reduce using rule 27 (expresion -> expresion MAS expresion .)
+    IGUAL           reduce using rule 27 (expresion -> expresion MAS expresion .)
+    DIF             reduce using rule 27 (expresion -> expresion MAS expresion .)
+    MENOR           reduce using rule 27 (expresion -> expresion MAS expresion .)
+    MAYOR           reduce using rule 27 (expresion -> expresion MAS expresion .)
+    MENORIG         reduce using rule 27 (expresion -> expresion MAS expresion .)
+    MAYORIG         reduce using rule 27 (expresion -> expresion MAS expresion .)
+    PASA            reduce using rule 27 (expresion -> expresion MAS expresion .)
+    Y               reduce using rule 27 (expresion -> expresion MAS expresion .)
+    O               reduce using rule 27 (expresion -> expresion MAS expresion .)
+    HACER           reduce using rule 27 (expresion -> expresion MAS expresion .)
+    A               reduce using rule 27 (expresion -> expresion MAS expresion .)
+    COMA            reduce using rule 27 (expresion -> expresion MAS expresion .)
+    RPAREN          reduce using rule 27 (expresion -> expresion MAS expresion .)
+    RBRACKET        reduce using rule 27 (expresion -> expresion MAS expresion .)
+    FINFUNCION      reduce using rule 27 (expresion -> expresion MAS expresion .)
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+  ! POR             [ reduce using rule 27 (expresion -> expresion MAS expresion .) ]
+  ! DIV             [ reduce using rule 27 (expresion -> expresion MAS expresion .) ]
+  ! MAS             [ shift and go to state 54 ]
+  ! MENOS           [ shift and go to state 55 ]
+
+
+state 89
+
+    (28) expresion -> expresion MENOS expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    MAS             reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    MENOS           reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    ANOTAR          reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    MOSTRAR         reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    EVALUAR         reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    MIENTRAS        reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    AGREGAR         reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    QUITAR          reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    LIMPIAR         reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    FUNCION         reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    PROCEDIMIENTO   reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    ID              reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    FIN             reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    SI              reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    FINPROCEDIMIENTO reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    RETORNAR        reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    IGUAL           reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    DIF             reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    MENOR           reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    MAYOR           reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    MENORIG         reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    MAYORIG         reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    PASA            reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    Y               reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    O               reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    HACER           reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    A               reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    COMA            reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    RPAREN          reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    RBRACKET        reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    FINFUNCION      reduce using rule 28 (expresion -> expresion MENOS expresion .)
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+  ! POR             [ reduce using rule 28 (expresion -> expresion MENOS expresion .) ]
+  ! DIV             [ reduce using rule 28 (expresion -> expresion MENOS expresion .) ]
+  ! MAS             [ shift and go to state 54 ]
+  ! MENOS           [ shift and go to state 55 ]
+
+
+state 90
+
+    (29) expresion -> expresion POR expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    MAS             reduce using rule 29 (expresion -> expresion POR expresion .)
+    MENOS           reduce using rule 29 (expresion -> expresion POR expresion .)
+    POR             reduce using rule 29 (expresion -> expresion POR expresion .)
+    DIV             reduce using rule 29 (expresion -> expresion POR expresion .)
+    ANOTAR          reduce using rule 29 (expresion -> expresion POR expresion .)
+    MOSTRAR         reduce using rule 29 (expresion -> expresion POR expresion .)
+    EVALUAR         reduce using rule 29 (expresion -> expresion POR expresion .)
+    MIENTRAS        reduce using rule 29 (expresion -> expresion POR expresion .)
+    AGREGAR         reduce using rule 29 (expresion -> expresion POR expresion .)
+    QUITAR          reduce using rule 29 (expresion -> expresion POR expresion .)
+    LIMPIAR         reduce using rule 29 (expresion -> expresion POR expresion .)
+    FUNCION         reduce using rule 29 (expresion -> expresion POR expresion .)
+    PROCEDIMIENTO   reduce using rule 29 (expresion -> expresion POR expresion .)
+    ID              reduce using rule 29 (expresion -> expresion POR expresion .)
+    FIN             reduce using rule 29 (expresion -> expresion POR expresion .)
+    SI              reduce using rule 29 (expresion -> expresion POR expresion .)
+    FINPROCEDIMIENTO reduce using rule 29 (expresion -> expresion POR expresion .)
+    RETORNAR        reduce using rule 29 (expresion -> expresion POR expresion .)
+    IGUAL           reduce using rule 29 (expresion -> expresion POR expresion .)
+    DIF             reduce using rule 29 (expresion -> expresion POR expresion .)
+    MENOR           reduce using rule 29 (expresion -> expresion POR expresion .)
+    MAYOR           reduce using rule 29 (expresion -> expresion POR expresion .)
+    MENORIG         reduce using rule 29 (expresion -> expresion POR expresion .)
+    MAYORIG         reduce using rule 29 (expresion -> expresion POR expresion .)
+    PASA            reduce using rule 29 (expresion -> expresion POR expresion .)
+    Y               reduce using rule 29 (expresion -> expresion POR expresion .)
+    O               reduce using rule 29 (expresion -> expresion POR expresion .)
+    HACER           reduce using rule 29 (expresion -> expresion POR expresion .)
+    A               reduce using rule 29 (expresion -> expresion POR expresion .)
+    COMA            reduce using rule 29 (expresion -> expresion POR expresion .)
+    RPAREN          reduce using rule 29 (expresion -> expresion POR expresion .)
+    RBRACKET        reduce using rule 29 (expresion -> expresion POR expresion .)
+    FINFUNCION      reduce using rule 29 (expresion -> expresion POR expresion .)
+
+  ! MAS             [ shift and go to state 54 ]
+  ! MENOS           [ shift and go to state 55 ]
+  ! POR             [ shift and go to state 56 ]
+  ! DIV             [ shift and go to state 57 ]
+
+
+state 91
+
+    (30) expresion -> expresion DIV expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    MAS             reduce using rule 30 (expresion -> expresion DIV expresion .)
+    MENOS           reduce using rule 30 (expresion -> expresion DIV expresion .)
+    POR             reduce using rule 30 (expresion -> expresion DIV expresion .)
+    DIV             reduce using rule 30 (expresion -> expresion DIV expresion .)
+    ANOTAR          reduce using rule 30 (expresion -> expresion DIV expresion .)
+    MOSTRAR         reduce using rule 30 (expresion -> expresion DIV expresion .)
+    EVALUAR         reduce using rule 30 (expresion -> expresion DIV expresion .)
+    MIENTRAS        reduce using rule 30 (expresion -> expresion DIV expresion .)
+    AGREGAR         reduce using rule 30 (expresion -> expresion DIV expresion .)
+    QUITAR          reduce using rule 30 (expresion -> expresion DIV expresion .)
+    LIMPIAR         reduce using rule 30 (expresion -> expresion DIV expresion .)
+    FUNCION         reduce using rule 30 (expresion -> expresion DIV expresion .)
+    PROCEDIMIENTO   reduce using rule 30 (expresion -> expresion DIV expresion .)
+    ID              reduce using rule 30 (expresion -> expresion DIV expresion .)
+    FIN             reduce using rule 30 (expresion -> expresion DIV expresion .)
+    SI              reduce using rule 30 (expresion -> expresion DIV expresion .)
+    FINPROCEDIMIENTO reduce using rule 30 (expresion -> expresion DIV expresion .)
+    RETORNAR        reduce using rule 30 (expresion -> expresion DIV expresion .)
+    IGUAL           reduce using rule 30 (expresion -> expresion DIV expresion .)
+    DIF             reduce using rule 30 (expresion -> expresion DIV expresion .)
+    MENOR           reduce using rule 30 (expresion -> expresion DIV expresion .)
+    MAYOR           reduce using rule 30 (expresion -> expresion DIV expresion .)
+    MENORIG         reduce using rule 30 (expresion -> expresion DIV expresion .)
+    MAYORIG         reduce using rule 30 (expresion -> expresion DIV expresion .)
+    PASA            reduce using rule 30 (expresion -> expresion DIV expresion .)
+    Y               reduce using rule 30 (expresion -> expresion DIV expresion .)
+    O               reduce using rule 30 (expresion -> expresion DIV expresion .)
+    HACER           reduce using rule 30 (expresion -> expresion DIV expresion .)
+    A               reduce using rule 30 (expresion -> expresion DIV expresion .)
+    COMA            reduce using rule 30 (expresion -> expresion DIV expresion .)
+    RPAREN          reduce using rule 30 (expresion -> expresion DIV expresion .)
+    RBRACKET        reduce using rule 30 (expresion -> expresion DIV expresion .)
+    FINFUNCION      reduce using rule 30 (expresion -> expresion DIV expresion .)
+
+  ! MAS             [ shift and go to state 54 ]
+  ! MENOS           [ shift and go to state 55 ]
+  ! POR             [ shift and go to state 56 ]
+  ! DIV             [ shift and go to state 57 ]
+
+
+state 92
+
+    (34) expresion -> ID LBRACKET expresion . RBRACKET
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    RBRACKET        shift and go to state 119
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 93
+
+    (42) expresion -> ID LPAREN argumentos_opt . RPAREN
+
+    RPAREN          shift and go to state 120
+
+
+state 94
+
+    (40) expresion -> PROBAR LPAREN expresion . COMA expresion COMA expresion RPAREN
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    COMA            shift and go to state 121
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 95
+
+    (43) expresion -> LPAREN expresion RPAREN .
+
+    MAS             reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    MENOS           reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    POR             reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    DIV             reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    ANOTAR          reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    MOSTRAR         reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    EVALUAR         reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    MIENTRAS        reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    AGREGAR         reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    QUITAR          reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    LIMPIAR         reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    FUNCION         reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    PROCEDIMIENTO   reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    ID              reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    FIN             reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    SI              reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    FINPROCEDIMIENTO reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    RETORNAR        reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    IGUAL           reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    DIF             reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    MENOR           reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    MAYOR           reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    MENORIG         reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    MAYORIG         reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    PASA            reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    Y               reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    O               reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    HACER           reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    A               reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    COMA            reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    RPAREN          reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    RBRACKET        reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+    FINFUNCION      reduce using rule 43 (expresion -> LPAREN expresion RPAREN .)
+
+
+state 96
+
+    (41) expresion -> REPORTAR LPAREN expresion . RPAREN
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    RPAREN          shift and go to state 122
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 97
+
+    (9) sentencia -> EVALUAR condicion PASA sentencias .
+    (10) sentencia -> EVALUAR condicion PASA sentencias . SI NO PASA sentencias
+
+  ! shift/reduce conflict for SI resolved as shift
+    ANOTAR          reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    MOSTRAR         reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    EVALUAR         reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    MIENTRAS        reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    AGREGAR         reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    QUITAR          reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    LIMPIAR         reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    FUNCION         reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    PROCEDIMIENTO   reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    ID              reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    FIN             reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    FINPROCEDIMIENTO reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    RETORNAR        reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .)
+    SI              shift and go to state 123
+
+  ! SI              [ reduce using rule 9 (sentencia -> EVALUAR condicion PASA sentencias .) ]
+
+
+state 98
+
+    (50) condicion -> condicion Y condicion .
+    (50) condicion -> condicion . Y condicion
+    (51) condicion -> condicion . O condicion
+
+    PASA            reduce using rule 50 (condicion -> condicion Y condicion .)
+    Y               reduce using rule 50 (condicion -> condicion Y condicion .)
+    HACER           reduce using rule 50 (condicion -> condicion Y condicion .)
+    O               shift and go to state 65
+
+  ! O               [ reduce using rule 50 (condicion -> condicion Y condicion .) ]
+  ! Y               [ shift and go to state 64 ]
+
+
+state 99
+
+    (51) condicion -> condicion O condicion .
+    (50) condicion -> condicion . Y condicion
+    (51) condicion -> condicion . O condicion
+
+    PASA            reduce using rule 51 (condicion -> condicion O condicion .)
+    Y               reduce using rule 51 (condicion -> condicion O condicion .)
+    O               reduce using rule 51 (condicion -> condicion O condicion .)
+    HACER           reduce using rule 51 (condicion -> condicion O condicion .)
+
+  ! Y               [ shift and go to state 64 ]
+  ! O               [ shift and go to state 65 ]
+
+
+state 100
+
+    (44) condicion -> expresion IGUAL expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    PASA            reduce using rule 44 (condicion -> expresion IGUAL expresion .)
+    Y               reduce using rule 44 (condicion -> expresion IGUAL expresion .)
+    O               reduce using rule 44 (condicion -> expresion IGUAL expresion .)
+    HACER           reduce using rule 44 (condicion -> expresion IGUAL expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 101
+
+    (45) condicion -> expresion DIF expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    PASA            reduce using rule 45 (condicion -> expresion DIF expresion .)
+    Y               reduce using rule 45 (condicion -> expresion DIF expresion .)
+    O               reduce using rule 45 (condicion -> expresion DIF expresion .)
+    HACER           reduce using rule 45 (condicion -> expresion DIF expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 102
+
+    (46) condicion -> expresion MENOR expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    PASA            reduce using rule 46 (condicion -> expresion MENOR expresion .)
+    Y               reduce using rule 46 (condicion -> expresion MENOR expresion .)
+    O               reduce using rule 46 (condicion -> expresion MENOR expresion .)
+    HACER           reduce using rule 46 (condicion -> expresion MENOR expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 103
+
+    (47) condicion -> expresion MAYOR expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    PASA            reduce using rule 47 (condicion -> expresion MAYOR expresion .)
+    Y               reduce using rule 47 (condicion -> expresion MAYOR expresion .)
+    O               reduce using rule 47 (condicion -> expresion MAYOR expresion .)
+    HACER           reduce using rule 47 (condicion -> expresion MAYOR expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 104
+
+    (48) condicion -> expresion MENORIG expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    PASA            reduce using rule 48 (condicion -> expresion MENORIG expresion .)
+    Y               reduce using rule 48 (condicion -> expresion MENORIG expresion .)
+    O               reduce using rule 48 (condicion -> expresion MENORIG expresion .)
+    HACER           reduce using rule 48 (condicion -> expresion MENORIG expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 105
+
+    (49) condicion -> expresion MAYORIG expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    PASA            reduce using rule 49 (condicion -> expresion MAYORIG expresion .)
+    Y               reduce using rule 49 (condicion -> expresion MAYORIG expresion .)
+    O               reduce using rule 49 (condicion -> expresion MAYORIG expresion .)
+    HACER           reduce using rule 49 (condicion -> expresion MAYORIG expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 106
+
+    (11) sentencia -> MIENTRAS condicion HACER sentencias .
+
+    ANOTAR          reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    MOSTRAR         reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    EVALUAR         reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    MIENTRAS        reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    AGREGAR         reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    QUITAR          reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    LIMPIAR         reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    FUNCION         reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    PROCEDIMIENTO   reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    ID              reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    FIN             reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    SI              reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    FINPROCEDIMIENTO reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+    RETORNAR        reduce using rule 11 (sentencia -> MIENTRAS condicion HACER sentencias .)
+
+
+state 107
+
+    (12) sentencia -> AGREGAR expresion A ID .
+
+    ANOTAR          reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    MOSTRAR         reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    EVALUAR         reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    MIENTRAS        reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    AGREGAR         reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    QUITAR          reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    LIMPIAR         reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    FUNCION         reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    PROCEDIMIENTO   reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    ID              reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    FIN             reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    SI              reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    FINPROCEDIMIENTO reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+    RETORNAR        reduce using rule 12 (sentencia -> AGREGAR expresion A ID .)
+
+
+state 108
+
+    (13) sentencia -> QUITAR EN ID LBRACKET . expresion RBRACKET
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 124
+
+state 109
+
+    (15) sentencia -> FUNCION tipo ID LPAREN . parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+    (54) parametros_opt -> . parametros
+    (55) parametros_opt -> . empty
+    (56) parametros -> . parametro
+    (57) parametros -> . parametro COMA parametros
+    (63) empty -> .
+    (58) parametro -> . tipo ID
+    (18) tipo -> . NUMERO_TIPO
+    (19) tipo -> . TEXTO_TIPO
+    (20) tipo -> . VULNERABILIDAD_TIPO
+    (21) tipo -> . BOOL_TIPO
+    (22) tipo -> . LISTA MENOR tipo_base MAYOR
+
+    RPAREN          reduce using rule 63 (empty -> .)
+    NUMERO_TIPO     shift and go to state 20
+    TEXTO_TIPO      shift and go to state 21
+    VULNERABILIDAD_TIPO shift and go to state 22
+    BOOL_TIPO       shift and go to state 23
+    LISTA           shift and go to state 45
+
+    tipo                           shift and go to state 115
+    parametros_opt                 shift and go to state 125
+    parametros                     shift and go to state 112
+    empty                          shift and go to state 113
+    parametro                      shift and go to state 114
+
+state 110
+
+    (22) tipo -> LISTA MENOR tipo_base . MAYOR
+
+    MAYOR           shift and go to state 126
+
+
+state 111
+
+    (16) sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt . RPAREN sentencias FINPROCEDIMIENTO
+
+    RPAREN          shift and go to state 127
+
+
+state 112
+
+    (54) parametros_opt -> parametros .
+
+    RPAREN          reduce using rule 54 (parametros_opt -> parametros .)
+
+
+state 113
+
+    (55) parametros_opt -> empty .
+
+    RPAREN          reduce using rule 55 (parametros_opt -> empty .)
+
+
+state 114
+
+    (56) parametros -> parametro .
+    (57) parametros -> parametro . COMA parametros
+
+    RPAREN          reduce using rule 56 (parametros -> parametro .)
+    COMA            shift and go to state 128
+
+
+state 115
+
+    (58) parametro -> tipo . ID
+
+    ID              shift and go to state 129
+
+
+state 116
+
+    (5) sentencia -> ANOTAR tipo ID ASIGNAR expresion .
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    ANOTAR          reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    MOSTRAR         reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    EVALUAR         reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    MIENTRAS        reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    AGREGAR         reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    QUITAR          reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    LIMPIAR         reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    FUNCION         reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    PROCEDIMIENTO   reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    ID              reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    FIN             reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    SI              reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    FINPROCEDIMIENTO reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    RETORNAR        reduce using rule 5 (sentencia -> ANOTAR tipo ID ASIGNAR expresion .)
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 117
+
+    (6) sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR . ID ASIGNAR VACIA
+    (7) sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR . ID ASIGNAR LBRACKET RBRACKET
+    (22) tipo -> LISTA MENOR tipo_base MAYOR .
+
+    ID              reduce using rule 22 (tipo -> LISTA MENOR tipo_base MAYOR .)
+
+  ! ID              [ shift and go to state 130 ]
+
+
+state 118
+
+    (62) argumentos -> expresion COMA argumentos .
+
+    RPAREN          reduce using rule 62 (argumentos -> expresion COMA argumentos .)
+
+
+state 119
+
+    (34) expresion -> ID LBRACKET expresion RBRACKET .
+
+    MAS             reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    MENOS           reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    POR             reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    DIV             reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    ANOTAR          reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    MOSTRAR         reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    EVALUAR         reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    MIENTRAS        reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    AGREGAR         reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    QUITAR          reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    LIMPIAR         reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    FUNCION         reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    PROCEDIMIENTO   reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    ID              reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    FIN             reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    SI              reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    FINPROCEDIMIENTO reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    RETORNAR        reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    IGUAL           reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    DIF             reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    MENOR           reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    MAYOR           reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    MENORIG         reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    MAYORIG         reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    PASA            reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    Y               reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    O               reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    HACER           reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    A               reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    COMA            reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    RPAREN          reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    RBRACKET        reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+    FINFUNCION      reduce using rule 34 (expresion -> ID LBRACKET expresion RBRACKET .)
+
+
+state 120
+
+    (42) expresion -> ID LPAREN argumentos_opt RPAREN .
+
+    MAS             reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    MENOS           reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    POR             reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    DIV             reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    ANOTAR          reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    MOSTRAR         reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    EVALUAR         reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    MIENTRAS        reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    AGREGAR         reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    QUITAR          reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    LIMPIAR         reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    FUNCION         reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    PROCEDIMIENTO   reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    ID              reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    FIN             reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    SI              reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    FINPROCEDIMIENTO reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    RETORNAR        reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    IGUAL           reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    DIF             reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    MENOR           reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    MAYOR           reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    MENORIG         reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    MAYORIG         reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    PASA            reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    Y               reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    O               reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    HACER           reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    A               reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    COMA            reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    RPAREN          reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    RBRACKET        reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+    FINFUNCION      reduce using rule 42 (expresion -> ID LPAREN argumentos_opt RPAREN .)
+
+
+state 121
+
+    (40) expresion -> PROBAR LPAREN expresion COMA . expresion COMA expresion RPAREN
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 131
+
+state 122
+
+    (41) expresion -> REPORTAR LPAREN expresion RPAREN .
+
+    MAS             reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    MENOS           reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    POR             reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    DIV             reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    ANOTAR          reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    MOSTRAR         reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    EVALUAR         reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    MIENTRAS        reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    AGREGAR         reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    QUITAR          reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    LIMPIAR         reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    FUNCION         reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    PROCEDIMIENTO   reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    ID              reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    FIN             reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    SI              reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    FINPROCEDIMIENTO reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    RETORNAR        reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    IGUAL           reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    DIF             reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    MENOR           reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    MAYOR           reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    MENORIG         reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    MAYORIG         reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    PASA            reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    Y               reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    O               reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    HACER           reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    A               reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    COMA            reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    RPAREN          reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    RBRACKET        reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+    FINFUNCION      reduce using rule 41 (expresion -> REPORTAR LPAREN expresion RPAREN .)
+
+
+state 123
+
+    (10) sentencia -> EVALUAR condicion PASA sentencias SI . NO PASA sentencias
+
+    NO              shift and go to state 132
+
+
+state 124
+
+    (13) sentencia -> QUITAR EN ID LBRACKET expresion . RBRACKET
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    RBRACKET        shift and go to state 133
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 125
+
+    (15) sentencia -> FUNCION tipo ID LPAREN parametros_opt . RPAREN sentencias RETORNAR expresion FINFUNCION
+
+    RPAREN          shift and go to state 134
+
+
+state 126
+
+    (22) tipo -> LISTA MENOR tipo_base MAYOR .
+
+    ID              reduce using rule 22 (tipo -> LISTA MENOR tipo_base MAYOR .)
+
+
+state 127
+
+    (16) sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN . sentencias FINPROCEDIMIENTO
+    (2) sentencias -> . sentencia sentencias
+    (3) sentencias -> . sentencia
+    (4) sentencia -> . ANOTAR ID ASIGNAR expresion
+    (5) sentencia -> . ANOTAR tipo ID ASIGNAR expresion
+    (6) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (8) sentencia -> . MOSTRAR expresion
+    (9) sentencia -> . EVALUAR condicion PASA sentencias
+    (10) sentencia -> . EVALUAR condicion PASA sentencias SI NO PASA sentencias
+    (11) sentencia -> . MIENTRAS condicion HACER sentencias
+    (12) sentencia -> . AGREGAR expresion A ID
+    (13) sentencia -> . QUITAR EN ID LBRACKET expresion RBRACKET
+    (14) sentencia -> . LIMPIAR ID
+    (15) sentencia -> . FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+    (16) sentencia -> . PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+    (17) sentencia -> . ID LPAREN argumentos_opt RPAREN
+
+    ANOTAR          shift and go to state 5
+    MOSTRAR         shift and go to state 7
+    EVALUAR         shift and go to state 8
+    MIENTRAS        shift and go to state 9
+    AGREGAR         shift and go to state 10
+    QUITAR          shift and go to state 11
+    LIMPIAR         shift and go to state 12
+    FUNCION         shift and go to state 13
+    PROCEDIMIENTO   shift and go to state 14
+    ID              shift and go to state 6
+
+    sentencias                     shift and go to state 135
+    sentencia                      shift and go to state 4
+
+state 128
+
+    (57) parametros -> parametro COMA . parametros
+    (56) parametros -> . parametro
+    (57) parametros -> . parametro COMA parametros
+    (58) parametro -> . tipo ID
+    (18) tipo -> . NUMERO_TIPO
+    (19) tipo -> . TEXTO_TIPO
+    (20) tipo -> . VULNERABILIDAD_TIPO
+    (21) tipo -> . BOOL_TIPO
+    (22) tipo -> . LISTA MENOR tipo_base MAYOR
+
+    NUMERO_TIPO     shift and go to state 20
+    TEXTO_TIPO      shift and go to state 21
+    VULNERABILIDAD_TIPO shift and go to state 22
+    BOOL_TIPO       shift and go to state 23
+    LISTA           shift and go to state 45
+
+    parametro                      shift and go to state 114
+    parametros                     shift and go to state 136
+    tipo                           shift and go to state 115
+
+state 129
+
+    (58) parametro -> tipo ID .
+
+    COMA            reduce using rule 58 (parametro -> tipo ID .)
+    RPAREN          reduce using rule 58 (parametro -> tipo ID .)
+
+
+state 130
+
+    (6) sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID . ASIGNAR VACIA
+    (7) sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID . ASIGNAR LBRACKET RBRACKET
+
+    ASIGNAR         shift and go to state 137
+
+
+state 131
+
+    (40) expresion -> PROBAR LPAREN expresion COMA expresion . COMA expresion RPAREN
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    COMA            shift and go to state 138
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 132
+
+    (10) sentencia -> EVALUAR condicion PASA sentencias SI NO . PASA sentencias
+
+    PASA            shift and go to state 139
+
+
+state 133
+
+    (13) sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .
+
+    ANOTAR          reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    MOSTRAR         reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    EVALUAR         reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    MIENTRAS        reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    AGREGAR         reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    QUITAR          reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    LIMPIAR         reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    FUNCION         reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    PROCEDIMIENTO   reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    ID              reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    FIN             reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    SI              reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    FINPROCEDIMIENTO reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+    RETORNAR        reduce using rule 13 (sentencia -> QUITAR EN ID LBRACKET expresion RBRACKET .)
+
+
+state 134
+
+    (15) sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN . sentencias RETORNAR expresion FINFUNCION
+    (2) sentencias -> . sentencia sentencias
+    (3) sentencias -> . sentencia
+    (4) sentencia -> . ANOTAR ID ASIGNAR expresion
+    (5) sentencia -> . ANOTAR tipo ID ASIGNAR expresion
+    (6) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (8) sentencia -> . MOSTRAR expresion
+    (9) sentencia -> . EVALUAR condicion PASA sentencias
+    (10) sentencia -> . EVALUAR condicion PASA sentencias SI NO PASA sentencias
+    (11) sentencia -> . MIENTRAS condicion HACER sentencias
+    (12) sentencia -> . AGREGAR expresion A ID
+    (13) sentencia -> . QUITAR EN ID LBRACKET expresion RBRACKET
+    (14) sentencia -> . LIMPIAR ID
+    (15) sentencia -> . FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+    (16) sentencia -> . PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+    (17) sentencia -> . ID LPAREN argumentos_opt RPAREN
+
+    ANOTAR          shift and go to state 5
+    MOSTRAR         shift and go to state 7
+    EVALUAR         shift and go to state 8
+    MIENTRAS        shift and go to state 9
+    AGREGAR         shift and go to state 10
+    QUITAR          shift and go to state 11
+    LIMPIAR         shift and go to state 12
+    FUNCION         shift and go to state 13
+    PROCEDIMIENTO   shift and go to state 14
+    ID              shift and go to state 6
+
+    sentencias                     shift and go to state 140
+    sentencia                      shift and go to state 4
+
+state 135
+
+    (16) sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias . FINPROCEDIMIENTO
+
+    FINPROCEDIMIENTO shift and go to state 141
+
+
+state 136
+
+    (57) parametros -> parametro COMA parametros .
+
+    RPAREN          reduce using rule 57 (parametros -> parametro COMA parametros .)
+
+
+state 137
+
+    (6) sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR . VACIA
+    (7) sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR . LBRACKET RBRACKET
+
+    VACIA           shift and go to state 142
+    LBRACKET        shift and go to state 143
+
+
+state 138
+
+    (40) expresion -> PROBAR LPAREN expresion COMA expresion COMA . expresion RPAREN
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 144
+
+state 139
+
+    (10) sentencia -> EVALUAR condicion PASA sentencias SI NO PASA . sentencias
+    (2) sentencias -> . sentencia sentencias
+    (3) sentencias -> . sentencia
+    (4) sentencia -> . ANOTAR ID ASIGNAR expresion
+    (5) sentencia -> . ANOTAR tipo ID ASIGNAR expresion
+    (6) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA
+    (7) sentencia -> . ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET
+    (8) sentencia -> . MOSTRAR expresion
+    (9) sentencia -> . EVALUAR condicion PASA sentencias
+    (10) sentencia -> . EVALUAR condicion PASA sentencias SI NO PASA sentencias
+    (11) sentencia -> . MIENTRAS condicion HACER sentencias
+    (12) sentencia -> . AGREGAR expresion A ID
+    (13) sentencia -> . QUITAR EN ID LBRACKET expresion RBRACKET
+    (14) sentencia -> . LIMPIAR ID
+    (15) sentencia -> . FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION
+    (16) sentencia -> . PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO
+    (17) sentencia -> . ID LPAREN argumentos_opt RPAREN
+
+    ANOTAR          shift and go to state 5
+    MOSTRAR         shift and go to state 7
+    EVALUAR         shift and go to state 8
+    MIENTRAS        shift and go to state 9
+    AGREGAR         shift and go to state 10
+    QUITAR          shift and go to state 11
+    LIMPIAR         shift and go to state 12
+    FUNCION         shift and go to state 13
+    PROCEDIMIENTO   shift and go to state 14
+    ID              shift and go to state 6
+
+    sentencias                     shift and go to state 145
+    sentencia                      shift and go to state 4
+
+state 140
+
+    (15) sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias . RETORNAR expresion FINFUNCION
+
+    RETORNAR        shift and go to state 146
+
+
+state 141
+
+    (16) sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .
+
+    ANOTAR          reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    MOSTRAR         reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    EVALUAR         reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    MIENTRAS        reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    AGREGAR         reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    QUITAR          reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    LIMPIAR         reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    FUNCION         reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    PROCEDIMIENTO   reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    ID              reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    FIN             reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    SI              reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    FINPROCEDIMIENTO reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+    RETORNAR        reduce using rule 16 (sentencia -> PROCEDIMIENTO ID LPAREN parametros_opt RPAREN sentencias FINPROCEDIMIENTO .)
+
+
+state 142
+
+    (6) sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .
+
+    ANOTAR          reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    MOSTRAR         reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    EVALUAR         reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    MIENTRAS        reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    AGREGAR         reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    QUITAR          reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    LIMPIAR         reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    FUNCION         reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    PROCEDIMIENTO   reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    ID              reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    FIN             reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    SI              reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    FINPROCEDIMIENTO reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+    RETORNAR        reduce using rule 6 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR VACIA .)
+
+
+state 143
+
+    (7) sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET . RBRACKET
+
+    RBRACKET        shift and go to state 147
+
+
+state 144
+
+    (40) expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion . RPAREN
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    RPAREN          shift and go to state 148
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 145
+
+    (10) sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .
+
+    ANOTAR          reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    MOSTRAR         reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    EVALUAR         reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    MIENTRAS        reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    AGREGAR         reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    QUITAR          reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    LIMPIAR         reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    FUNCION         reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    PROCEDIMIENTO   reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    ID              reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    FIN             reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    SI              reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    FINPROCEDIMIENTO reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+    RETORNAR        reduce using rule 10 (sentencia -> EVALUAR condicion PASA sentencias SI NO PASA sentencias .)
+
+
+state 146
+
+    (15) sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR . expresion FINFUNCION
+    (27) expresion -> . expresion MAS expresion
+    (28) expresion -> . expresion MENOS expresion
+    (29) expresion -> . expresion POR expresion
+    (30) expresion -> . expresion DIV expresion
+    (31) expresion -> . NUMERO
+    (32) expresion -> . TEXTO
+    (33) expresion -> . ID
+    (34) expresion -> . ID LBRACKET expresion RBRACKET
+    (35) expresion -> . SQLI
+    (36) expresion -> . XSS
+    (37) expresion -> . RCE
+    (38) expresion -> . VULNERABLE
+    (39) expresion -> . SEGURO
+    (40) expresion -> . PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN
+    (41) expresion -> . REPORTAR LPAREN expresion RPAREN
+    (42) expresion -> . ID LPAREN argumentos_opt RPAREN
+    (43) expresion -> . LPAREN expresion RPAREN
+
+    NUMERO          shift and go to state 26
+    TEXTO           shift and go to state 27
+    ID              shift and go to state 28
+    SQLI            shift and go to state 29
+    XSS             shift and go to state 30
+    RCE             shift and go to state 31
+    VULNERABLE      shift and go to state 32
+    SEGURO          shift and go to state 33
+    PROBAR          shift and go to state 34
+    REPORTAR        shift and go to state 36
+    LPAREN          shift and go to state 35
+
+    expresion                      shift and go to state 149
+
+state 147
+
+    (7) sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .
+
+    ANOTAR          reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    MOSTRAR         reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    EVALUAR         reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    MIENTRAS        reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    AGREGAR         reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    QUITAR          reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    LIMPIAR         reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    FUNCION         reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    PROCEDIMIENTO   reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    ID              reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    FIN             reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    SI              reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    FINPROCEDIMIENTO reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+    RETORNAR        reduce using rule 7 (sentencia -> ANOTAR LISTA MENOR tipo_base MAYOR ID ASIGNAR LBRACKET RBRACKET .)
+
+
+state 148
+
+    (40) expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .
+
+    MAS             reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    MENOS           reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    POR             reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    DIV             reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    ANOTAR          reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    MOSTRAR         reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    EVALUAR         reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    MIENTRAS        reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    AGREGAR         reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    QUITAR          reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    LIMPIAR         reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    FUNCION         reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    PROCEDIMIENTO   reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    ID              reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    FIN             reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    SI              reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    FINPROCEDIMIENTO reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    RETORNAR        reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    IGUAL           reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    DIF             reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    MENOR           reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    MAYOR           reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    MENORIG         reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    MAYORIG         reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    PASA            reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    Y               reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    O               reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    HACER           reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    A               reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    COMA            reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    RPAREN          reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    RBRACKET        reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+    FINFUNCION      reduce using rule 40 (expresion -> PROBAR LPAREN expresion COMA expresion COMA expresion RPAREN .)
+
+
+state 149
+
+    (15) sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion . FINFUNCION
+    (27) expresion -> expresion . MAS expresion
+    (28) expresion -> expresion . MENOS expresion
+    (29) expresion -> expresion . POR expresion
+    (30) expresion -> expresion . DIV expresion
+
+    FINFUNCION      shift and go to state 150
+    MAS             shift and go to state 54
+    MENOS           shift and go to state 55
+    POR             shift and go to state 56
+    DIV             shift and go to state 57
+
+
+state 150
+
+    (15) sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .
+
+    ANOTAR          reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    MOSTRAR         reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    EVALUAR         reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    MIENTRAS        reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    AGREGAR         reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    QUITAR          reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    LIMPIAR         reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    FUNCION         reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    PROCEDIMIENTO   reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    ID              reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    FIN             reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    SI              reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    FINPROCEDIMIENTO reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+    RETORNAR        reduce using rule 15 (sentencia -> FUNCION tipo ID LPAREN parametros_opt RPAREN sentencias RETORNAR expresion FINFUNCION .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for ANOTAR in state 4 resolved as shift
+WARNING: shift/reduce conflict for MOSTRAR in state 4 resolved as shift
+WARNING: shift/reduce conflict for EVALUAR in state 4 resolved as shift
+WARNING: shift/reduce conflict for MIENTRAS in state 4 resolved as shift
+WARNING: shift/reduce conflict for AGREGAR in state 4 resolved as shift
+WARNING: shift/reduce conflict for QUITAR in state 4 resolved as shift
+WARNING: shift/reduce conflict for LIMPIAR in state 4 resolved as shift
+WARNING: shift/reduce conflict for FUNCION in state 4 resolved as shift
+WARNING: shift/reduce conflict for PROCEDIMIENTO in state 4 resolved as shift
+WARNING: shift/reduce conflict for ID in state 4 resolved as shift
+WARNING: shift/reduce conflict for SI in state 97 resolved as shift
