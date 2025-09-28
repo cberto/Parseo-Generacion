@@ -622,27 +622,27 @@ FIN
 |---|---|---|
 | λ                                                 | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q0, λ, λ) ⇒ (q1, Z) |
 | Z                                                 | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q1, λ, λ) ⇒ (q2, Programa) |
-| Z Programa                                        | INICIO …                                             | δ(q2, λ, Programa) ⇒ (q2, INICIO Sentencias FIN) |
-| Z FIN Sentencias INICIO                           | INICIO …                                             | δ(q2, INICIO, INICIO) ⇒ (q2, λ) |
+| Z Programa                                        | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, Programa) ⇒ (q2, INICIO Sentencias FIN) |
+| Z FIN Sentencias INICIO                           | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, INICIO, INICIO) ⇒ (q2, λ) |
 | Z FIN Sentencias                                  | procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, Sentencias) ⇒ (q2, Sentencia Sentencias) |
-| Z FIN Sentencias Sentencia                        | procedimiento p ( … ) …                              | δ(q2, λ, Sentencia) ⇒ (q2, DefinicionProcedimiento) |
-| Z FIN Sentencias DefinicionProcedimiento          | procedimiento p ( … ) …                              | δ(q2, λ, DefinicionProcedimiento) ⇒ (q2, procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento) |
+| Z FIN Sentencias Sentencia                        | procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, Sentencia) ⇒ (q2, DefinicionProcedimiento) |
+| Z FIN Sentencias DefinicionProcedimiento          | procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, DefinicionProcedimiento) ⇒ (q2, procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento) |∏
 | Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador procedimiento | procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, procedimiento, procedimiento) ⇒ (q2, λ) |
-| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador | p ( texto a ) …                                      | δ(q2, λ, Identificador) ⇒ (q2, p) |
-| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( p | p ( texto a ) …                                      | δ(q2, p, p) ⇒ (q2, λ) |
-| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt (   | ( texto a ) …                                        | δ(q2, (, () ⇒ (q2, λ) |
-| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt     | texto a ) …                                          | δ(q2, λ, ParametrosOpt) ⇒ (q2, ListaParametros) |
-| Z FIN Sentencias finProcedimiento Sentencias ) ListaParametros   | texto a ) …                                          | δ(q2, λ, ListaParametros) ⇒ (q2, Parametro) |
-| Z FIN Sentencias finProcedimiento Sentencias ) Parametro         | texto a ) …                                          | δ(q2, λ, Parametro) ⇒ (q2, Tipo Identificador) |
-| Z FIN Sentencias finProcedimiento Sentencias ) Identificador Tipo| texto a ) …                                          | δ(q2, λ, Tipo) ⇒ (q2, texto) |
-| Z FIN Sentencias finProcedimiento Sentencias ) Identificador texto| texto a ) …                                         | δ(q2, texto, texto) ⇒ (q2, λ) |
-| Z FIN Sentencias finProcedimiento Sentencias ) Identificador     | a ) …                                                | δ(q2, λ, Identificador) ⇒ (q2, a) |
-| Z FIN Sentencias finProcedimiento Sentencias ) a                 | a ) …                                                | δ(q2, a, a) ⇒ (q2, λ) |
-| Z FIN Sentencias finProcedimiento Sentencias )                   | ) …                                                  | δ(q2, ), )) ⇒ (q2, λ) |
+| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador | p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, Identificador) ⇒ (q2, p) |
+| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( p | p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, p, p) ⇒ (q2, λ) |
+| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt (   | ( texto a ) mostrar a finProcedimiento FIN   | δ(q2, (, () ⇒ (q2, λ) |
+| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt     | texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, ParametrosOpt) ⇒ (q2, ListaParametros) |
+| Z FIN Sentencias finProcedimiento Sentencias ) ListaParametros   | texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, ListaParametros) ⇒ (q2, Parametro) |
+| Z FIN Sentencias finProcedimiento Sentencias ) Parametro         | texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, Parametro) ⇒ (q2, Tipo Identificador) |
+| Z FIN Sentencias finProcedimiento Sentencias ) Identificador Tipo| texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, Tipo) ⇒ (q2, texto) |
+| Z FIN Sentencias finProcedimiento Sentencias ) Identificador texto| texto a ) mostrar a finProcedimiento FIN| δ(q2, texto, texto) ⇒ (q2, λ) |
+| Z FIN Sentencias finProcedimiento Sentencias ) Identificador     | a ) mostrar a finProcedimiento FIN| δ(q2, λ, Identificador) ⇒ (q2, a) |
+| Z FIN Sentencias finProcedimiento Sentencias ) a          | a ) mostrar a finProcedimiento FIN       | δ(q2, a, a) ⇒ (q2, λ) |
+| Z FIN Sentencias finProcedimiento Sentencias )                   | ) mostrar a finProcedimiento FIN         | δ(q2, ), )) ⇒ (q2, λ) |
 | Z FIN Sentencias finProcedimiento Sentencias                     | mostrar a finProcedimiento FIN                       | δ(q2, λ, Sentencias) ⇒ (q2, Sentencia Sentencias) |
-| Z FIN Sentencias finProcedimiento Sentencias Sentencia           | mostrar a …                                          | δ(q2, λ, Sentencia) ⇒ (q2, Impresion) |
-| Z FIN Sentencias finProcedimiento Sentencias Impresion           | mostrar a …                                          | δ(q2, λ, Impresion) ⇒ (q2, mostrar ExpresionTexto) |
-| Z FIN Sentencias finProcedimiento Sentencias ExpresionTexto mostrar| mostrar a …                                        | δ(q2, mostrar, mostrar) ⇒ (q2, λ) |
+| Z FIN Sentencias finProcedimiento Sentencias Sentencia           | mostrar a finProcedimiento FIN                                         | δ(q2, λ, Sentencia) ⇒ (q2, Impresion) |
+| Z FIN Sentencias finProcedimiento Sentencias Impresion           | mostrar a finProcedimiento FIN                                         | δ(q2, λ, Impresion) ⇒ (q2, mostrar ExpresionTexto) |
+| Z FIN Sentencias finProcedimiento Sentencias ExpresionTexto mostrar| mostrar a finProcedimiento FIN                                       | δ(q2, mostrar, mostrar) ⇒ (q2, λ) |
 | Z FIN Sentencias finProcedimiento Sentencias ExpresionTexto      | a finProcedimiento FIN                               | δ(q2, λ, ExpresionTexto) ⇒ (q2, ValorTexto) |
 | Z FIN Sentencias finProcedimiento Sentencias ValorTexto          | a finProcedimiento FIN                               | δ(q2, λ, ValorTexto) ⇒ (q2, Identificador) |
 | Z FIN Sentencias finProcedimiento Sentencias Identificador       | a finProcedimiento FIN                               | δ(q2, λ, Identificador) ⇒ (q2, a) |
