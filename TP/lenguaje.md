@@ -1,5 +1,22 @@
 # Lenguaje de Seguridad Educativo
 
+
+## Índice por TP
+
+- [TP 3](#tp-3)
+  - [ASD — Derivación a izquierda Descentende](#asd--derivación-a-izquierda-descentende)
+  - [ASA — Orden inverso de la derivación a la derecha (reducción ascendente)](#asa--orden-inverso-de-la-derivación-a-la-derecha-reducción-ascendente)
+  - [ASA — Derivación a la derecha](#asa--derivación-a-la-derecha)
+
+- [TP 4: ASD con retroceso cadena](#tp-4-asd-con-retroceso-cadena)
+
+- [TP5: Parsing ASCP LL (1) cadena](#tp5-parsing--ascp-ll-1-cadena)
+
+- [TP 6](#tp-6)
+  - [Bloque invertido](#bloque-invertido)
+  - [Parsing ASA con retroceso cadena](#parsing-asa-con-retroceso-cadena)
+
+
 ## Objetivo
 
 Ser un lenguaje de programación en español que permita expresar y automatizar tareas básicas de seguridad (detectar vulnerabilidades simples, validar entradas) de forma clara y accesible, con reglas simples y cercanas al ámbito de seguridad informática
