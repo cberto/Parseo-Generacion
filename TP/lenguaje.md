@@ -16,6 +16,8 @@
   - [Bloque invertido](#bloque-invertido)
   - [Parsing ASA con retroceso cadena](#parsing-asa-con-retroceso-cadena)
 
+- [TP 7](#tp-)
+
 
 ## Objetivo
 
@@ -671,13 +673,139 @@ _GIC = ⟨ΣN, ΣT, S, P⟩_
 
 
 
-## TP5: Parsing  ASCP LL (1) cadena
+# TP5: Parsing  ASCP LL (1) cadena
 
 
 
+## Cadena de prueba
 
+```txt
+INICIO
+procedimiento p(texto a)
+    mostrar a
+finProcedimiento
+FIN.
+```
 
+---
 
+## GIC reducido (para el análisis LL(1))
+
+```bnf
+Programa → INICIO Sentencias FIN
+Sentencias → Sentencia Sentencias | λ
+Sentencia → DefinicionProcedimiento | Impresion
+DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento
+ParametrosOpt → ListaParametros | λ
+ListaParametros → Parametro | Parametro , ListaParametros
+Parametro → Tipo Identificador
+Tipo → texto | numero | vulnerabilidad | bool
+Impresion → mostrar ExpresionTexto
+ExpresionTexto → ValorTexto
+ValorTexto → Identificador | texto | numero | booleano
+Identificador → a | p
+```
+
+---
+
+## PRIM (FIRST)
+
+| No terminal | PRIM (FIRST) |
+|---|---|
+| **PRIM(Programa)** | { **INICIO** } |
+| **PRIM(Sentencias)** | { **procedimiento**, **mostrar**, λ } |
+| **PRIM(Sentencia)** | { **procedimiento**, **mostrar** } |
+| **PRIM(DefinicionProcedimiento)** | { **procedimiento** } |
+| **PRIM(ParametrosOpt)** | { **texto**, **numero**, **vulnerabilidad**, **bool**, λ } |
+| **PRIM(ListaParametros)** | { **texto**, **numero**, **vulnerabilidad**, **bool** } |
+| **PRIM(Parametro)** | { **texto**, **numero**, **vulnerabilidad**, **bool** } |
+| **PRIM(Tipo)** | { **texto**, **numero**, **vulnerabilidad**, **bool** } |
+| **PRIM(Impresion)** | { **mostrar** } |
+| **PRIM(ExpresionTexto)** | { **a**, **texto**, **numero**, **booleano** } |
+| **PRIM(ValorTexto)** | { **a**, **texto**, **numero**, **booleano** } |
+| **PRIM(Identificador)** | { **a**, **p** } |
+
+---
+
+## SIG (FOLLOW)
+
+| No terminal | SIG (FOLLOW) |
+|---|---|
+| **SIG(Programa)** | { **$** } |
+| **SIG(Sentencias)** | { **FIN**, **finProcedimiento** } |
+| **SIG(Sentencia)** | { **FIN**, **finProcedimiento** } |
+| **SIG(DefinicionProcedimiento)** | { **FIN**, **finProcedimiento** } |
+| **SIG(ParametrosOpt)** | { `)` } |
+| **SIG(ListaParametros)** | { `)` } |
+| **SIG(Parametro)** | { `)`, `,` } |
+| **SIG(Tipo)** | { **a**, **p** } |
+| **SIG(Impresion)** | { **FIN**, **finProcedimiento** } |
+| **SIG(ExpresionTexto)** | { **FIN**, **finProcedimiento** } |
+| **SIG(ValorTexto)** | { **FIN**, **finProcedimiento** } |
+| **SIG(Identificador)** | { **FIN**, **finProcedimiento** } |
+
+---
+
+## PRED (conjuntos predictivos)
+
+| Producción | PRED |
+|---|---|
+| **Programa → INICIO Sentencias FIN** | { **INICIO** } |
+| **Sentencias → Sentencia Sentencias** | { **procedimiento**, **mostrar** } |
+| **Sentencias → λ** | { **FIN**, **finProcedimiento** } |
+| **Sentencia → DefinicionProcedimiento** | { **procedimiento** } |
+| **Sentencia → Impresion** | { **mostrar** } |
+| **DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento** | { **procedimiento** } |
+| **ParametrosOpt → ListaParametros** | { **texto**, **numero**, **vulnerabilidad**, **bool** } |
+| **ParametrosOpt → λ** | { `)` } |
+| **ListaParametros → Parametro** | { **texto**, **numero**, **vulnerabilidad**, **bool** } |
+| **Parametro → Tipo Identificador** | { **texto**, **numero**, **vulnerabilidad**, **bool** } |
+| **Tipo → texto** | { **texto** } |
+| **Tipo → numero** | { **numero** } |
+| **Tipo → vulnerabilidad** | { **vulnerabilidad** } |
+| **Tipo → bool** | { **bool** } |
+| **Impresion → mostrar ExpresionTexto** | { **mostrar** } |
+| **ExpresionTexto → ValorTexto** | { **a**, **texto**, **numero**, **booleano** } |
+| **ValorTexto → Identificador** | { **a**, **p** } |
+
+---
+
+## Tabla LL(1) (parcial)
+
+| No terminal \ Símbolo | **INICIO** | **procedimiento** | **mostrar** | **texto** | **numero** | **vulnerabilidad** | **bool** | **FIN** | **finProcedimiento** | `)` |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **Programa** | P → INICIO Sentencias FIN | – | – | – | – | – | – | – | – | – |
+| **Sentencias** | – | S → Sentencia Sentencias | S → Sentencia Sentencias | – | – | – | – | **S → λ** | **S → λ** | – |
+| **Sentencia** | – | Sent → DefinicionProcedimiento | Sent → Impresion | – | – | – | – | – | – | – |
+| **DefinicionProcedimiento** | – | D → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento | – | – | – | – | – | – | – | – |
+| **ParametrosOpt** | – | – | – | POpt → ListaParametros | POpt → ListaParametros | POpt → ListaParametros | POpt → ListaParametros | – | – | **POpt → λ** |
+| **Impresion** | – | – | I → mostrar ExpresionTexto | – | – | – | – | – | – | – |
+
+---
+
+## Trazado del parsing LL(1)
+
+| Pila | Cadena | Regla o Acción |
+|---|---|---|
+| `$` | `INICIO … FIN $` | **Programa → INICIO Sentencias FIN** |
+| `$ FIN Sentencias INICIO` | `INICIO … FIN $` | Emparejar **INICIO** |
+| `$ FIN Sentencias` | `procedimiento p ( texto a ) mostrar a finProcedimiento FIN $` | **Sentencias → Sentencia Sentencias** |
+| `$ FIN Sentencias Sentencia` | `procedimiento …` | **Sentencia → DefinicionProcedimiento** |
+| `$ FIN Sentencias DefinicionProcedimiento` | `procedimiento …` | Emparejar **procedimiento**, **Identificador**, `(` |
+| `$ FIN Sentencias … ParametrosOpt …` | `texto a ) …` | **ParametrosOpt → ListaParametros** → **Parametro → Tipo Identificador** |
+| `$ FIN Sentencias … )` | `) …` | Emparejar `)` |
+| `$ FIN Sentencias` | `mostrar a finProcedimiento FIN $` | **Sentencias → Sentencia Sentencias** |
+| `$ FIN Sentencias Sentencia` | `mostrar …` | **Sentencia → Impresion → mostrar ExpresionTexto** |
+| `$ FIN Sentencias` | `finProcedimiento FIN $` | **Sentencias → λ** |
+| `$ FIN` | `FIN $` | Emparejar **FIN** |
+| `$` | `$` | **accept** |
+
+---
+
+## Conclusión
+
+El **lenguaje de seguridad educativo** cumple las condiciones **LL(1)** en su núcleo estructural (programas, procedimientos, impresión, parámetros).  
+No se presentan conflictos en la tabla predictiva, lo que demuestra que es posible construir un analizador descendente recursivo determinista para este subconjunto.
 
 # TP 6: 
 
@@ -776,3 +904,10 @@ _GIC = ⟨ΣN, ΣT, S, P⟩_
 | Z Programa                                                                                 | λ                                                                  | δ(q1, λ, Programa) ⇒ (q2, λ)                     |
 | Z                                                                                          | λ                                                                  | δ(q2, λ, Z) ⇒ (q3, λ)                            |
 | λ                                                                                          | λ                                                                  | accept                                           |
+
+
+
+
+# TP 7: 
+
+### Analisis TT y TS
