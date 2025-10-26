@@ -16,7 +16,7 @@
   - [Bloque invertido](#bloque-invertido)
   - [Parsing ASA con retroceso cadena](#parsing-asa-con-retroceso-cadena)
 
-- [TP 7](#tp-)
+- [TP 7](#tp-7)
 
 
 ## Objetivo
@@ -911,3 +911,37 @@ No se presentan conflictos en la tabla predictiva, lo que demuestra que es posib
 # TP 7: 
 
 ### Analisis TT y TS
+
+cadena
+
+```
+1: INICIO
+2:   procedimiento p(texto a)
+3:     mostrar a
+4:   finProcedimiento
+5: FIN.
+```
+
+
+## Tabla de tipos (TT)
+| Linea PRG | Cod | Nombre         | TipoBase | Padre | Dimensión | Mínimo | Máximo | Ámbito | Observaciones                   |
+| --------- | --- | -------------- | -------- | ----- | --------- | ------ | ------ | ------ | ------------------------------- |
+| L1        | 0   | numero         | -1       | -1    | 1         | -1     | -1     | 0      | primitivo                       |
+| L1        | 1   | bool           | -1       | -1    | 1         | -1     | -1     | 0      | primitivo (vulnerable | seguro) |
+| L1        | 2   | texto          | -1       | -1    | 1         | -1     | -1     | 0      | primitivo                       |
+| L1        | 3   | nada           | -1       | -1    | 1         | -1     | -1     | 0      | primitivo (“void”)              |
+| L1        | 4   | vulnerabilidad | -1       | -1    | 1         | -1     | -1     | 0      | primitivo (sqli | xss | rce)    |
+| L5        |     |                |          |       |           |        |        |        | Se eliminan todas las lineas    |
+
+
+
+## Tabla de Símbolos (TS)
+
+| Linea PRG | Cod | Nombre   | Categoria | Tipo | NumParMin | NumParMax | ListaPar  | Ámbito | Obervaciones                                             |
+| --------- | --- | -------- | --------- | ---- | --------- | --------- | --------- | ------ | -------------------------------------------------------- |
+| L1        | 0   | probar   | func      | 1    | 3         | 3         | [2, 4, 2] | 0      | Built-in. `probar(texto, vulnerabilidad, texto) -> bool` |
+| L1        | 1   | reportar | func      | 3    | 1         | 1         | [2]       | 0      | Built-in. `reportar(texto) -> nada`                      |
+| L2        | 2   | p        | proc      | 3    | 1         | 1         | [2]       | 0      | `procedimiento p(texto) -> nada`                         |
+| L2        | 3   | a        | var       | 2    | null      | null      | null      | 1      | Parámetro del procedimiento `p`                          |
+| L4        |     |          |           |      |           |           |           |        | Se elimina Cod 3 (fin de ámbito del proc)                |
+| L5        |     |          |           |      |           |           |           |        | Se eliminan todas las lineas                             |
