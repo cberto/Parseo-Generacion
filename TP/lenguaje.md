@@ -4,7 +4,7 @@
 
 - [TP 3](#tp-3)
 
-  - [ASD — Derivación a izquierda Descentende](#asd--derivación-a-izquierda-descentende)
+- [ASD — Derivación a izquierda Descendente](#asd--derivación-a-izquierda-descendente)
   - [ASA — Orden inverso de la derivación a la derecha (reducción ascendente)](#asa--orden-inverso-de-la-derivación-a-la-derecha-reducción-ascendente)
   - [ASA — Derivación a la derecha](#asa--derivación-a-la-derecha)
 
@@ -40,9 +40,7 @@ Ser un lenguaje de programación en español que permita expresar y automatizar 
 
 - **bool** → vulnerable | seguro.
 
-- **lista<tipo_base>** → lista tipada cuyos elementos son **numero**, **texto**, **vulnerabilidad** o **bool**.
-
-- **lista<tipo_base>** → elementos de `numero | texto | vulnerabilidad | bool`.
+- **lista<tipo_base>** → lista tipada cuyos elementos son `numero`, `texto`, `vulnerabilidad` o `bool`.
   - Se pueden crear vacías con `vacia` o con literal `[]`.
   - **Indexación:** el primer índice es **0**.
 
@@ -454,9 +452,8 @@ Limpiando listas...
 <tipo> ::= numero | texto | vulnerabilidad | bool | lista<tipo_base>
 <tipo_base> ::= numero | texto | vulnerabilidad | bool
 <impresion> ::= mostrar <expresion_texto>
-<expresion_texto> ::= <valor_texto> | <valor_texto> , <expresion_texto>;
-<valor_texto> ::= <texto> | <identificador> | <booleano> | <numero>
-| <acceso_lista> | <llamada_funcion
+<expresion_texto> ::= <valor_texto> | <valor_texto> + <expresion_texto>
+<valor_texto> ::= <texto> | <identificador> | <booleano> | <numero> | <acceso_lista> | <llamada_funcion>
 <condicional> ::= evaluar <condicion> <bloque_condicional>
 <bloque_condicional> ::= si pasa: <sentencias>
 | si pasa: <sentencias> si no pasa: <sentencias>
@@ -485,7 +482,8 @@ finProcedimiento
 <llamada_funcion> ::= <identificador> ( <argumentos_opt> )
 <llamada_procedimiento> ::= <identificador> ( <argumentos_opt> )
 <parametros_opt> ::= λ | <lista_parametros>
-<lista_parametros> ::= <parametro> | <parametro> , <lista_parametros>
+<lista_parametros> ::= <parametro> <resto_parametros>
+<resto_parametros> ::= , <lista_parametros> | λ
 <parametro> ::= <tipo> <identificador>
 <argumentos_opt> ::= λ | <lista_argumentos>
 <lista_argumentos> ::= <valor> | <valor> , <lista_argumentos>
@@ -515,7 +513,7 @@ mostrar a
 finProcedimiento
 
 
-FIN
+FIN.
 ```
 
 ## Árbol de Derivación - Grafico
@@ -526,7 +524,7 @@ FIN
 flowchart TD
   A[Programa] --> A1[INICIO]
   A --> A2[Sentencias]
-  A --> A3[FIN]
+  A --> A3[FIN.]
 
   A2 --> B1[Sentencia]
   B1 --> C1[DefinicionProcedimiento]
@@ -557,45 +555,45 @@ flowchart TD
 
 # TP 3
 
-## ASD — Derivación a izquierda Descentende
+## ASD — Derivación a izquierda Descendente
 
 | Cadena de derivación obtenida                                                          | Próxima producción a aplicar                                                                        |
 | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| Programa                                                                               | Programa → INICIO Sentencias FIN .                                                                  |
-| INICIO Sentencias FIN .                                                                | Sentencias → Sentencia                                                                              |
-| INICIO Sentencia FIN .                                                                 | Sentencia → DefinicionProcedimiento                                                                 |
-| INICIO DefinicionProcedimiento FIN .                                                   | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
-| INICIO procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento FIN . | Identificador → p                                                                                   |
-| INICIO procedimiento p ( ParametrosOpt ) Sentencias finProcedimiento FIN .             | ParametrosOpt → ListaParametros                                                                     |
-| INICIO procedimiento p ( ListaParametros ) Sentencias finProcedimiento FIN .           | ListaParametros → Parametro                                                                         |
-| INICIO procedimiento p ( Parametro ) Sentencias finProcedimiento FIN .                 | Parametro → Tipo Identificador                                                                      |
-| INICIO procedimiento p ( texto Identificador ) Sentencias finProcedimiento FIN .       | Identificador → a                                                                                   |
-| INICIO procedimiento p ( texto a ) Sentencias finProcedimiento FIN .                   | Sentencias → Sentencia                                                                              |
-| INICIO procedimiento p ( texto a ) Sentencia finProcedimiento FIN .                    | Sentencia → Impresion                                                                               |
-| INICIO procedimiento p ( texto a ) Impresion finProcedimiento FIN .                    | Impresion → mostrar ExpresionTexto                                                                  |
-| INICIO procedimiento p ( texto a ) mostrar ExpresionTexto finProcedimiento FIN .       | ExpresionTexto → ValorTexto                                                                         |
-| INICIO procedimiento p ( texto a ) mostrar ValorTexto finProcedimiento FIN .           | ValorTexto → Identificador                                                                          |
-| INICIO procedimiento p ( texto a ) mostrar Identificador finProcedimiento FIN .        | Identificador → a                                                                                   |
-| INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN .                    | accept                                                                                              |
+| Programa                                                                               | Programa → INICIO Sentencias FIN. .                                                                  |
+| INICIO Sentencias FIN. .                                                                | Sentencias → Sentencia                                                                              |
+| INICIO Sentencia FIN. .                                                                 | Sentencia → DefinicionProcedimiento                                                                 |
+| INICIO DefinicionProcedimiento FIN. .                                                   | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
+| INICIO procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento FIN. . | Identificador → p                                                                                   |
+| INICIO procedimiento p ( ParametrosOpt ) Sentencias finProcedimiento FIN. .             | ParametrosOpt → ListaParametros                                                                     |
+| INICIO procedimiento p ( ListaParametros ) Sentencias finProcedimiento FIN. .           | ListaParametros → Parametro                                                                         |
+| INICIO procedimiento p ( Parametro ) Sentencias finProcedimiento FIN. .                 | Parametro → Tipo Identificador                                                                      |
+| INICIO procedimiento p ( texto Identificador ) Sentencias finProcedimiento FIN. .       | Identificador → a                                                                                   |
+| INICIO procedimiento p ( texto a ) Sentencias finProcedimiento FIN. .                   | Sentencias → Sentencia                                                                              |
+| INICIO procedimiento p ( texto a ) Sentencia finProcedimiento FIN. .                    | Sentencia → Impresion                                                                               |
+| INICIO procedimiento p ( texto a ) Impresion finProcedimiento FIN. .                    | Impresion → mostrar ExpresionTexto                                                                  |
+| INICIO procedimiento p ( texto a ) mostrar ExpresionTexto finProcedimiento FIN. .       | ExpresionTexto → ValorTexto                                                                         |
+| INICIO procedimiento p ( texto a ) mostrar ValorTexto finProcedimiento FIN. .           | ValorTexto → Identificador                                                                          |
+| INICIO procedimiento p ( texto a ) mostrar Identificador finProcedimiento FIN. .        | Identificador → a                                                                                   |
+| INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN. .                    | accept                                                                                              |
 
 ### ASA — Orden inverso de la derivación a la derecha (reducción ascendente)
 
 | Cadena de derivación obtenida                                                    | Próxima producción a aplicar                                                                        |
 | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN .              | Identificador → a                                                                                   |
-| INICIO procedimiento p ( texto a ) mostrar Identificador finProcedimiento FIN .  | ValorTexto → Identificador                                                                          |
-| INICIO procedimiento p ( texto a ) mostrar ValorTexto finProcedimiento FIN .     | ExpresionTexto → ValorTexto                                                                         |
-| INICIO procedimiento p ( texto a ) mostrar ExpresionTexto finProcedimiento FIN . | Impresion → mostrar ExpresionTexto                                                                  |
-| INICIO procedimiento p ( texto a ) Impresion finProcedimiento FIN .              | Sentencia → Impresion                                                                               |
-| INICIO procedimiento p ( texto a ) Sentencia finProcedimiento FIN .              | Sentencias → Sentencia                                                                              |
-| INICIO procedimiento p ( texto Identificador ) Sentencias finProcedimiento FIN . | Identificador → a                                                                                   |
-| INICIO procedimiento p ( texto a ) Sentencias finProcedimiento FIN .             | Parametro → Tipo Identificador                                                                      |
-| INICIO procedimiento p ( Parametro ) Sentencias finProcedimiento FIN .           | ListaParametros → Parametro                                                                         |
-| INICIO procedimiento p ( ListaParametros ) Sentencias finProcedimiento FIN .     | ParametrosOpt → ListaParametros                                                                     |
-| INICIO procedimiento p ( ParametrosOpt ) Sentencias finProcedimiento FIN .       | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
-| INICIO DefinicionProcedimiento FIN .                                             | Sentencia → DefinicionProcedimiento                                                                 |
-| INICIO Sentencia FIN .                                                           | Sentencias → Sentencia                                                                              |
-| INICIO Sentencias FIN .                                                          | Programa → INICIO Sentencias FIN .                                                                  |
+| INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN. .              | Identificador → a                                                                                   |
+| INICIO procedimiento p ( texto a ) mostrar Identificador finProcedimiento FIN. .  | ValorTexto → Identificador                                                                          |
+| INICIO procedimiento p ( texto a ) mostrar ValorTexto finProcedimiento FIN. .     | ExpresionTexto → ValorTexto                                                                         |
+| INICIO procedimiento p ( texto a ) mostrar ExpresionTexto finProcedimiento FIN. . | Impresion → mostrar ExpresionTexto                                                                  |
+| INICIO procedimiento p ( texto a ) Impresion finProcedimiento FIN. .              | Sentencia → Impresion                                                                               |
+| INICIO procedimiento p ( texto a ) Sentencia finProcedimiento FIN. .              | Sentencias → Sentencia                                                                              |
+| INICIO procedimiento p ( texto Identificador ) Sentencias finProcedimiento FIN. . | Identificador → a                                                                                   |
+| INICIO procedimiento p ( texto a ) Sentencias finProcedimiento FIN. .             | Parametro → Tipo Identificador                                                                      |
+| INICIO procedimiento p ( Parametro ) Sentencias finProcedimiento FIN. .           | ListaParametros → Parametro                                                                         |
+| INICIO procedimiento p ( ListaParametros ) Sentencias finProcedimiento FIN. .     | ParametrosOpt → ListaParametros                                                                     |
+| INICIO procedimiento p ( ParametrosOpt ) Sentencias finProcedimiento FIN. .       | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
+| INICIO DefinicionProcedimiento FIN. .                                             | Sentencia → DefinicionProcedimiento                                                                 |
+| INICIO Sentencia FIN. .                                                           | Sentencias → Sentencia                                                                              |
+| INICIO Sentencias FIN. .                                                          | Programa → INICIO Sentencias FIN. .                                                                  |
 | Programa                                                                         | accept                                                                                              |
 
 > **Comentario:** En la derivación descendente se arranca desde el símbolo inicial (`Programa`) y se van expandiendo producciones siguiendo el orden de la entrada. Se ve cómo primero se reconoce la definición del procedimiento `p`, luego el bloque de sentencias y finalmente la impresión.
@@ -604,23 +602,23 @@ flowchart TD
 
 | Cadena de trabajo (input → reducciones)                                                    | Producción aplicada                                                                                 |
 | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
-| **INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN .**                    | —                                                                                                   |
-| INICIO procedimiento p ( texto a ) **mostrar Identificador** finProcedimiento FIN .        | Identificador → a                                                                                   |
-| INICIO procedimiento p ( texto a ) **mostrar ValorTexto** finProcedimiento FIN .           | ValorTexto → Identificador                                                                          |
-| INICIO procedimiento p ( texto a ) **mostrar ExpresionTexto** finProcedimiento FIN .       | ExpresionTexto → ValorTexto                                                                         |
-| INICIO procedimiento p ( texto a ) **Impresion** finProcedimiento FIN .                    | Impresion → mostrar ExpresionTexto                                                                  |
-| INICIO procedimiento p ( texto a ) **Sentencia** finProcedimiento FIN .                    | Sentencia → Impresion                                                                               |
-| INICIO procedimiento p ( texto a ) **Sentencias** finProcedimiento FIN .                   | Sentencias → Sentencia                                                                              |
-| INICIO procedimiento p ( **Tipo** a ) Sentencias finProcedimiento FIN .                    | Tipo → texto                                                                                        |
-| INICIO procedimiento p ( Tipo **Identificador** ) Sentencias finProcedimiento FIN .        | Identificador → a                                                                                   |
-| INICIO procedimiento p ( **Parametro** ) Sentencias finProcedimiento FIN .                 | Parametro → Tipo Identificador                                                                      |
-| INICIO procedimiento p ( **ListaParametros** ) Sentencias finProcedimiento FIN .           | ListaParametros → Parametro                                                                         |
-| INICIO procedimiento p ( **ParametrosOpt** ) Sentencias finProcedimiento FIN .             | ParametrosOpt → ListaParametros                                                                     |
-| INICIO procedimiento **Identificador** ( ParametrosOpt ) Sentencias finProcedimiento FIN . | Identificador → p                                                                                   |
-| INICIO **DefinicionProcedimiento** FIN .                                                   | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
-| INICIO **Sentencia** FIN .                                                                 | Sentencia → DefinicionProcedimiento                                                                 |
-| INICIO **Sentencias** FIN .                                                                | Sentencias → Sentencia                                                                              |
-| **Programa**                                                                               | Programa → INICIO Sentencias FIN .                                                                  |
+| **INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN. .**                    | —                                                                                                   |
+| INICIO procedimiento p ( texto a ) **mostrar Identificador** finProcedimiento FIN. .        | Identificador → a                                                                                   |
+| INICIO procedimiento p ( texto a ) **mostrar ValorTexto** finProcedimiento FIN. .           | ValorTexto → Identificador                                                                          |
+| INICIO procedimiento p ( texto a ) **mostrar ExpresionTexto** finProcedimiento FIN. .       | ExpresionTexto → ValorTexto                                                                         |
+| INICIO procedimiento p ( texto a ) **Impresion** finProcedimiento FIN. .                    | Impresion → mostrar ExpresionTexto                                                                  |
+| INICIO procedimiento p ( texto a ) **Sentencia** finProcedimiento FIN. .                    | Sentencia → Impresion                                                                               |
+| INICIO procedimiento p ( texto a ) **Sentencias** finProcedimiento FIN. .                   | Sentencias → Sentencia                                                                              |
+| INICIO procedimiento p ( **Tipo** a ) Sentencias finProcedimiento FIN. .                    | Tipo → texto                                                                                        |
+| INICIO procedimiento p ( Tipo **Identificador** ) Sentencias finProcedimiento FIN. .        | Identificador → a                                                                                   |
+| INICIO procedimiento p ( **Parametro** ) Sentencias finProcedimiento FIN. .                 | Parametro → Tipo Identificador                                                                      |
+| INICIO procedimiento p ( **ListaParametros** ) Sentencias finProcedimiento FIN. .           | ListaParametros → Parametro                                                                         |
+| INICIO procedimiento p ( **ParametrosOpt** ) Sentencias finProcedimiento FIN. .             | ParametrosOpt → ListaParametros                                                                     |
+| INICIO procedimiento **Identificador** ( ParametrosOpt ) Sentencias finProcedimiento FIN. . | Identificador → p                                                                                   |
+| INICIO **DefinicionProcedimiento** FIN. .                                                   | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
+| INICIO **Sentencia** FIN. .                                                                 | Sentencia → DefinicionProcedimiento                                                                 |
+| INICIO **Sentencias** FIN. .                                                                | Sentencias → Sentencia                                                                              |
+| **Programa**                                                                               | Programa → INICIO Sentencias FIN. .                                                                  |
 | **accept**                                                                                 | —                                                                                                   |
 
 > **Comentario:** La tabla de derivación a la derecha muestra el proceso inverso: partimos de la cadena completa y vamos reduciendo subcadenas a no terminales. Se observa cómo cada coincidencia reemplaza fragmentos hasta colapsar todo en `Programa`.
@@ -636,7 +634,7 @@ procedimiento p(texto a)
 mostrar a
 finProcedimiento
 
-FIN
+FIN.
 ```
 
 ---
@@ -646,7 +644,7 @@ FIN
 _GIC = ⟨ΣN, ΣT, S, P⟩_
 
 - **ΣN** = { Programa, Sentencias, Sentencia, DefinicionProcedimiento, ParametrosOpt, ListaParametros, Parametro, Tipo, Identificador, Impresion, ExpresionTexto, ValorTexto }
-- **ΣT** = { `INICIO`, `FIN`, `procedimiento`, `finProcedimiento`, `(`, `)`, `texto`, `mostrar`, `p`, `a` }
+- **ΣT** = { `INICIO`, `FIN.`, `procedimiento`, `finProcedimiento`, `(`, `)`, `texto`, `mostrar`, `p`, `a` }
 - **S** = `Programa`
 - **P** (solo las necesarias para esta entrada):
 
@@ -655,7 +653,7 @@ _GIC = ⟨ΣN, ΣT, S, P⟩_
 δ(q1, λ, λ)        => (q2, Programa)
 
 ; Expansiones por λ
-δ(q2, λ, Programa)             => (q2, INICIO Sentencias FIN)
+δ(q2, λ, Programa)             => (q2, INICIO Sentencias FIN.)
 
 ; Bloque global: primera Sentencias se expande en una Sentencia (la definición)
 δ(q2, λ, Sentencias)           => (q2, Sentencia Sentencias)
@@ -699,7 +697,7 @@ _GIC = ⟨ΣN, ΣT, S, P⟩_
 δ(q2, mostrar, mostrar)                => (q2, λ)
 δ(q2, a, a)                            => (q2, λ)
 δ(q2, finProcedimiento, finProcedimiento) => (q2, λ)
-δ(q2, FIN, FIN)                        => (q2, λ)
+δ(q2, FIN., FIN.)                        => (q2, λ)
 
 ; Aceptación
 δ(q2, λ, Z) => (q3, λ)
@@ -709,37 +707,37 @@ _GIC = ⟨ΣN, ΣT, S, P⟩_
 
 | Pila                                                                                       | Cadena                                                            | Transición                                                                                                          |
 | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| λ                                                                                          | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q0, λ, λ) ⇒ (q1, Z)                                                                                               |
-| Z                                                                                          | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q1, λ, λ) ⇒ (q2, Programa)                                                                                        |
-| Z Programa                                                                                 | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, λ, Programa) ⇒ (q2, INICIO Sentencias FIN)                                                                    |
-| Z FIN Sentencias INICIO                                                                    | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN | δ(q2, INICIO, INICIO) ⇒ (q2, λ)                                                                                     |
-| Z FIN Sentencias                                                                           | procedimiento p ( texto a ) mostrar a finProcedimiento FIN        | δ(q2, λ, Sentencias) ⇒ (q2, Sentencia Sentencias)                                                                   |
-| Z FIN Sentencias Sentencia                                                                 | procedimiento p ( texto a ) mostrar a finProcedimiento FIN        | δ(q2, λ, Sentencia) ⇒ (q2, DefinicionProcedimiento)                                                                 |
-| Z FIN Sentencias DefinicionProcedimiento                                                   | procedimiento p ( texto a ) mostrar a finProcedimiento FIN        | δ(q2, λ, DefinicionProcedimiento) ⇒ (q2, procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento) |
-| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador procedimiento | procedimiento p ( texto a ) mostrar a finProcedimiento FIN        | δ(q2, procedimiento, procedimiento) ⇒ (q2, λ)                                                                       |
-| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador               | p ( texto a ) mostrar a finProcedimiento FIN                      | δ(q2, λ, Identificador) ⇒ (q2, p)                                                                                   |
-| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( p                           | p ( texto a ) mostrar a finProcedimiento FIN                      | δ(q2, p, p) ⇒ (q2, λ)                                                                                               |
-| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt (                             | ( texto a ) mostrar a finProcedimiento FIN                        | δ(q2, (, () ⇒ (q2, λ)                                                                                               |
-| Z FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt                               | texto a ) mostrar a finProcedimiento FIN                          | δ(q2, λ, ParametrosOpt) ⇒ (q2, ListaParametros)                                                                     |
-| Z FIN Sentencias finProcedimiento Sentencias ) ListaParametros                             | texto a ) mostrar a finProcedimiento FIN                          | δ(q2, λ, ListaParametros) ⇒ (q2, Parametro)                                                                         |
-| Z FIN Sentencias finProcedimiento Sentencias ) Parametro                                   | texto a ) mostrar a finProcedimiento FIN                          | δ(q2, λ, Parametro) ⇒ (q2, Tipo Identificador)                                                                      |
-| Z FIN Sentencias finProcedimiento Sentencias ) Identificador Tipo                          | texto a ) mostrar a finProcedimiento FIN                          | δ(q2, λ, Tipo) ⇒ (q2, texto)                                                                                        |
-| Z FIN Sentencias finProcedimiento Sentencias ) Identificador texto                         | texto a ) mostrar a finProcedimiento FIN                          | δ(q2, texto, texto) ⇒ (q2, λ)                                                                                       |
-| Z FIN Sentencias finProcedimiento Sentencias ) Identificador                               | a ) mostrar a finProcedimiento FIN                                | δ(q2, λ, Identificador) ⇒ (q2, a)                                                                                   |
-| Z FIN Sentencias finProcedimiento Sentencias ) a                                           | a ) mostrar a finProcedimiento FIN                                | δ(q2, a, a) ⇒ (q2, λ)                                                                                               |
-| Z FIN Sentencias finProcedimiento Sentencias )                                             | ) mostrar a finProcedimiento FIN                                  | δ(q2, ), )) ⇒ (q2, λ)                                                                                               |
-| Z FIN Sentencias finProcedimiento Sentencias                                               | mostrar a finProcedimiento FIN                                    | δ(q2, λ, Sentencias) ⇒ (q2, Sentencia Sentencias)                                                                   |
-| Z FIN Sentencias finProcedimiento Sentencias Sentencia                                     | mostrar a finProcedimiento FIN                                    | δ(q2, λ, Sentencia) ⇒ (q2, Impresion)                                                                               |
-| Z FIN Sentencias finProcedimiento Sentencias Impresion                                     | mostrar a finProcedimiento FIN                                    | δ(q2, λ, Impresion) ⇒ (q2, mostrar ExpresionTexto)                                                                  |
-| Z FIN Sentencias finProcedimiento Sentencias ExpresionTexto mostrar                        | mostrar a finProcedimiento FIN                                    | δ(q2, mostrar, mostrar) ⇒ (q2, λ)                                                                                   |
-| Z FIN Sentencias finProcedimiento Sentencias ExpresionTexto                                | a finProcedimiento FIN                                            | δ(q2, λ, ExpresionTexto) ⇒ (q2, ValorTexto)                                                                         |
-| Z FIN Sentencias finProcedimiento Sentencias ValorTexto                                    | a finProcedimiento FIN                                            | δ(q2, λ, ValorTexto) ⇒ (q2, Identificador)                                                                          |
-| Z FIN Sentencias finProcedimiento Sentencias Identificador                                 | a finProcedimiento FIN                                            | δ(q2, λ, Identificador) ⇒ (q2, a)                                                                                   |
-| Z FIN Sentencias finProcedimiento Sentencias a                                             | a finProcedimiento FIN                                            | δ(q2, a, a) ⇒ (q2, λ)                                                                                               |
-| Z FIN Sentencias finProcedimiento Sentencias                                               | finProcedimiento FIN                                              | δ(q2, λ, Sentencias) ⇒ (q2, λ)                                                                                      |
-| Z FIN Sentencias finProcedimiento                                                          | finProcedimiento FIN                                              | δ(q2, finProcedimiento, finProcedimiento) ⇒ (q2, λ)                                                                 |
-| Z FIN Sentencias                                                                           | FIN                                                               | δ(q2, λ, Sentencias) ⇒ (q2, λ)                                                                                      |
-| Z FIN                                                                                      | FIN                                                               | δ(q2, FIN, FIN) ⇒ (q2, λ)                                                                                           |
+| λ                                                                                          | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN. | δ(q0, λ, λ) ⇒ (q1, Z)                                                                                               |
+| Z                                                                                          | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN. | δ(q1, λ, λ) ⇒ (q2, Programa)                                                                                        |
+| Z Programa                                                                                 | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN. | δ(q2, λ, Programa) ⇒ (q2, INICIO Sentencias FIN.)                                                                    |
+| Z FIN. Sentencias INICIO                                                                    | INICIO procedimiento p ( texto a ) mostrar a finProcedimiento FIN. | δ(q2, INICIO, INICIO) ⇒ (q2, λ)                                                                                     |
+| Z FIN. Sentencias                                                                           | procedimiento p ( texto a ) mostrar a finProcedimiento FIN.        | δ(q2, λ, Sentencias) ⇒ (q2, Sentencia Sentencias)                                                                   |
+| Z FIN. Sentencias Sentencia                                                                 | procedimiento p ( texto a ) mostrar a finProcedimiento FIN.        | δ(q2, λ, Sentencia) ⇒ (q2, DefinicionProcedimiento)                                                                 |
+| Z FIN. Sentencias DefinicionProcedimiento                                                   | procedimiento p ( texto a ) mostrar a finProcedimiento FIN.        | δ(q2, λ, DefinicionProcedimiento) ⇒ (q2, procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento) |
+| Z FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador procedimiento | procedimiento p ( texto a ) mostrar a finProcedimiento FIN.        | δ(q2, procedimiento, procedimiento) ⇒ (q2, λ)                                                                       |
+| Z FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador               | p ( texto a ) mostrar a finProcedimiento FIN.                      | δ(q2, λ, Identificador) ⇒ (q2, p)                                                                                   |
+| Z FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt ( p                           | p ( texto a ) mostrar a finProcedimiento FIN.                      | δ(q2, p, p) ⇒ (q2, λ)                                                                                               |
+| Z FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt (                             | ( texto a ) mostrar a finProcedimiento FIN.                        | δ(q2, (, () ⇒ (q2, λ)                                                                                               |
+| Z FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt                               | texto a ) mostrar a finProcedimiento FIN.                          | δ(q2, λ, ParametrosOpt) ⇒ (q2, ListaParametros)                                                                     |
+| Z FIN. Sentencias finProcedimiento Sentencias ) ListaParametros                             | texto a ) mostrar a finProcedimiento FIN.                          | δ(q2, λ, ListaParametros) ⇒ (q2, Parametro)                                                                         |
+| Z FIN. Sentencias finProcedimiento Sentencias ) Parametro                                   | texto a ) mostrar a finProcedimiento FIN.                          | δ(q2, λ, Parametro) ⇒ (q2, Tipo Identificador)                                                                      |
+| Z FIN. Sentencias finProcedimiento Sentencias ) Identificador Tipo                          | texto a ) mostrar a finProcedimiento FIN.                          | δ(q2, λ, Tipo) ⇒ (q2, texto)                                                                                        |
+| Z FIN. Sentencias finProcedimiento Sentencias ) Identificador texto                         | texto a ) mostrar a finProcedimiento FIN.                          | δ(q2, texto, texto) ⇒ (q2, λ)                                                                                       |
+| Z FIN. Sentencias finProcedimiento Sentencias ) Identificador                               | a ) mostrar a finProcedimiento FIN.                                | δ(q2, λ, Identificador) ⇒ (q2, a)                                                                                   |
+| Z FIN. Sentencias finProcedimiento Sentencias ) a                                           | a ) mostrar a finProcedimiento FIN.                                | δ(q2, a, a) ⇒ (q2, λ)                                                                                               |
+| Z FIN. Sentencias finProcedimiento Sentencias )                                             | ) mostrar a finProcedimiento FIN.                                  | δ(q2, ), )) ⇒ (q2, λ)                                                                                               |
+| Z FIN. Sentencias finProcedimiento Sentencias                                               | mostrar a finProcedimiento FIN.                                    | δ(q2, λ, Sentencias) ⇒ (q2, Sentencia Sentencias)                                                                   |
+| Z FIN. Sentencias finProcedimiento Sentencias Sentencia                                     | mostrar a finProcedimiento FIN.                                    | δ(q2, λ, Sentencia) ⇒ (q2, Impresion)                                                                               |
+| Z FIN. Sentencias finProcedimiento Sentencias Impresion                                     | mostrar a finProcedimiento FIN.                                    | δ(q2, λ, Impresion) ⇒ (q2, mostrar ExpresionTexto)                                                                  |
+| Z FIN. Sentencias finProcedimiento Sentencias ExpresionTexto mostrar                        | mostrar a finProcedimiento FIN.                                    | δ(q2, mostrar, mostrar) ⇒ (q2, λ)                                                                                   |
+| Z FIN. Sentencias finProcedimiento Sentencias ExpresionTexto                                | a finProcedimiento FIN.                                            | δ(q2, λ, ExpresionTexto) ⇒ (q2, ValorTexto)                                                                         |
+| Z FIN. Sentencias finProcedimiento Sentencias ValorTexto                                    | a finProcedimiento FIN.                                            | δ(q2, λ, ValorTexto) ⇒ (q2, Identificador)                                                                          |
+| Z FIN. Sentencias finProcedimiento Sentencias Identificador                                 | a finProcedimiento FIN.                                            | δ(q2, λ, Identificador) ⇒ (q2, a)                                                                                   |
+| Z FIN. Sentencias finProcedimiento Sentencias a                                             | a finProcedimiento FIN.                                            | δ(q2, a, a) ⇒ (q2, λ)                                                                                               |
+| Z FIN. Sentencias finProcedimiento Sentencias                                               | finProcedimiento FIN.                                              | δ(q2, λ, Sentencias) ⇒ (q2, λ)                                                                                      |
+| Z FIN. Sentencias finProcedimiento                                                          | finProcedimiento FIN.                                              | δ(q2, finProcedimiento, finProcedimiento) ⇒ (q2, λ)                                                                 |
+| Z FIN. Sentencias                                                                           | FIN.                                                               | δ(q2, λ, Sentencias) ⇒ (q2, λ)                                                                                      |
+| Z FIN.                                                                                      | FIN.                                                               | δ(q2, FIN., FIN.) ⇒ (q2, λ)                                                                                           |
 | Z                                                                                          | λ                                                                 | δ(q2, λ, Z) ⇒ (q3, λ)                                                                                               |
 | λ                                                                                          | λ                                                                 | **accept**                                                                                                          |
 
@@ -762,7 +760,7 @@ FIN.
 ## GIC reducido (para el análisis LL(1))
 
 ```bnf
-Programa → INICIO Sentencias FIN
+Programa → INICIO Sentencias FIN.
 Sentencias → Sentencia Sentencias | λ
 Sentencia → DefinicionProcedimiento | Impresion
 DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento
@@ -807,18 +805,18 @@ Identificador → a | p
 | Producción                   | Conjunto                                                |
 | ---------------------------- | ------------------------------------------------------- |
 | SIG(Programa)                | {$}                                                     |
-| SIG(Sentencias)              | {FIN, finProcedimiento}                                 |
-| SIG(Sentencia)               | {procedimiento, mostrar, FIN, finProcedimiento}         |
-| SIG(DefinicionProcedimiento) | {procedimiento, mostrar, FIN, finProcedimiento}         |
+| SIG(Sentencias)              | {FIN., finProcedimiento}                                 |
+| SIG(Sentencia)               | {procedimiento, mostrar, FIN., finProcedimiento}         |
+| SIG(DefinicionProcedimiento) | {procedimiento, mostrar, FIN., finProcedimiento}         |
 | SIG(ParametrosOpt)           | {)}                                                     |
 | SIG(RestoParametros)         | {)}                                                     |
 | SIG(ListaParametros)         | {)}                                                     |
 | SIG(Parametro)               | {,, )}                                                  |
 | SIG(Tipo)                    | {a, p}                                                  |
-| SIG(Impresion)               | {procedimiento, mostrar, FIN, finProcedimiento}         |
-| SIG(ExpresionTexto)          | {procedimiento, mostrar, FIN, finProcedimiento}         |
-| SIG(ValorTexto)              | {procedimiento, mostrar, FIN, finProcedimiento}         |
-| SIG(Identificador)           | {(, , ), procedimiento, mostrar, FIN, finProcedimiento} |
+| SIG(Impresion)               | {procedimiento, mostrar, FIN., finProcedimiento}         |
+| SIG(ExpresionTexto)          | {procedimiento, mostrar, FIN., finProcedimiento}         |
+| SIG(ValorTexto)              | {procedimiento, mostrar, FIN., finProcedimiento}         |
+| SIG(Identificador)           | {(, , ), procedimiento, mostrar, FIN., finProcedimiento} |
 
 > **Comentario:** `SIG` lista los terminales que pueden seguir a cada no terminal. Es clave para manejar las producciones con λ.
 
@@ -826,9 +824,9 @@ Identificador → a | p
 
 | Producción                                                                                                | Conjunto                              |
 | --------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| PRED(Programa → INICIO Sentencias FIN)                                                                    | {INICIO}                              |
+| PRED(Programa → INICIO Sentencias FIN.)                                                                    | {INICIO}                              |
 | PRED(Sentencias → Sentencia Sentencias)                                                                   | {procedimiento, mostrar}              |
-| PRED(Sentencias → λ)                                                                                      | {FIN, finProcedimiento}               |
+| PRED(Sentencias → λ)                                                                                      | {FIN., finProcedimiento}               |
 | PRED(Sentencia → DefinicionProcedimiento)                                                                 | {procedimiento}                       |
 | PRED(Sentencia → Impresion)                                                                               | {mostrar}                             |
 | PRED(DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento) | {procedimiento}                       |
@@ -851,9 +849,9 @@ Identificador → a | p
 
 ## Tabla LL(1)
 
-|                             |              INICIO              |                                            procedimiento                                            |              mostrar               |                    texto                    |                   numero                    |               vulnerabilidad                |                    bool                     |              a              |              p              |          booleano           |                  ,                  |   (   |            )            |        FIN         | finProcedimiento |   $   |
+|                             |              INICIO              |                                            procedimiento                                            |              mostrar               |                    texto                    |                   numero                    |               vulnerabilidad                |                    bool                     |              a              |              p              |          booleano           |                  ,                  |   (   |            )            |        FIN.         | finProcedimiento |   $   |
 | --------------------------- | :------------------------------: | :-------------------------------------------------------------------------------------------------: | :--------------------------------: | :-----------------------------------------: | :-----------------------------------------: | :-----------------------------------------: | :-----------------------------------------: | :-------------------------: | :-------------------------: | :-------------------------: | :---------------------------------: | :---: | :---------------------: | :----------------: | :--------------: | :---: |
-| **Programa**                | Programa → INICIO Sentencias FIN |                                                error                                                |               error                |                    error                    |                    error                    |                    error                    |                    error                    |            error            |            error            |            error            |                error                | error |          error          |       error        |      error       | error |
+| **Programa**                | Programa → INICIO Sentencias FIN. |                                                error                                                |               error                |                    error                    |                    error                    |                    error                    |                    error                    |            error            |            error            |            error            |                error                | error |          error          |       error        |      error       | error |
 | **Sentencias**              |              error               |                                  Sentencias → Sentencia Sentencias                                  | Sentencias → Sentencia Sentencias  |                    error                    |                    error                    |                    error                    |                    error                    |            error            |            error            |            error            |                error                | error |   **Sentencias → λ**    | **Sentencias → λ** |      error       |
 | **Sentencia**               |              error               |                                 Sentencia → DefinicionProcedimiento                                 |       Sentencia → Impresion        |                    error                    |                    error                    |                    error                    |                    error                    |            error            |            error            |            error            |                error                | error |          error          |       error        |      error       |
 | **DefinicionProcedimiento** |              error               | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |               error                |                    error                    |                    error                    |                    error                    |                    error                    |            error            |            error            |            error            |                error                | error |          error          |       error        |      error       |
@@ -873,44 +871,44 @@ Identificador → a | p
 
 | Pila                                                                                       | Cadena                                                                       | Regla o Acción                                                                                      |
 | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| $ Programa                                                                                 | INICIO procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN $ | Programa → INICIO Sentencias FIN                                                                    |
-| $ FIN Sentencias INICIO                                                                    | INICIO procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN $ | emparejar(INICIO)                                                                                   |
-| $ FIN Sentencias                                                                           | procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN $        | Sentencias → Sentencia Sentencias                                                                   |
-| $ FIN Sentencias Sentencia                                                                 | procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN $        | Sentencia → DefinicionProcedimiento                                                                 |
-| $ FIN Sentencias DefinicionProcedimiento                                                   | procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN $        | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
-| $ FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador procedimiento | procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN $        | emparejar(procedimiento)                                                                            |
-| $ FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador               | p ( texto a , bool p ) mostrar a finProcedimiento FIN $                      | Identificador → p                                                                                   |
-| $ FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt (                             | ( texto a , bool p ) mostrar a finProcedimiento FIN $                        | emparejar(p)                                                                                        |
-| $ FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt                               | texto a , bool p ) mostrar a finProcedimiento FIN $                          | emparejar(()                                                                                        |
-| $ FIN Sentencias finProcedimiento Sentencias ) ParametrosOpt                               | texto a , bool p ) mostrar a finProcedimiento FIN $                          | ParametrosOpt → ListaParametros                                                                     |
-| $ FIN Sentencias finProcedimiento Sentencias ) ListaParametros                             | texto a , bool p ) mostrar a finProcedimiento FIN $                          | ListaParametros → Parametro RestoParametros                                                         |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros Parametro                   | texto a , bool p ) mostrar a finProcedimiento FIN $                          | Parametro → Tipo Identificador                                                                      |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros Identificador Tipo          | texto a , bool p ) mostrar a finProcedimiento FIN $                          | Tipo → texto                                                                                        |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros Identificador               | a , bool p ) mostrar a finProcedimiento FIN $                                | emparejar(texto)                                                                                    |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros                             | a , bool p ) mostrar a finProcedimiento FIN $                                | Identificador → a                                                                                   |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros                             | , bool p ) mostrar a finProcedimiento FIN $                                  | emparejar(a)                                                                                        |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros                             | , bool p ) mostrar a finProcedimiento FIN $                                  | RestoParametros → , ListaParametros                                                                 |
-| $ FIN Sentencias finProcedimiento Sentencias ) ListaParametros ,                           | , bool p ) mostrar a finProcedimiento FIN $                                  | emparejar(,)                                                                                        |
-| $ FIN Sentencias finProcedimiento Sentencias ) ListaParametros                             | bool p ) mostrar a finProcedimiento FIN $                                    | ListaParametros → Parametro RestoParametros                                                         |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros Parametro                   | bool p ) mostrar a finProcedimiento FIN $                                    | Parametro → Tipo Identificador                                                                      |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros Identificador Tipo          | bool p ) mostrar a finProcedimiento FIN $                                    | Tipo → bool                                                                                         |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros Identificador               | p ) mostrar a finProcedimiento FIN $                                         | emparejar(bool)                                                                                     |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros                             | p ) mostrar a finProcedimiento FIN $                                         | Identificador → p                                                                                   |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros                             | ) mostrar a finProcedimiento FIN $                                           | emparejar(p)                                                                                        |
-| $ FIN Sentencias finProcedimiento Sentencias ) RestoParametros                             | ) mostrar a finProcedimiento FIN $                                           | RestoParametros → λ                                                                                 |
-| $ FIN Sentencias finProcedimiento Sentencias )                                             | ) mostrar a finProcedimiento FIN $                                           | emparejar())                                                                                        |
-| $ FIN Sentencias finProcedimiento Sentencias                                               | mostrar a finProcedimiento FIN $                                             | Sentencias → Sentencia Sentencias                                                                   |
-| $ FIN Sentencias finProcedimiento Sentencias Sentencia                                     | mostrar a finProcedimiento FIN $                                             | Sentencia → Impresion                                                                               |
-| $ FIN Sentencias finProcedimiento Sentencias Impresion                                     | mostrar a finProcedimiento FIN $                                             | Impresion → mostrar ExpresionTexto                                                                  |
-| $ FIN Sentencias finProcedimiento Sentencias ExpresionTexto mostrar                        | mostrar a finProcedimiento FIN $                                             | emparejar(mostrar)                                                                                  |
-| $ FIN Sentencias finProcedimiento Sentencias ExpresionTexto                                | a finProcedimiento FIN $                                                     | ExpresionTexto → ValorTexto                                                                         |
-| $ FIN Sentencias finProcedimiento Sentencias ValorTexto                                    | a finProcedimiento FIN $                                                     | ValorTexto → Identificador                                                                          |
-| $ FIN Sentencias finProcedimiento Sentencias Identificador                                 | a finProcedimiento FIN $                                                     | Identificador → a                                                                                   |
-| $ FIN Sentencias finProcedimiento Sentencias                                               | finProcedimiento FIN $                                                       | emparejar(a)                                                                                        |
-| $ FIN Sentencias finProcedimiento                                                          | finProcedimiento FIN $                                                       | Sentencias → λ                                                                                      |
-| $ FIN Sentencias                                                                           | FIN $                                                                        | emparejar(finProcedimiento)                                                                         |
-| $ FIN                                                                                      | FIN $                                                                        | Sentencias → λ                                                                                      |
-| $                                                                                          | $                                                                            | emparejar(FIN)                                                                                      |
+| $ Programa                                                                                 | INICIO procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN. $ | Programa → INICIO Sentencias FIN.                                                                    |
+| $ FIN. Sentencias INICIO                                                                    | INICIO procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN. $ | emparejar(INICIO)                                                                                   |
+| $ FIN. Sentencias                                                                           | procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN. $        | Sentencias → Sentencia Sentencias                                                                   |
+| $ FIN. Sentencias Sentencia                                                                 | procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN. $        | Sentencia → DefinicionProcedimiento                                                                 |
+| $ FIN. Sentencias DefinicionProcedimiento                                                   | procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN. $        | DefinicionProcedimiento → procedimiento Identificador ( ParametrosOpt ) Sentencias finProcedimiento |
+| $ FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador procedimiento | procedimiento p ( texto a , bool p ) mostrar a finProcedimiento FIN. $        | emparejar(procedimiento)                                                                            |
+| $ FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt ( Identificador               | p ( texto a , bool p ) mostrar a finProcedimiento FIN. $                      | Identificador → p                                                                                   |
+| $ FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt (                             | ( texto a , bool p ) mostrar a finProcedimiento FIN. $                        | emparejar(p)                                                                                        |
+| $ FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt                               | texto a , bool p ) mostrar a finProcedimiento FIN. $                          | emparejar(()                                                                                        |
+| $ FIN. Sentencias finProcedimiento Sentencias ) ParametrosOpt                               | texto a , bool p ) mostrar a finProcedimiento FIN. $                          | ParametrosOpt → ListaParametros                                                                     |
+| $ FIN. Sentencias finProcedimiento Sentencias ) ListaParametros                             | texto a , bool p ) mostrar a finProcedimiento FIN. $                          | ListaParametros → Parametro RestoParametros                                                         |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros Parametro                   | texto a , bool p ) mostrar a finProcedimiento FIN. $                          | Parametro → Tipo Identificador                                                                      |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros Identificador Tipo          | texto a , bool p ) mostrar a finProcedimiento FIN. $                          | Tipo → texto                                                                                        |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros Identificador               | a , bool p ) mostrar a finProcedimiento FIN. $                                | emparejar(texto)                                                                                    |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros                             | a , bool p ) mostrar a finProcedimiento FIN. $                                | Identificador → a                                                                                   |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros                             | , bool p ) mostrar a finProcedimiento FIN. $                                  | emparejar(a)                                                                                        |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros                             | , bool p ) mostrar a finProcedimiento FIN. $                                  | RestoParametros → , ListaParametros                                                                 |
+| $ FIN. Sentencias finProcedimiento Sentencias ) ListaParametros ,                           | , bool p ) mostrar a finProcedimiento FIN. $                                  | emparejar(,)                                                                                        |
+| $ FIN. Sentencias finProcedimiento Sentencias ) ListaParametros                             | bool p ) mostrar a finProcedimiento FIN. $                                    | ListaParametros → Parametro RestoParametros                                                         |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros Parametro                   | bool p ) mostrar a finProcedimiento FIN. $                                    | Parametro → Tipo Identificador                                                                      |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros Identificador Tipo          | bool p ) mostrar a finProcedimiento FIN. $                                    | Tipo → bool                                                                                         |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros Identificador               | p ) mostrar a finProcedimiento FIN. $                                         | emparejar(bool)                                                                                     |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros                             | p ) mostrar a finProcedimiento FIN. $                                         | Identificador → p                                                                                   |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros                             | ) mostrar a finProcedimiento FIN. $                                           | emparejar(p)                                                                                        |
+| $ FIN. Sentencias finProcedimiento Sentencias ) RestoParametros                             | ) mostrar a finProcedimiento FIN. $                                           | RestoParametros → λ                                                                                 |
+| $ FIN. Sentencias finProcedimiento Sentencias )                                             | ) mostrar a finProcedimiento FIN. $                                           | emparejar())                                                                                        |
+| $ FIN. Sentencias finProcedimiento Sentencias                                               | mostrar a finProcedimiento FIN. $                                             | Sentencias → Sentencia Sentencias                                                                   |
+| $ FIN. Sentencias finProcedimiento Sentencias Sentencia                                     | mostrar a finProcedimiento FIN. $                                             | Sentencia → Impresion                                                                               |
+| $ FIN. Sentencias finProcedimiento Sentencias Impresion                                     | mostrar a finProcedimiento FIN. $                                             | Impresion → mostrar ExpresionTexto                                                                  |
+| $ FIN. Sentencias finProcedimiento Sentencias ExpresionTexto mostrar                        | mostrar a finProcedimiento FIN. $                                             | emparejar(mostrar)                                                                                  |
+| $ FIN. Sentencias finProcedimiento Sentencias ExpresionTexto                                | a finProcedimiento FIN. $                                                     | ExpresionTexto → ValorTexto                                                                         |
+| $ FIN. Sentencias finProcedimiento Sentencias ValorTexto                                    | a finProcedimiento FIN. $                                                     | ValorTexto → Identificador                                                                          |
+| $ FIN. Sentencias finProcedimiento Sentencias Identificador                                 | a finProcedimiento FIN. $                                                     | Identificador → a                                                                                   |
+| $ FIN. Sentencias finProcedimiento Sentencias                                               | finProcedimiento FIN. $                                                       | emparejar(a)                                                                                        |
+| $ FIN. Sentencias finProcedimiento                                                          | finProcedimiento FIN. $                                                       | Sentencias → λ                                                                                      |
+| $ FIN. Sentencias                                                                           | FIN. $                                                                        | emparejar(finProcedimiento)                                                                         |
+| $ FIN.                                                                                      | FIN. $                                                                        | Sentencias → λ                                                                                      |
+| $                                                                                          | $                                                                            | emparejar(FIN.)                                                                                      |
 |                                                                                            |                                                                              | **Aceptar**                                                                                         |
 
 > **Comentario:** El trazado muestra una corrida del algoritmo LL(1). La pila y la cadena se van reduciendo conforme se aplican reglas o se emparejan terminales con la entrada.
@@ -932,7 +930,7 @@ No se presentan conflictos en la tabla predictiva, lo que demuestra que es posib
 δ(q1, λ, Programa) => (q2, λ)
 
 ; Expansiones por λ (invertidas)
-δ(q2, INICIO Sentencias FIN, Programa) => (q2, λ)
+δ(q2, INICIO Sentencias FIN., Programa) => (q2, λ)
 
 ; Bloque global: primera Sentencias se expande en una Sentencia (la definición)
 δ(q2, Sentencia Sentencias, Sentencias) => (q2, λ)
@@ -975,7 +973,7 @@ No se presentan conflictos en la tabla predictiva, lo que demuestra que es posib
 δ(q2, mostrar, mostrar) => (q2, λ)
 δ(q2, a, a) => (q2, λ)
 δ(q2, finProcedimiento, finProcedimiento) => (q2, λ)
-δ(q2, FIN, FIN) => (q2, λ)
+δ(q2, FIN., FIN.) => (q2, λ)
 
 ; Aceptación
 δ(q2, λ, Z) => (q3, λ)
@@ -987,36 +985,36 @@ No se presentan conflictos en la tabla predictiva, lo que demuestra que es posib
 
 | Pila                                                                                      | Cadena                                                         | Transición                   |
 | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------- | ---------------------------- |
-| λ                                                                                         | INICIO procedimiento p(texto a) mostrar a finProcedimiento FIN | δ(q0, λ, λ) ⇒ (q1, Z)        |
-| Z                                                                                         | INICIO procedimiento p(texto a) mostrar a finProcedimiento FIN | shift                        |
-| Z INICIO                                                                                  | procedimiento p(texto a) mostrar a finProcedimiento FIN        | shift                        |
-| Z INICIO procedimiento                                                                    | p(texto a) mostrar a finProcedimiento FIN                      | shift                        |
-| Z INICIO procedimiento p                                                                  | (texto a) mostrar a finProcedimiento FIN                       | reduce                       |
-| Z INICIO procedimiento Identificador                                                      | (texto a) mostrar a finProcedimiento FIN                       | shift                        |
-| Z INICIO procedimiento Identificador (                                                    | texto a) mostrar a finProcedimiento FIN                        | shift                        |
-| Z INICIO procedimiento Identificador (texto                                               | a) mostrar a finProcedimiento FIN                              | reduce                       |
-| Z INICIO procedimiento Identificador (Tipo                                                | a) mostrar a finProcedimiento FIN                              | shift                        |
-| Z INICIO procedimiento Identificador (Tipo a                                              | ) mostrar a finProcedimiento FIN                               | reduce                       |
-| Z INICIO procedimiento Identificador (Tipo Identificador                                  | ) mostrar a finProcedimiento FIN                               | reduce                       |
-| Z INICIO procedimiento Identificador (Parametro                                           | ) mostrar a finProcedimiento FIN                               | reduce                       |
-| Z INICIO procedimiento Identificador (ListaParametros                                     | ) mostrar a finProcedimiento FIN                               | reduce                       |
-| Z INICIO procedimiento Identificador (ParametrosOpt                                       | ) mostrar a finProcedimiento FIN                               | shift                        |
-| Z INICIO procedimiento Identificador (ParametrosOpt )                                     | mostrar a finProcedimiento FIN                                 | shift                        |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar                             | a finProcedimiento FIN                                         | shift                        |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar a                           | finProcedimiento FIN                                           | reduce                       |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Identificador               | finProcedimiento FIN                                           | reduce                       |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar ValorTexto                  | finProcedimiento FIN                                           | reduce                       |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar ExpresionTexto              | finProcedimiento FIN                                           | reduce                       |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Impresion                   | finProcedimiento FIN                                           | reduce                       |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Sentencia                   | finProcedimiento FIN                                           | reduce                       |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Sentencia Sentencias        | finProcedimiento FIN                                           | reduce                       |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Sentencias                  | finProcedimiento FIN                                           | shift                        |
-| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Sentencias finProcedimiento | FIN                                                            | reduce                       |
-| Z INICIO DefinicionProcedimiento                                                          | FIN                                                            | reduce                       |
-| Z INICIO Sentencia                                                                        | FIN                                                            | reduce                       |
-| Z INICIO Sentencia Sentencias                                                             | FIN                                                            | reduce                       |
-| Z INICIO Sentencias                                                                       | FIN                                                            | shift                        |
-| Z INICIO Sentencias FIN                                                                   | λ                                                              | reduce                       |
+| λ                                                                                         | INICIO procedimiento p(texto a) mostrar a finProcedimiento FIN. | δ(q0, λ, λ) ⇒ (q1, Z)        |
+| Z                                                                                         | INICIO procedimiento p(texto a) mostrar a finProcedimiento FIN. | shift                        |
+| Z INICIO                                                                                  | procedimiento p(texto a) mostrar a finProcedimiento FIN.        | shift                        |
+| Z INICIO procedimiento                                                                    | p(texto a) mostrar a finProcedimiento FIN.                      | shift                        |
+| Z INICIO procedimiento p                                                                  | (texto a) mostrar a finProcedimiento FIN.                       | reduce                       |
+| Z INICIO procedimiento Identificador                                                      | (texto a) mostrar a finProcedimiento FIN.                       | shift                        |
+| Z INICIO procedimiento Identificador (                                                    | texto a) mostrar a finProcedimiento FIN.                        | shift                        |
+| Z INICIO procedimiento Identificador (texto                                               | a) mostrar a finProcedimiento FIN.                              | reduce                       |
+| Z INICIO procedimiento Identificador (Tipo                                                | a) mostrar a finProcedimiento FIN.                              | shift                        |
+| Z INICIO procedimiento Identificador (Tipo a                                              | ) mostrar a finProcedimiento FIN.                               | reduce                       |
+| Z INICIO procedimiento Identificador (Tipo Identificador                                  | ) mostrar a finProcedimiento FIN.                               | reduce                       |
+| Z INICIO procedimiento Identificador (Parametro                                           | ) mostrar a finProcedimiento FIN.                               | reduce                       |
+| Z INICIO procedimiento Identificador (ListaParametros                                     | ) mostrar a finProcedimiento FIN.                               | reduce                       |
+| Z INICIO procedimiento Identificador (ParametrosOpt                                       | ) mostrar a finProcedimiento FIN.                               | shift                        |
+| Z INICIO procedimiento Identificador (ParametrosOpt )                                     | mostrar a finProcedimiento FIN.                                 | shift                        |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar                             | a finProcedimiento FIN.                                         | shift                        |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar a                           | finProcedimiento FIN.                                           | reduce                       |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Identificador               | finProcedimiento FIN.                                           | reduce                       |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar ValorTexto                  | finProcedimiento FIN.                                           | reduce                       |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar ExpresionTexto              | finProcedimiento FIN.                                           | reduce                       |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Impresion                   | finProcedimiento FIN.                                           | reduce                       |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Sentencia                   | finProcedimiento FIN.                                           | reduce                       |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Sentencia Sentencias        | finProcedimiento FIN.                                           | reduce                       |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Sentencias                  | finProcedimiento FIN.                                           | shift                        |
+| Z INICIO procedimiento Identificador (ParametrosOpt ) mostrar Sentencias finProcedimiento | FIN.                                                            | reduce                       |
+| Z INICIO DefinicionProcedimiento                                                          | FIN.                                                            | reduce                       |
+| Z INICIO Sentencia                                                                        | FIN.                                                            | reduce                       |
+| Z INICIO Sentencia Sentencias                                                             | FIN.                                                            | reduce                       |
+| Z INICIO Sentencias                                                                       | FIN.                                                            | shift                        |
+| Z INICIO Sentencias FIN.                                                                   | λ                                                              | reduce                       |
 | Z Programa                                                                                | λ                                                              | δ(q1, λ, Programa) ⇒ (q2, λ) |
 | Z                                                                                         | λ                                                              | δ(q2, λ, Z) ⇒ (q3, λ)        |
 | λ                                                                                         | λ                                                              | accept                       |
