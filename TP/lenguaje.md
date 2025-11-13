@@ -55,12 +55,16 @@ Un programa comienza con **`INICIO`** y termina con **`FIN.`**. Todas las senten
 ### Asignación
 
 - Declaración + asignación:  
-  `anotar <tipo> <id> = <valor>`
+  `anotar <tipo> <id> = <valor>`  
+  Ej.: `anotar numero intentos = 3`
 - Reasignación:  
-  `anotar <id> = <nuevo_valor>`
+  `anotar <id> = <nuevo_valor>`  
+  Ej.: `anotar intentos = intentos + 1`
 - Listas:
-  - Crear: `anotar lista<tipo> <id> = []` o `anotar lista<tipo> <id> = vacia`
-  - Acceso: `<lista>[<indice>]`
+  - Crear: `anotar lista<tipo> <id> = []` o `anotar lista<tipo> <id> = vacia`  
+    Ej.: `anotar lista<texto> urls = []`
+  - Acceso: `<lista>[<indice>]`  
+    Ej.: `mostrar urls[0]`
 
 ### Impresión
 
@@ -73,20 +77,36 @@ Ej.: `mostrar "Sitio: " + sitio + " | Vulnerabilidad: " + tipo`
 
 Negación: `no <condicion>`
 
-Ej:` evaluar <condicion> si pasa: <sentencias> si no pasa <sentencia>`
+Ej.:  
+```
+evaluar resultado == vulnerable
+si pasa:
+    mostrar "Sitio comprometido"
+si no pasa:
+    mostrar "Todo ok"
+```
 
 ### Iteración (únicamente mientras)
 
-`mientras <condicion> hacer <sentencias>`
-repite mientras la condición sea verdadera.
+`mientras <condicion> hacer <sentencias>` repite mientras la condición sea verdadera.  
+Ej.:  
+```
+anotar numero i = 0
+mientras i < 3 hacer
+    mostrar "Prueba #" + i
+    anotar i = i + 1
+```
 
 ## Operaciones de lista
 
-- `agregar <valor> a <lista>` (Se agrega al final de lista)
+- `agregar <valor> a <lista>` (Se agrega al final de lista)  
+  Ej.: `agregar "https://ejemplo.com" a urls`
 
-- `quitar en <lista>[<indice>]` (Elimina por índice) - si no tiene índice válido da error
+- `quitar en <lista>[<indice>]` (Elimina por índice) — si no tiene índice válido da error  
+  Ej.: `quitar en urls[1]`
 
-- `limpiar <lista>` (Deja la lista vacía)
+- `limpiar <lista>` (Deja la lista vacía)  
+  Ej.: `limpiar urls`
 
 ## Funciones y procedimientos
 
@@ -98,12 +118,28 @@ funcion <tipo> <nombre>(parámetros)
     retornar <valor>
 finFuncion
 ```
+Ej.:
+```
+funcion bool esCritica(vulnerabilidad tipo)
+    evaluar tipo == rce
+    si pasa:
+        retornar vulnerable
+    si no pasa:
+        retornar seguro
+finFuncion
+```
 
 - **Procedimientos:** no devuelven valor; se invocan como sentencia. Se aceptan parametros
 
 ```
 procedimiento <nombre>(parámetros)
     sentencias
+finProcedimiento
+```
+Ej.:
+```
+procedimiento mostrarReporte(texto sitio, bool estado)
+    mostrar "Sitio: " + sitio + " | Estado: " + estado
 finProcedimiento
 ```
 
@@ -157,17 +193,52 @@ evaluar <condicion>
 
 ## Especificaciones semánticas
 
-- **Tipos:** verificación estática; declarar tipo al crear variable.
-- **vulnerabilidad:** debe estar en `[sqli,xss,rce]`.
-- **Listas:** tipo base estricto; error si se inserta tipo distinto.
-- **mostrar:** convierte a `texto` al concatenar/mostrar.
-- **Ámbitos:** variables/params de funciones/procedimientos son locales.
-- **Errores runtime:** índice fuera de rango, división por cero, etc.
+- **Tipos:** verificación estática; declarar tipo al crear variable.  
+  Ej.:  
+  ```
+  anotar numero contador = 0
+  ```
+- **vulnerabilidad:** debe estar en `[sqli,xss,rce]`.  
+  Ej.:  
+  ```
+  anotar vulnerabilidad tipo = sqli
+  ```
+- **Listas:** tipo base estricto; error si se inserta tipo distinto.  
+  Ej.:  
+  ```
+  anotar lista<texto> sitios = []
+  agregar "https://ejemplo.com" a sitios
+  ```
+- **mostrar:** convierte a `texto` al concatenar/mostrar.  
+  Ej.:  
+  ```
+  mostrar "Detectado: " + tipo
+  ```
+- **Ámbitos:** variables/params de funciones/procedimientos son locales.  
+  Ej.:  
+  ```
+  funcion numero sumar(numero a, numero b)
+      retornar a + b
+  finFuncion
+  ```
+- **Errores runtime:** índice fuera de rango, división por cero, etc.  
+  Ej.:  
+  ```
+  mostrar lista[10]  # Índice inválido
+  ```
 
 ## Funciones predefinidas
 
 - **probar**: Evalúa si una entrada es vulnerable. Retorna `vulnerable` si es vulnerable, `seguro` si no es vulnerable.
 - **reportar**: Genera un reporte de vulnerabilidad encontrada con el mensaje especificado.
+
+> 💡 **Heurística usada por `probar`**  
+> La función analiza el `payload` con expresiones regulares sencillas:  
+> - `sqli`: detecta cadenas como `' OR`, `1=1`, `UNION`, `--`. Indican intentos de alterar consultas SQL.  
+> - `xss`: busca `<script>`, atributos `onerror=`/`onload=` o la secuencia `"><` para inyectar JavaScript.  
+> - `rce`: marca operadores de shell (`;`, `&&`, `|`, `` ` ``), `$(...)` o comandos como `ping -c`.  
+> Si aparece alguno de esos patrones, la función devuelve `vulnerable`; si no, `seguro`.  
+> Los patrones están definidos en `scanner/addons/builtins.py`.
 
 ## Función predefinida: probar (modo simulado)
 
@@ -527,6 +598,8 @@ flowchart TD
 | INICIO Sentencias FIN .                                                          | Programa → INICIO Sentencias FIN .                                                                  |
 | Programa                                                                         | accept                                                                                              |
 
+> **Comentario:** En la derivación descendente se arranca desde el símbolo inicial (`Programa`) y se van expandiendo producciones siguiendo el orden de la entrada. Se ve cómo primero se reconoce la definición del procedimiento `p`, luego el bloque de sentencias y finalmente la impresión.
+
 ### ASA — Derivación a la derecha
 
 | Cadena de trabajo (input → reducciones)                                                    | Producción aplicada                                                                                 |
@@ -549,6 +622,8 @@ flowchart TD
 | INICIO **Sentencias** FIN .                                                                | Sentencias → Sentencia                                                                              |
 | **Programa**                                                                               | Programa → INICIO Sentencias FIN .                                                                  |
 | **accept**                                                                                 | —                                                                                                   |
+
+> **Comentario:** La tabla de derivación a la derecha muestra el proceso inverso: partimos de la cadena completa y vamos reduciendo subcadenas a no terminales. Se observa cómo cada coincidencia reemplaza fragmentos hasta colapsar todo en `Programa`.
 
 # Análisis Sintáctico Descendente (ASD)
 
@@ -668,6 +743,8 @@ _GIC = ⟨ΣN, ΣT, S, P⟩_
 | Z                                                                                          | λ                                                                 | δ(q2, λ, Z) ⇒ (q3, λ)                                                                                               |
 | λ                                                                                          | λ                                                                 | **accept**                                                                                                          |
 
+> **Comentario:** Aquí se ve el análisis descendente con retroceso. La pila muestra los símbolos pendientes, la cadena restante indica qué falta consumir y la transición detalla la función de movimiento. Cada vez que no hay coincidencia inmediata, el autómata expande producciones (por eso aparecen muchas operaciones con λ) hasta que logra consumir la cadena completa y aceptar.
+
 # TP5: Parsing ASCP LL (1) cadena
 
 ## Cadena de prueba
@@ -699,6 +776,8 @@ ValorTexto → Identificador | texto | numero | booleano
 Identificador → a | p
 ```
 
+> **Comentario:** Se toma una versión simplificada de la gramática para construir la tabla LL(1). Solo incluye los símbolos necesarios para analizar la cadena de prueba y evita ambigüedades.
+
 ---
 
 ## PRIM
@@ -719,6 +798,8 @@ Identificador → a | p
 | PRIM(ValorTexto)              | {a, p, texto, numero, booleano}          |
 | PRIM(Identificador)           | {a, p}                                   |
 
+> **Comentario:** `PRIM` indica con qué terminales puede comenzar cada no terminal. Se usa para llenar la tabla predictiva.
+
 ---
 
 ## SIG
@@ -738,6 +819,8 @@ Identificador → a | p
 | SIG(ExpresionTexto)          | {procedimiento, mostrar, FIN, finProcedimiento}         |
 | SIG(ValorTexto)              | {procedimiento, mostrar, FIN, finProcedimiento}         |
 | SIG(Identificador)           | {(, , ), procedimiento, mostrar, FIN, finProcedimiento} |
+
+> **Comentario:** `SIG` lista los terminales que pueden seguir a cada no terminal. Es clave para manejar las producciones con λ.
 
 ## PRED
 
@@ -762,6 +845,8 @@ Identificador → a | p
 | PRED(ValorTexto → numero)                                                                                 | {numero}                              |
 | PRED(ValorTexto → booleano)                                                                               | {booleano}                            |
 
+> **Comentario:** `PRED` combina `PRIM` y `SIG` para saber cuándo usar cada producción durante el parsing LL(1).
+
 ---
 
 ## Tabla LL(1)
@@ -781,6 +866,8 @@ Identificador → a | p
 | **ExpresionTexto**          |              error               |                                                error                                                |               error                |         ExpresionTexto → ValorTexto         |         ExpresionTexto → ValorTexto         |                    error                    |                    error                    | ExpresionTexto → ValorTexto | ExpresionTexto → ValorTexto | ExpresionTexto → ValorTexto |                error                | error |          error          |       error        |      error       | error |
 | **ValorTexto**              |              error               |                                                error                                                |               error                |             ValorTexto → texto              |             ValorTexto → numero             |                    error                    |                    error                    | ValorTexto → Identificador  | ValorTexto → Identificador  |    ValorTexto → booleano    |                error                | error |          error          |       error        |      error       | error |
 | **Identificador**           |              error               |                                                error                                                |               error                |                    error                    |                    error                    |                    error                    |                    error                    |      Identificador → a      |      Identificador → p      |            error            |                error                | error |          error          |       error        |      error       | error |
+
+> **Comentario:** Esta tabla indica qué producción elegir según el símbolo no terminal en la pila y el token actual. La ausencia de conflictos confirma que la gramática (reducida) es LL(1).
 
 ## Trazado del parsing LL(1)
 
@@ -825,6 +912,8 @@ Identificador → a | p
 | $ FIN                                                                                      | FIN $                                                                        | Sentencias → λ                                                                                      |
 | $                                                                                          | $                                                                            | emparejar(FIN)                                                                                      |
 |                                                                                            |                                                                              | **Aceptar**                                                                                         |
+
+> **Comentario:** El trazado muestra una corrida del algoritmo LL(1). La pila y la cadena se van reduciendo conforme se aplican reglas o se emparejan terminales con la entrada.
 
 ---
 
@@ -892,6 +981,8 @@ No se presentan conflictos en la tabla predictiva, lo que demuestra que es posib
 δ(q2, λ, Z) => (q3, λ)
 ```
 
+> **Comentario:** El bloque invertido lista las expansiones que haría un parser ascendente invirtiendo el orden. Sirve para verificar consistencia con las derivaciones anteriores.
+
 ### Parsing ASA con retroceso cadena
 
 | Pila                                                                                      | Cadena                                                         | Transición                   |
@@ -930,6 +1021,8 @@ No se presentan conflictos en la tabla predictiva, lo que demuestra que es posib
 | Z                                                                                         | λ                                                              | δ(q2, λ, Z) ⇒ (q3, λ)        |
 | λ                                                                                         | λ                                                              | accept                       |
 
+> **Comentario:** Este trazado corresponde al parsing ascendente (shift-reduce) con retroceso. Muestra las operaciones `shift` (desplazar) y `reduce` (reducir) hasta aceptar la cadena.
+
 # TP 7:
 
 ### Analisis TT y TS
@@ -955,6 +1048,8 @@ cadena
 | L1        | 4   | vulnerabilidad | -1       | -1    | 1         | -1     | -1     | 0      | primitivo (sqli/xss/rce)      |
 | L5        | —   | —              | —        | —     | —         | —      | —      | —      | Se eliminan todas las líneas  |
 
+> **Comentario:** La TT (tabla de tipos) enumera los tipos disponibles, sus metadatos (padre, dimensión) y comentarios. Aquí solo se listan los primitivos del lenguaje.
+
 ## Tabla de Símbolos (TS)
 
 | Linea PRG | Cod | Nombre   | Categoria | Tipo | NumParMin | NumParMax | ListaPar  | Ámbito | Obervaciones                                             |
@@ -965,3 +1060,5 @@ cadena
 | L2        | 3   | a        | var       | 2    | null      | null      | null      | 1      | Parámetro del procedimiento `p`                          |
 | L4        |     |          |           |      |           |           |           |        | Se elimina Cod 3 (fin de ámbito del proc)                |
 | L5        |     |          |           |      |           |           |           |        | Se eliminan todas las lineas                             |
+
+> **Comentario:** La TS (tabla de símbolos) guarda información sobre funciones, procedimientos y variables: categoría, tipo, cantidad de parámetros y ámbito. Permite rastrear qué identificadores están disponibles en cada nivel.
