@@ -1,140 +1,171 @@
+"""
+Intérprete principal del lenguaje de seguridad educativo.
+
+Secuencia de ejecución:
+1. El código fuente se tokeniza con `scanner.lexer`.
+2. El parser (`scanner.addons.parser`) construye un AST.
+3. Las funciones `ejecutar` y `evaluar` recorren el AST y mantienen el estado
+   en estructuras globales:
+   - `variables_globales`: valores de las variables declaradas.
+   - `tipos_de_variables`: tipos asociados a cada identificador.
+   - `tabla_funciones`: definiciones de funciones disponibles.
+   - `tabla_procedimientos`: definiciones de procedimientos disponibles.
+
+La interpretación se realiza en memoria: cada sentencia produce efectos sobre
+estas estructuras y las llamadas a funciones/procedimientos crean contextos
+locales que se guardan y restauran automáticamente.
+"""
+
 from scanner import lexer
 from scanner.addons.parser import parser
 import scanner.addons.builtins as builtins
 
 def ejecutar(ast):
-    if not ast: return
-    tipo = ast[0]
+    """Despacha la ejecución de cada nodo del AST según su tipo."""
+    if not ast:
+        return
+    # Un nodo siempre es una tupla (tipo, datos...), por ejemplo:
+    # ("asignar", "variable", ("num", 10)).
+    tipo_nodo = ast[0]
 
-    if tipo == "programa":
-        for stmt in ast[1]:
-            ejecutar(stmt)
+    if tipo_nodo == "programa":
+        # El nodo raíz contiene la secuencia completa de sentencias.
+        for sentencia in ast[1]:
+            ejecutar(sentencia)
 
-    elif tipo == "asignar":
-        _, var, expr = ast
-        val = evaluar(expr)
-        memoria[var] = val
+    elif tipo_nodo == "asignar":
+        _, identificador, expresion = ast
+        valor = evaluar(expresion)
+        variables_globales[identificador] = valor
 
-    elif tipo == "declarar_asignar":
-        _, tipo_var, var, expr = ast
-        val = evaluar(expr)
-        memoria[var] = val
-        tipos[var] = tipo_var
+    elif tipo_nodo == "declarar_asignar":
+        _, tipo_variable, identificador, expresion = ast
+        valor = evaluar(expresion)
+        variables_globales[identificador] = valor
+        tipos_de_variables[identificador] = tipo_variable
 
-    elif tipo == "declarar_lista_vacia":
-        _, tipo_base, var = ast
-        memoria[var] = []
-        tipos[var] = ("lista", tipo_base)
+    elif tipo_nodo == "declarar_lista_vacia":
+        _, tipo_base, identificador = ast
+        variables_globales[identificador] = []
+        tipos_de_variables[identificador] = ("lista", tipo_base)
 
-    elif tipo == "mostrar":
-        _, expr = ast
-        val = evaluar(expr)
-        print(val)
+    elif tipo_nodo == "mostrar":
+        # Evalúa la expresión y la imprime en consola.
+        _, expresion = ast
+        valor = evaluar(expresion)
+        print(valor)
 
-    elif tipo == "evaluar":
+    elif tipo_nodo == "evaluar":
         _, condicion, bloque_si, bloque_no = ast
         if evaluar_condicion(condicion):
-            for stmt in bloque_si:
-                ejecutar(stmt)
+            for sentencia in bloque_si:
+                ejecutar(sentencia)
         elif bloque_no:
-            for stmt in bloque_no:
-                ejecutar(stmt)
+            for sentencia in bloque_no:
+                ejecutar(sentencia)
 
-    elif tipo == "mientras":
+    elif tipo_nodo == "mientras":
         _, condicion, bloque = ast
         while evaluar_condicion(condicion):
-            for stmt in bloque:
-                ejecutar(stmt)
+            for sentencia in bloque:
+                ejecutar(sentencia)
 
-    elif tipo == "agregar":
-        _, valor, lista = ast
-        val = evaluar(valor)
-        if lista in memoria and isinstance(memoria[lista], list):
-            memoria[lista].append(val)
+    elif tipo_nodo == "agregar":
+        _, expresion_valor, nombre_lista = ast
+        valor = evaluar(expresion_valor)
+        if nombre_lista in variables_globales and isinstance(variables_globales[nombre_lista], list):
+            variables_globales[nombre_lista].append(valor)
         else:
-            print(f"Error: '{lista}' no es una lista")
+            print(f"Error: '{nombre_lista}' no es una lista")
 
-    elif tipo == "quitar":
-        _, lista, indice = ast
-        idx = evaluar(indice)
-        if lista in memoria and isinstance(memoria[lista], list):
-            if 0 <= idx < len(memoria[lista]):
-                memoria[lista].pop(idx)
+    elif tipo_nodo == "quitar":
+        _, nombre_lista, expresion_indice = ast
+        indice = evaluar(expresion_indice)
+        if nombre_lista in variables_globales and isinstance(variables_globales[nombre_lista], list):
+            if 0 <= indice < len(variables_globales[nombre_lista]):
+                variables_globales[nombre_lista].pop(indice)
             else:
-                print(f"Error: Índice {idx} fuera de rango en lista '{lista}'")
+                print(f"Error: Índice {indice} fuera de rango en lista '{nombre_lista}'")
         else:
-            print(f"Error: '{lista}' no es una lista")
+            print(f"Error: '{nombre_lista}' no es una lista")
 
-    elif tipo == "limpiar":
-        _, lista = ast
-        if lista in memoria and isinstance(memoria[lista], list):
-            memoria[lista].clear()
+    elif tipo_nodo == "limpiar":
+        _, nombre_lista = ast
+        if nombre_lista in variables_globales and isinstance(variables_globales[nombre_lista], list):
+            variables_globales[nombre_lista].clear()
         else:
-            print(f"Error: '{lista}' no es una lista")
+            print(f"Error: '{nombre_lista}' no es una lista")
 
-    elif tipo == "definir_funcion":
-        _, tipo_ret, nombre, parametros, cuerpo, retorno = ast
-        funciones[nombre] = ("funcion", tipo_ret, parametros, cuerpo, retorno)
+    elif tipo_nodo == "definir_funcion":
+        _, tipo_retorno, nombre, parametros, cuerpo, expresion_retorno = ast
+        # Se almacena la firma completa para resolver llamadas posteriores.
+        tabla_funciones[nombre] = ("funcion", tipo_retorno, parametros, cuerpo, expresion_retorno)
 
-    elif tipo == "definir_procedimiento":
+    elif tipo_nodo == "definir_procedimiento":
         _, nombre, parametros, cuerpo = ast
-        procedimientos[nombre] = ("procedimiento", parametros, cuerpo)
+        tabla_procedimientos[nombre] = ("procedimiento", parametros, cuerpo)
 
-    elif tipo == "llamada_procedimiento":
+    elif tipo_nodo == "llamada_procedimiento":
         _, nombre, argumentos = ast
-        if nombre in procedimientos:
+        if nombre in tabla_procedimientos:
+            # Los procedimientos no devuelven valor; solo generan efectos.
             ejecutar_procedimiento(nombre, argumentos)
         else:
             print(f"Error: Procedimiento '{nombre}' no definido")
 
 def evaluar(expr):
-    et = expr[0]
+    """Evalúa una expresión y devuelve su resultado en tiempo de ejecución."""
+    etiqueta = expr[0]
 
-    if et == "num": return expr[1]
-    if et == "texto": return expr[1]
-    if et == "var": return memoria.get(expr[1], None)
-    if et == "bool": return expr[1]
+    if etiqueta == "num": return expr[1]
+    if etiqueta == "texto": return expr[1]
+    if etiqueta == "var": return variables_globales.get(expr[1], None)
+    if etiqueta == "bool": return expr[1]
 
-    if et == "acceso_lista":
-        _, lista, indice = expr
-        idx = evaluar(indice)
-        if lista in memoria and isinstance(memoria[lista], list):
-            if 0 <= idx < len(memoria[lista]):
-                return memoria[lista][idx]
+    if etiqueta == "acceso_lista":
+        _, nombre_lista, expresion_indice = expr
+        indice = evaluar(expresion_indice)
+        if nombre_lista in variables_globales and isinstance(variables_globales[nombre_lista], list):
+            if 0 <= indice < len(variables_globales[nombre_lista]):
+                return variables_globales[nombre_lista][indice]
             else:
-                print(f"Error: Índice {idx} fuera de rango en lista '{lista}'")
+                print(f"Error: Índice {indice} fuera de rango en lista '{nombre_lista}'")
                 return None
         else:
-            print(f"Error: '{lista}' no es una lista")
+            print(f"Error: '{nombre_lista}' no es una lista")
             return None
 
-    if et == "binop":
-        _, op, izq, der = expr
-        l = evaluar(izq); r = evaluar(der)
-        if op == "+": 
+    if etiqueta == "binop":
+        _, operador, expresion_izquierda, expresion_derecha = expr
+        operando_izquierdo = evaluar(expresion_izquierda)
+        operando_derecho = evaluar(expresion_derecha)
+        if operador == "+": 
             # Concatenación de texto o suma numérica
-            if isinstance(l, str) or isinstance(r, str):
-                return str(l) + str(r)
-            return l + r
-        if op == "-": return l - r
-        if op == "*": return l * r
-        if op == "/": 
-            if r == 0:
+            if isinstance(operando_izquierdo, str) or isinstance(operando_derecho, str):
+                return str(operando_izquierdo) + str(operando_derecho)
+            return operando_izquierdo + operando_derecho
+        if operador == "-": return operando_izquierdo - operando_derecho
+        if operador == "*": return operando_izquierdo * operando_derecho
+        if operador == "/": 
+            if operando_derecho == 0:
                 print("Error: División por cero")
                 return 0
-            return l / r
+            return operando_izquierdo / operando_derecho
+        # Nota: si llega hasta aquí la operación no está soportada.
 
-    if et == "probar":
+    if etiqueta == "probar":
         _, url, tipo, payload = expr
+        # Builtin que simula una prueba de seguridad y devuelve un bool.
         return builtins.fn_probar(evaluar(url), evaluar(tipo), evaluar(payload))
 
-    if et == "reportar":
+    if etiqueta == "reportar":
         _, msg = expr
+        # Builtin que genera un reporte; se mantiene para efectos secundarios.
         return builtins.fn_reportar(evaluar(msg))
 
-    if et == "llamada_funcion":
+    if etiqueta == "llamada_funcion":
         _, nombre, argumentos = expr
-        if nombre in funciones:
+        if nombre in tabla_funciones:
             return ejecutar_funcion(nombre, argumentos)
         else:
             print(f"Error: Función '{nombre}' no definida")
@@ -145,6 +176,8 @@ def evaluar_condicion(condicion):
     if not condicion:
         return False
     
+    # Las condiciones comparten la misma convención que las expresiones:
+    # en la primera posición se indica el tipo de operación a realizar.
     tipo = condicion[0]
     
     if tipo == "comparacion":
@@ -174,7 +207,8 @@ def evaluar_condicion(condicion):
         return condicion[1] == "vulnerable"
     
     else:
-        # Si es una expresión simple, evaluarla
+        # Si es una expresión simple (por ejemplo una variable), se evalúa
+        # reutilizando la lógica general y se normaliza el resultado a bool.
         val = evaluar(condicion)
         if isinstance(val, str):
             return val == "vulnerable"
@@ -182,15 +216,15 @@ def evaluar_condicion(condicion):
 
 def ejecutar_funcion(nombre, argumentos):
     """Ejecuta una función definida por el usuario"""
-    if nombre not in funciones:
+    if nombre not in tabla_funciones:
         print(f"Error: Función '{nombre}' no definida")
         return None
     
-    _, tipo_ret, parametros, cuerpo, retorno = funciones[nombre]
+    _, tipo_retorno, parametros, cuerpo, expresion_retorno = tabla_funciones[nombre]
     
     # Crear contexto local
-    memoria_local = {}
-    tipos_local = {}
+    variables_locales = {}
+    tipos_locales = {}
     
     # Asignar argumentos a parámetros
     if len(argumentos) != len(parametros):
@@ -198,46 +232,49 @@ def ejecutar_funcion(nombre, argumentos):
         return None
     
     for i, (tipo_param, nombre_param) in enumerate(parametros):
-        valor = evaluar(argumentos[i])
-        memoria_local[nombre_param] = valor
-        tipos_local[nombre_param] = tipo_param
+        valor_argumento = evaluar(argumentos[i])
+        variables_locales[nombre_param] = valor_argumento
+        tipos_locales[nombre_param] = tipo_param
     
     # Guardar contexto global
-    memoria_global = memoria.copy()
-    tipos_global = tipos.copy()
+    variables_previas = variables_globales.copy()
+    tipos_previos = tipos_de_variables.copy()
     
     # Establecer contexto local
-    memoria.clear()
-    memoria.update(memoria_local)
-    tipos.clear()
-    tipos.update(tipos_local)
+    variables_globales.clear()
+    variables_globales.update(variables_locales)
+    tipos_de_variables.clear()
+    tipos_de_variables.update(tipos_locales)
+    # A partir de aquí todo acceso a variables se realiza sobre el contexto
+    # recién creado hasta que la función finalice.
     
     # Ejecutar cuerpo de la función
-    for stmt in cuerpo:
-        ejecutar(stmt)
+    for sentencia in cuerpo:
+        ejecutar(sentencia)
     
     # Evaluar expresión de retorno
-    resultado = evaluar(retorno)
+    valor_retorno = evaluar(expresion_retorno)
     
     # Restaurar contexto global
-    memoria.clear()
-    memoria.update(memoria_global)
-    tipos.clear()
-    tipos.update(tipos_global)
+    variables_globales.clear()
+    variables_globales.update(variables_previas)
+    tipos_de_variables.clear()
+    tipos_de_variables.update(tipos_previos)
+    # El retorno se realiza una vez restaurado el entorno anterior.
     
-    return resultado
+    return valor_retorno
 
 def ejecutar_procedimiento(nombre, argumentos):
     """Ejecuta un procedimiento definido por el usuario"""
-    if nombre not in procedimientos:
+    if nombre not in tabla_procedimientos:
         print(f"Error: Procedimiento '{nombre}' no definido")
         return
     
-    _, parametros, cuerpo = procedimientos[nombre]
+    _, parametros, cuerpo = tabla_procedimientos[nombre]
     
     # Crear contexto local
-    memoria_local = {}
-    tipos_local = {}
+    variables_locales = {}
+    tipos_locales = {}
     
     # Asignar argumentos a parámetros
     if len(argumentos) != len(parametros):
@@ -245,42 +282,43 @@ def ejecutar_procedimiento(nombre, argumentos):
         return
     
     for i, (tipo_param, nombre_param) in enumerate(parametros):
-        valor = evaluar(argumentos[i])
-        memoria_local[nombre_param] = valor
-        tipos_local[nombre_param] = tipo_param
+        valor_argumento = evaluar(argumentos[i])
+        variables_locales[nombre_param] = valor_argumento
+        tipos_locales[nombre_param] = tipo_param
     
     # Guardar contexto global
-    memoria_global = memoria.copy()
-    tipos_global = tipos.copy()
+    variables_previas = variables_globales.copy()
+    tipos_previos = tipos_de_variables.copy()
     
     # Establecer contexto local
-    memoria.clear()
-    memoria.update(memoria_local)
-    tipos.clear()
-    tipos.update(tipos_local)
+    variables_globales.clear()
+    variables_globales.update(variables_locales)
+    tipos_de_variables.clear()
+    tipos_de_variables.update(tipos_locales)
     
     # Ejecutar cuerpo del procedimiento
-    for stmt in cuerpo:
-        ejecutar(stmt)
+    for sentencia in cuerpo:
+        ejecutar(sentencia)
     
     # Restaurar contexto global
-    memoria.clear()
-    memoria.update(memoria_global)
-    tipos.clear()
-    tipos.update(tipos_global)
+    variables_globales.clear()
+    variables_globales.update(variables_previas)
+    tipos_de_variables.clear()
+    tipos_de_variables.update(tipos_previos)
+    # No se devuelve valor alguno porque los procedimientos solo generan efectos.
 
 # Variables globales
-memoria = {}  # Almacén de variables
-tipos = {}    # Tipos de variables
-funciones = {}  # Funciones definidas
-procedimientos = {}  # Procedimientos definidos
+variables_globales = {}       # Almacén de variables y sus valores actuales
+tipos_de_variables = {}       # Tipos declarados para cada identificador
+tabla_funciones = {}          # Funciones definidas por el usuario
+tabla_procedimientos = {}     # Procedimientos definidos por el usuario
 
 if __name__ == "__main__":
     # Leer código desde archivo
     with open("test.bug", "r") as f:
         codigo = f.read()
     
-    print("🔍 Aplicando scanner...")
+    print(" Aplicando scanner...")
     lexer.input(codigo)
     
     # Mostrar tokens como en el ejemplo de PLY
@@ -290,8 +328,8 @@ if __name__ == "__main__":
             break
         print(tok)
     
-    print("\n🔍 Analizando código...")
+    print("\n Analizando código...")
     ast = parser.parse(codigo, lexer=lexer)
     
-    print("🚀 Ejecutando programa...")
+    print(" Ejecutando programa...")
     ejecutar(ast)

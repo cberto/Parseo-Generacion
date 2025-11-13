@@ -1,6 +1,70 @@
 """
 Analizador Sintáctico (Parser) para el Lenguaje de Seguridad Educativo
 Implementación corregida siguiendo las mejores prácticas de PLY
+
+Gramática en BNF aproximada:
+
+<programa> ::= INICIO <sentencias> FIN
+<sentencias> ::= <sentencia> <sentencias> | <sentencia>
+
+<sentencia> ::= ANOTAR ID ASIGNAR <expresion>
+             | ANOTAR <tipo> ID ASIGNAR <expresion>
+             | ANOTAR LISTA MENOR <tipo_base> MAYOR ID ASIGNAR VACIA
+             | ANOTAR LISTA MENOR <tipo_base> MAYOR ID ASIGNAR LBRACKET RBRACKET
+             | MOSTRAR <expresion>
+             | EVALUAR <condicion> PASA <sentencias>
+             | EVALUAR <condicion> PASA <sentencias> SI NO PASA <sentencias>
+             | MIENTRAS <condicion> HACER <sentencias>
+             | AGREGAR <expresion> A ID
+             | QUITAR EN ID LBRACKET <expresion> RBRACKET
+             | LIMPIAR ID
+             | FUNCION <tipo> ID LPAREN <parametros_opt> RPAREN <sentencias> RETORNAR <expresion> FINFUNCION
+             | PROCEDIMIENTO ID LPAREN <parametros_opt> RPAREN <sentencias> FINPROCEDIMIENTO
+             | ID LPAREN <argumentos_opt> RPAREN
+
+<tipo> ::= NUMERO_TIPO
+        | TEXTO_TIPO
+        | VULNERABILIDAD_TIPO
+        | BOOL_TIPO
+        | LISTA MENOR <tipo_base> MAYOR
+
+<tipo_base> ::= NUMERO_TIPO | TEXTO_TIPO | VULNERABILIDAD_TIPO | BOOL_TIPO
+
+<expresion> ::= <expresion> MAS <expresion>
+             | <expresion> MENOS <expresion>
+             | <expresion> POR <expresion>
+             | <expresion> DIV <expresion>
+             | NUMERO
+             | TEXTO
+             | ID
+             | ID LBRACKET <expresion> RBRACKET
+             | SQLI
+             | XSS
+             | RCE
+             | VULNERABLE
+             | SEGURO
+             | PROBAR LPAREN <expresion> COMA <expresion> COMA <expresion> RPAREN
+             | REPORTAR LPAREN <expresion> RPAREN
+             | ID LPAREN <argumentos_opt> RPAREN
+             | LPAREN <expresion> RPAREN
+
+<condicion> ::= <expresion> IGUAL <expresion>
+             | <expresion> DIF <expresion>
+             | <expresion> MENOR <expresion>
+             | <expresion> MAYOR <expresion>
+             | <expresion> MENORIG <expresion>
+             | <expresion> MAYORIG <expresion>
+             | <condicion> Y <condicion>
+             | <condicion> O <condicion>
+             | NO <condicion>
+             | <expresion>
+
+<parametros_opt> ::= <parametros> | ε
+<parametros> ::= <parametro> | <parametro> COMA <parametros>
+<parametro> ::= <tipo> ID
+
+<argumentos_opt> ::= <argumentos> | ε
+<argumentos> ::= <expresion> | <expresion> COMA <argumentos>
 """
 
 import ply.yacc as yacc

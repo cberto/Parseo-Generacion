@@ -23,13 +23,16 @@ SEGURO = "seguro"          # Valor booleano falso
 # Patrones precompilados para mejorar rendimiento
 # Estos patrones detectan payloads típicos de cada tipo de vulnerabilidad
 
-# SQL Injection: patrones comunes de inyección SQL
+# SQL Injection: considera cadenas típicas para forzar la lógica de consultas.
+# Ejemplos: "' OR 1=1--" hace que la condición siempre sea verdadera.
 P_SQLI = re.compile(r"(?:' OR|1=1|UNION|--)", re.IGNORECASE)
 
-# Cross-Site Scripting: patrones de scripts maliciosos
+# Cross-Site Scripting: detecta etiquetas o atributos que inyectan JavaScript.
+# Ejemplos: "<script>" abre un bloque de script, `onerror=` ejecuta JS en eventos.
 P_XSS = re.compile(r"(?:<script>|onerror=|onload=|\"<)", re.IGNORECASE)
 
-# Remote Code Execution: patrones de ejecución de comandos
+# Remote Code Execution: busca operadores de shell o comandos peligrosos.
+# Ejemplos: ";" encadena comandos, "`...`" ejecuta subshell, "ping -c" suele usarse en pruebas.
 P_RCE = re.compile(r"(?:;|&&|\||`|\$\(|ping -c)", re.IGNORECASE)
 
 # =============================================================================
@@ -77,6 +80,9 @@ def fn_probar(url: str, tipo: str, payload: str) -> str:
     """
     # Log de la prueba realizada
     print(f"[probar] URL={url} | Tipo={tipo} | Payload={payload}")
+    # La evaluación es puramente heurística: se revisa si el `payload`
+    # contiene rasgos característicos del ataque. Si el patrón aparece,
+    # se considera "vulnerable"; si no, se marca "seguro".
     
     # Aplicar el patrón correspondiente según el tipo de vulnerabilidad
     if tipo == 'sqli':

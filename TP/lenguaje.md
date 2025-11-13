@@ -965,23 +965,3 @@ cadena
 | L2        | 3   | a        | var       | 2    | null      | null      | null      | 1      | Parámetro del procedimiento `p`                          |
 | L4        |     |          |           |      |           |           |           |        | Se elimina Cod 3 (fin de ámbito del proc)                |
 | L5        |     |          |           |      |           |           |           |        | Se eliminan todas las lineas                             |
-
-stateDiagram-v2
-[*] --> S0
-
-    %% Inicio: puede venir nombre, delimitador, espacios o EOF
-    S0 --> IN_NAME : letra
-    S0 --> S_DELIM : "." | "," | ";"
-    S0 --> IN_WS   : espacio | tab | salto
-    S0 --> [*]     : EOF
-
-    %% NAME: [A-Za-z][A-Za-z0-9]*
-    IN_NAME --> IN_NAME : letra | dígito
-    IN_NAME --> S0      : (no letra/ni dígito)
-
-    %% DELIMITADOR: { . , ; }
-    S_DELIM --> S0
-
-    %% ESPACIOS: uno o más, se ignoran (sirven para separar nombres)
-    IN_WS --> IN_WS : espacio | tab | salto
-    IN_WS --> S0    : (cualquier otro)
